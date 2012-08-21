@@ -215,8 +215,52 @@ class DigitsArray {
   
 }
 
+// TODO: fixup naming convention to be dartlike
 class BigInteger {
+  DigitsArray _m_digits;
+  
+  // Constructors
+  BigInteger() { throw "Not Implemented" };
+  BigInteger.fromInt(int number) { throw "Not Implemented" };
+  BigInteger.fromList(List<int> array) { throw "Not Implemented" };
+  BigInteger.fromListWithLength(List<int> array, int length) { throw "Not Implemented" };
+  BigInteger.fromListWithOffset(List<int> array, int offset, int length) { throw "Not Implemented" };
+  
+  _ConstructFrom(List<int> array, int offset, int length){ throw "Not Implemented" };
+  
+  // Properties
+  bool get IsNegative() { throw "Not Implemented" };
+  bool get IsZero() { throw "Not Implemented" };
   
   
+  // Arithmetic operations.
+  BigInteger operator +(BigInteger other) { throw "Not Implemented" }; 
+  BigInteger operator -(BigInteger other) { throw "Not Implemented" };
+  BigInteger operator *(BigInteger other) { throw "Not Implemented" };
+  BigInteger operator %(BigInteger other) { throw "Not Implemented" };
+  BigInteger operator /(BigInteger other) { throw "Not Implemented" };
+  // Truncating division.
+  BigInteger operator ~/(BigInteger other) { throw "Not Implemented" };
+  // The unary '-' operator.
+  BigInteger operator negate() { throw "Not Implemented" };
+  BigInteger remainder(BigInteger other) { throw "Not Implemented" };
+
+  // Relational operations.
+  bool operator <(BigInteger other) { throw "Not Implemented" };
+  bool operator <=(BigInteger other) { throw "Not Implemented" };
+  bool operator >(BigInteger other) { throw "Not Implemented" };
+  bool operator >=(BigInteger other) { throw "Not Implemented" };
+  
+  
+  // Bit-operations.
+  BigInteger operator &(BigInteger other) { throw "Not Implemented" };
+  BigInteger operator |(BigInteger other) { throw "Not Implemented" };
+  BigInteger operator ^(BigInteger other) { throw "Not Implemented" };
+  BigInteger operator ~() { throw "Not Implemented" };
+  BigInteger operator <<(int shiftAmount) { throw "Not Implemented" };
+  BigInteger operator >>(int shiftAmount) { throw "Not Implemented" };
+  
+  String toHexString() { throw "Not Implemented"; }
+  String toRadixString(int radix) { throw "Not Implemented"; }
   
 }
