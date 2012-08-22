@@ -225,6 +225,9 @@ class BigInteger {
   BigInteger.fromList(List<int> array) { throw "Not Implemented" };
   BigInteger.fromListWithLength(List<int> array, int length) { throw "Not Implemented" };
   BigInteger.fromListWithOffset(List<int> array, int offset, int length) { throw "Not Implemented" };
+  BigInteger.fromString(String digits, [int radix = 10]) { throw "Not Implemented" };
+  BigInteger.fromDigitsArray(DigitsArray digits) { throw "Not Implemented" };
+  
   
   _ConstructFrom(List<int> array, int offset, int length){ throw "Not Implemented" };
   
@@ -251,7 +254,6 @@ class BigInteger {
   bool operator >(BigInteger other) { throw "Not Implemented" };
   bool operator >=(BigInteger other) { throw "Not Implemented" };
   
-  
   // Bit-operations.
   BigInteger operator &(BigInteger other) { throw "Not Implemented" };
   BigInteger operator |(BigInteger other) { throw "Not Implemented" };
@@ -260,7 +262,42 @@ class BigInteger {
   BigInteger operator <<(int shiftAmount) { throw "Not Implemented" };
   BigInteger operator >>(int shiftAmount) { throw "Not Implemented" };
   
+//  BigInteger operator ++() { throw "Not Implemented" };
+//  BigInteger operator --() { throw "Not Implemented" };
+  
+  static BigInteger Add(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
+  static BigInteger Increment(BigInteger leftSide) { throw "Not Implemented" };
+  static BigInteger Subtract(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
+  static BigInteger Decrement(BigInteger leftSide) { throw "Not Implemented" };
+  static BigInteger Negate() { throw "Not Implemented" };
+  static BigInteger Abs(BigInteger leftSide) { throw "Not Implemented" };
+  static BigInteger Multiply(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
+  static BigInteger Divide(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
+  static BigInteger DivideWithRemainder(BigInteger leftSide, BigInteger rightSide, BigInteger quotient, BigInteger remainder) { throw "Not Implemented" };
+  static BigInteger MultiDivide(BigInteger leftSide, BigInteger rightSide, BigInteger quotient, BigInteger remainder) { throw "Not Implemented" };
+  static BigInteger SingleDivide(BigInteger leftSide, BigInteger rightSide, BigInteger quotient, BigInteger remainder) { throw "Not Implemented" };
+  static BigInteger Modulus(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
+  static BigInteger BitwiseAnd(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
+  static BigInteger BitwiseOr(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
+  static BigInteger Xor(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
+  static BigInteger OnesComplement(BigInteger leftSide) { throw "Not Implemented" };
+  static BigInteger LeftShift(BigInteger leftSide, int shiftCount) { throw "Not Implemented" };
+  static BigInteger static BigInteger RightShift(BigInteger leftSide, int shiftCount) { throw "Not Implemented" };
+  
+  
+  // TODO: find dart class to inherit for compareTo
+  int CompareTo(BigInteger value) { throw "Not Implemented" };
+  int Compare(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
+  
+  // NOTE: does dart implement equals? I think not. 
+  
+  String toString() { throw "Not Implemented"; }
   String toHexString() { throw "Not Implemented"; }
   String toRadixString(int radix) { throw "Not Implemented"; }
+  
+  static int toInt() { throw "Not Implemented"; }
+  static double toDouble() { throw "Not Implemented"; }
+  static num toNum() { throw "Not Implemented"; }
+  
   
 }
