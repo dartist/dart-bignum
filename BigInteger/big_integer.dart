@@ -217,83 +217,219 @@ class DigitsArray {
 
 // TODO: fixup naming convention to be dartlike
 class BigInteger {
-  DigitsArray _m_digits;
+  DigitsArray m_digits;
   
   // Constructors
-  BigInteger() { throw "Not Implemented" };
-  BigInteger.fromInt(int number) { throw "Not Implemented" };
-  BigInteger.fromList(List<int> array) { throw "Not Implemented" };
-  BigInteger.fromListWithLength(List<int> array, int length) { throw "Not Implemented" };
-  BigInteger.fromListWithOffset(List<int> array, int offset, int length) { throw "Not Implemented" };
-  BigInteger.fromString(String digits, [int radix = 10]) { throw "Not Implemented" };
-  BigInteger.fromDigitsArray(DigitsArray digits) { throw "Not Implemented" };
+  BigInteger() {  
+    m_digits = new DigitsArray.withUsed(1, 1);
+  }
+  BigInteger.fromInt(int number) {  
+    m_digits = new DigitsArray.withUsed((8 / DataSizeOf).toInt() + 1, 0);
+    while (number != 0 && m_digits.dataUsed < m_digits.count)
+    {
+      m_digits[m_digits.dataUsed] = number & AllBits;
+      number >>= DataSizeBits;
+      m_digits.dataUsed++;
+    }
+    m_digits.ResetDataUsed();
+  }
   
+  BigInteger.fromList(List<int> array) {  
+    _ConstructFrom(array, 0, array.length);
+  }
   
-  _ConstructFrom(List<int> array, int offset, int length){ throw "Not Implemented" };
+  BigInteger.fromListWithLength(List<int> array, int length) {
+    _ConstructFrom(array, 0, length);
+  }
+  
+  BigInteger.fromListWithOffset(List<int> array, int offset, int length) {  
+    _ConstructFrom(array, offset, length);
+  }
+  
+  BigInteger.fromString(String digits, [int radix = 10]) {
+    _Construct(digits, radix);
+  }
+  
+  BigInteger.fromDigitsArray(DigitsArray digits) {
+    digits.ResetDataUsed();
+    this.m_digits = digits;
+  }
+  
+  _ConstructFrom(List<int> array, int offset, int length){ 
+    if (array == null)
+    {
+      throw "array is null";
+    }
+    if (offset > array.length || length > array.length)
+    {
+      throw "Argument out of range offset";
+    }
+    if (length > array.length || (offset + length) > array.length)
+    {
+      throw "Argument out of range length";
+    }
+    
+    int estSize = (length / 4).toInt();
+    int leftOver = length & 3;
+    if (leftOver != 0)
+    {
+      ++estSize;
+    }
+    
+    m_digits = new DigitsArray.withUsed(estSize + 1, 0); // alloc one extra since we can't init -'s from here.
+    
+    // TODO: we might need to AND off or assert() any addtional bits generated from this. 
+    for (int i = offset + length - 1, j = 0; (i - offset) >= 3; i -= 4, j++)
+    {
+      m_digits[j] = ((array[i - 3] << 24) + (array[i - 2] << 16) + (array[i - 1] <<  8) + array[i]);
+      m_digits.dataUsed++;
+    }
+    
+    int accumulator = 0;
+    for (int i = leftOver; i > 0; i--)
+    {
+      int digit = array[offset + leftOver - i];
+      digit = (digit << ((i - 1) * 8));
+      accumulator |= digit;
+    }
+    m_digits[m_digits.dataUsed] = accumulator;
+
+    m_digits.ResetDataUsed();
+    
+  }
+  
+  void _Construct(String digits, int radix) {
+    if (digits == null)
+    {
+      throw "Argument Null digits";
+    }
+    
+    BigInteger multiplier = new BigInteger.fromInt(1);
+    BigInteger result = new BigInteger();
+    digits = digits.toUpperCase().trim();
+    
+    int nDigits = (digits[0] == '-' ? 1 : 0);
+    
+    for (int idx = digits.length - 1; idx >= nDigits ; idx--)
+    {
+      int d = (digits[idx]).charCodeAt(0);
+      if (d >= '0'.charCodeAt(0) && d <= '9'.charCodeAt(0))
+      {
+        d -= '0'.charCodeAt(0);
+      }
+      else if (d >= 'A'.charCodeAt(0) && d <= 'Z'.charCodeAt(0))
+      {
+        d = (d - 'A'.charCodeAt(0)) + 10;
+      }
+      else
+      {
+        throw "Argument out of range digits"; 
+      }
+      
+      if (d >= radix)
+      {
+        throw "Argument out of range digits";
+      }
+      result += (multiplier * new BigInteger.fromInt(d));
+      multiplier *= new BigInteger.fromInt(radix);
+    }
+    
+    if (digits[0] == '-')
+    {
+      result = -result;
+    }
+    
+    this.m_digits = result.m_digits;
+  }
   
   // Properties
-  bool get IsNegative() { throw "Not Implemented" };
-  bool get IsZero() { throw "Not Implemented" };
-  
+  bool get IsNegative() => this.m_digits.isNegative;
+  bool get IsZero() => this.m_digits.isZero;
   
   // Arithmetic operations.
-  BigInteger operator +(BigInteger other) { throw "Not Implemented" }; 
-  BigInteger operator -(BigInteger other) { throw "Not Implemented" };
-  BigInteger operator *(BigInteger other) { throw "Not Implemented" };
-  BigInteger operator %(BigInteger other) { throw "Not Implemented" };
-  BigInteger operator /(BigInteger other) { throw "Not Implemented" };
+  BigInteger operator +(BigInteger other) {  
+    int size = Math.max(this.m_digits.dataUsed, other.m_digits.dataUsed);
+    
+    DigitsArray da = new DigitsArray(size + 1);
+    
+    int carry = 0;
+    for (int i = 0; i < da.count; i++) {
+      int sum = this.m_digits[i] + other.m_digits[i] + carry;
+      carry = sum >> DataSizeBits;
+      da[i] = sum & AllBits;
+    }
+    
+    return new BigInteger.fromDigitsArray(da);
+  }
+  
+  BigInteger operator -(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator *(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator %(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator /(BigInteger other) { throw "Not Implemented"; }
   // Truncating division.
-  BigInteger operator ~/(BigInteger other) { throw "Not Implemented" };
+  BigInteger operator ~/(BigInteger other) { throw "Not Implemented"; }
   // The unary '-' operator.
-  BigInteger operator negate() { throw "Not Implemented" };
-  BigInteger remainder(BigInteger other) { throw "Not Implemented" };
+  BigInteger operator negate() { throw "Not Implemented"; }
+  BigInteger remainder(BigInteger other) { throw "Not Implemented"; }
 
   // Relational operations.
-  bool operator <(BigInteger other) { throw "Not Implemented" };
-  bool operator <=(BigInteger other) { throw "Not Implemented" };
-  bool operator >(BigInteger other) { throw "Not Implemented" };
-  bool operator >=(BigInteger other) { throw "Not Implemented" };
+  bool operator <(BigInteger other) { throw "Not Implemented"; }
+  bool operator <=(BigInteger other) { throw "Not Implemented"; }
+  bool operator >(BigInteger other) { throw "Not Implemented"; }
+  bool operator >=(BigInteger other) { throw "Not Implemented"; }
   
   // Bit-operations.
-  BigInteger operator &(BigInteger other) { throw "Not Implemented" };
-  BigInteger operator |(BigInteger other) { throw "Not Implemented" };
-  BigInteger operator ^(BigInteger other) { throw "Not Implemented" };
-  BigInteger operator ~() { throw "Not Implemented" };
-  BigInteger operator <<(int shiftAmount) { throw "Not Implemented" };
-  BigInteger operator >>(int shiftAmount) { throw "Not Implemented" };
+  BigInteger operator &(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator |(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator ^(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator ~() { throw "Not Implemented"; }
+  BigInteger operator <<(int shiftAmount) { throw "Not Implemented"; }
+  BigInteger operator >>(int shiftAmount) { throw "Not Implemented"; }
   
 //  BigInteger operator ++() { throw "Not Implemented" };
 //  BigInteger operator --() { throw "Not Implemented" };
   
-  static BigInteger Add(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
-  static BigInteger Increment(BigInteger leftSide) { throw "Not Implemented" };
-  static BigInteger Subtract(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
-  static BigInteger Decrement(BigInteger leftSide) { throw "Not Implemented" };
-  static BigInteger Negate() { throw "Not Implemented" };
-  static BigInteger Abs(BigInteger leftSide) { throw "Not Implemented" };
-  static BigInteger Multiply(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
-  static BigInteger Divide(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
-  static BigInteger DivideWithRemainder(BigInteger leftSide, BigInteger rightSide, BigInteger quotient, BigInteger remainder) { throw "Not Implemented" };
-  static BigInteger MultiDivide(BigInteger leftSide, BigInteger rightSide, BigInteger quotient, BigInteger remainder) { throw "Not Implemented" };
-  static BigInteger SingleDivide(BigInteger leftSide, BigInteger rightSide, BigInteger quotient, BigInteger remainder) { throw "Not Implemented" };
-  static BigInteger Modulus(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
-  static BigInteger BitwiseAnd(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
-  static BigInteger BitwiseOr(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
-  static BigInteger Xor(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
-  static BigInteger OnesComplement(BigInteger leftSide) { throw "Not Implemented" };
-  static BigInteger LeftShift(BigInteger leftSide, int shiftCount) { throw "Not Implemented" };
-  static BigInteger static BigInteger RightShift(BigInteger leftSide, int shiftCount) { throw "Not Implemented" };
+  static BigInteger Add(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented"; }
+  static BigInteger Increment(BigInteger leftSide) { throw "Not Implemented"; }
+  static BigInteger Subtract(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented"; }
+  static BigInteger Decrement(BigInteger leftSide) { throw "Not Implemented"; }
+  static BigInteger Negate() { throw "Not Implemented"; }
+  static BigInteger Abs(BigInteger leftSide) { throw "Not Implemented"; }
+  static BigInteger Multiply(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented"; }
+  static BigInteger Divide(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented"; }
+  static BigInteger DivideWithRemainder(BigInteger leftSide, BigInteger rightSide, BigInteger quotient, BigInteger remainder) { throw "Not Implemented"; }
+  static BigInteger MultiDivide(BigInteger leftSide, BigInteger rightSide, BigInteger quotient, BigInteger remainder) { throw "Not Implemented"; }
+  static BigInteger SingleDivide(BigInteger leftSide, BigInteger rightSide, BigInteger quotient, BigInteger remainder) { throw "Not Implemented"; }
+  static BigInteger Modulus(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented"; }
+  static BigInteger BitwiseAnd(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented"; }
+  static BigInteger BitwiseOr(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented"; }
+  static BigInteger Xor(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented"; }
+  static BigInteger OnesComplement(BigInteger leftSide) { throw "Not Implemented"; }
+  static BigInteger LeftShift(BigInteger leftSide, int shiftCount) { throw "Not Implemented"; }
+  static BigInteger RightShift(BigInteger leftSide, int shiftCount) { throw "Not Implemented"; }
   
   
   // TODO: find dart class to inherit for compareTo
-  int CompareTo(BigInteger value) { throw "Not Implemented" };
-  int Compare(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented" };
+  int CompareTo(BigInteger value) { throw "Not Implemented"; }
+  int Compare(BigInteger leftSide, BigInteger rightSide) { throw "Not Implemented"; }
   
   // NOTE: does dart implement equals? I think not. 
   
   String toString() { throw "Not Implemented"; }
   String toHexString() { throw "Not Implemented"; }
-  String toRadixString(int radix) { throw "Not Implemented"; }
+  String toRadixString(int radix) {  
+    if (radix < 2 || radix > 36)
+    {
+      throw "Argument out of range radix";
+    }
+
+    if (IsZero)
+    {
+      return "0";
+    }
+    
+    throw "Not Implemented"; 
+  }
   
   static int toInt() { throw "Not Implemented"; }
   static double toDouble() { throw "Not Implemented"; }

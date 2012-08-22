@@ -1,10 +1,11 @@
-#import('file:///C:/dart_bleeding/dart/dart-sdk/lib/unittest/unittest.dart');
+//#import('package:unittest/unittest.dart');
+#import('../packages/unittest/unittest.dart');
 #source('../BigInteger/big_integer.dart');
 
 class TestBigInteger {
-  void main() {
+  testDigitsArray() {
     group('DigitsArray', () {
-      test("Constructor (size)", () {
+      test("DigitsArray(size)", () {
         DigitsArray da = new DigitsArray(10);
         Expect.equals(11, da.data.length, "data not constructed properly");
         Expect.equals(11, da.count, "data not constructed properly");
@@ -12,7 +13,7 @@ class TestBigInteger {
         Expect.equals(false, da.isNegative, "Not positive");
       });
       
-      test(".withUsed(size,used)", () {
+      test("DigitsArray.withUsed(size,used)", () {
         DigitsArray da = new DigitsArray.withUsed(10, 10);
         Expect.equals(11, da.data.length, "data not constructed properly");
         Expect.equals(11, da.count, "data not constructed properly");
@@ -21,7 +22,7 @@ class TestBigInteger {
         Expect.equals(false, da.isNegative, "Not positive");
       });
       
-      test(".fromList(copyFrom)", () {
+      test("DigitsArray.fromList(copyFrom)", () {
         DigitsArray da = new DigitsArray.withUsed(10, 10);
         Expect.equals(11, da.data.length, "data not constructed properly");
         Expect.equals(11, da.count, "data not constructed properly");
@@ -46,7 +47,7 @@ class TestBigInteger {
         Expect.equals(false, da.isNegative, "Not positive");
       });
       
-      test("ShiftLeft", () {
+      test("DigitsArray.ShiftLeft", () {
         DigitsArray da = new DigitsArray.withUsed(10, 10);
         for (int i = 0; i < 10; i++)
         {
@@ -59,7 +60,7 @@ class TestBigInteger {
         }
       });
       
-      test("ShiftRight", () {
+      test("DigitsArray.ShiftRight", () {
         DigitsArray da = new DigitsArray.withUsed(10, 10);
         for (int i = 0; i < 10; i++)
         {
@@ -78,6 +79,42 @@ class TestBigInteger {
         
       });
     });
+  }
+  
+  testBigInteger() {
+    group("", () {
+      test("", () {
+        BigInteger bi1 = new BigInteger.fromInt(1);
+        BigInteger bi2 = new BigInteger.fromInt(1);
+        BigInteger bi3 = bi1 + bi2;
+        print("bi1 = ${bi1.m_digits.data}");
+        print("bi2 = ${bi2.m_digits.data}");
+        print("bi3 = ${bi3.m_digits.data}");
+        
+        bi1 = new BigInteger.fromInt(1);
+        bi2 = new BigInteger.fromInt(1);
+        bi3 = bi1 + bi2;
+        for (int i =0; i<10000; i++) {
+          bi3+=bi3;
+          print("bi3 = ${bi3.m_digits.data}");
+        }
+      });
+      
+// * is not implemented yet. 
+//      test("", () {
+//        BigInteger bi1 = new BigInteger.fromString("1");
+//        BigInteger bi2 = new BigInteger.fromString("1");
+//        BigInteger bi3 = bi1 + bi2;
+//        print("bi1 = ${bi1.m_digits.data}");
+//        print("bi2 = ${bi2.m_digits.data}");
+//        print("bi3 = ${bi3.m_digits.data}");
+//      });
+    });
+  }
+  
+  void main() {
+    testDigitsArray();
+    testBigInteger();
   }
 }
 
