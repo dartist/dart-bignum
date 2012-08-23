@@ -265,10 +265,10 @@ var s; // NOTE: Who sets this?
     var this_array = this.array;
     var w_array    = w.array;
   
-    print("x = ${x}");
-    print("x = ${x is double}");
-    print("x = ${x is int}");
-    print("x = ${x.toInt()}");
+//    print("x = ${x}");
+//    print("x = ${x is double}");
+//    print("x = ${x is int}");
+//    print("x = ${x.toInt()}");
     var xl = x.toInt() & 0x3fff, xh = x.toInt() >> 14;
     while(--n >= 0) {
       var l = this_array[i]&0x3fff;
@@ -528,8 +528,8 @@ var s; // NOTE: Who sets this?
   // (protected) clamp off excess high words
   clamp() {
     var this_array = this.array;
-    print(this.s);
-    print(BI_DM);
+//    print(this.s);
+//    print(BI_DM);
     var c = this.s&BI_DM;
     while(this.t > 0 && this_array[this.t-1] == c) --this.t;
   }
