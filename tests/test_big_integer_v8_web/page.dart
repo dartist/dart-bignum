@@ -20,14 +20,15 @@ void main() {
   appendText(y.toString(16));
   appendText(z.toString(16));
   appendText(zz.toString(16));
-  // TODO: toRadix fails 
-  //appendText(zz.toRadix(16));
   
+  appendText(zz.toRadix(16));
+  assert(zz.toString(16) == zz.toRadix(16));
   int i =0;
   while(i<100) {
     appendText();
     zz = x.multiply(zz);
     appendText(zz.toString(16));
+    assert(zz.toString(16) == zz.toRadix(16));
     i++;
   }
   
@@ -69,5 +70,13 @@ void main() {
   encrypt();
   appendText();
   decrypt();
+  
+  appendText();
+  var sw = new Stopwatch.start();
+  appendText(new BigInteger("100", 16).pow(100).pow(100).toString(16));
+  sw.stop();
+  appendText(sw.elapsedInMs());
+  
+  
   
 }

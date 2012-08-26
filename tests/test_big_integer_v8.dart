@@ -66,6 +66,20 @@ class TestBigIntegerV8 {
           encrypt();
           decrypt();
 
+          BigInteger yy = new BigInteger("3", 16);
+          var iii = yy.pow(3);
+          print(yy.toString(16));
+          assert(yy.toString(16) == "3");
+          print(iii.toString(16));
+          assert(iii.toString(16) == "1b");
+          
+          var sw = new Stopwatch.start();
+          print(new BigInteger("100", 16).pow(100).pow(100).toString(16));
+          sw.stop();
+          print(sw.elapsedInMs());
+          // TODO: bug with recursive call to toRadix and toString
+          //print(yy.toString());
+          
         });
       });
     }

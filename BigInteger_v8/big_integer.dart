@@ -407,7 +407,7 @@ class BigInteger {
     //    print(x);
     //    print(x.toInt());
     //    print(x.toInt()>>16);
-    //    if (x is double) x = x.toInt();
+        if (x is double) x = x.toInt();
     
     if((t=x>>16) != 0) { x = t; r += 16; }
     if((t=x>>8) != 0) { x = t; r += 8; }
@@ -499,7 +499,7 @@ class BigInteger {
     var a_array = a.array;
     var i = 0, c = 0, m = Math.min(a.t,this.t);
     while(i < m) {
-      c += this_array[i]-a_array[i];
+      c += (this_array[i].toInt() - a_array[i].toInt()).toInt();
       r_array[i++] = c&BI_DM;
       c >>= BI_DB;
     }
@@ -714,7 +714,7 @@ class BigInteger {
   }
     
   // (protected) return x s.t. r^x < DV
-  chunkSize(r) { return (Math.LN2*BI_DB/Math.log(r)).floor(); }
+  chunkSize(r) { return (Math.LN2*BI_DB/Math.log(r)).floor().toInt(); }
   
   // (public) 0 if this == 0, 1 if this > 0
   signum() {
@@ -733,12 +733,13 @@ class BigInteger {
     var d = nbv(a), y = nbi(), z = nbi(), r = "";
     this.divRemTo(d,y,z);
     while(y.signum() > 0) {
-//      print("y.signum() > 0");
-//      print(a+z.intValue());
-      r = (a+z.intValue()).toString(b).substr(1) + r; // TODO: fix this, dart String not handled properly in this case
+      // TODO: This is crazy slow
+      r = "${new BigInteger((a+z.intValue()).toString(), 10).toString(b).substring(1)}${r}";
       y.divRemTo(d,y,z);
     }
-    return z.intValue().toString(b) + r;
+    
+    // TODO: This is crazy slow
+    return "${new BigInteger(z.intValue().toString(), 10).toString(b)}${r}";
   }
   
   // (protected) convert from radix string
