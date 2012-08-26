@@ -1,5 +1,6 @@
 //#import('package:unittest/unittest.dart');
-#import('dart:math');
+#import('dart:math', prefix:"Math");
+#import('../fixnum/fixnum.dart', prefix:"Fixnum");
 #import('../packages/unittest/unittest.dart');
 #source('../BigInteger_v8/big_integer.dart');
 
@@ -20,7 +21,7 @@ class TestBigIntegerV8 {
         print(y.toString(16));
         print(z.toString(16));
         print(zz.toString(16));
-        
+        print(zz.toRadix(16));
         
 //        while(true) {
 //          print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
@@ -56,6 +57,8 @@ class TestBigIntegerV8 {
             RSA.setPrivateEx(nValue, eValue, dValue, pValue, qValue, dmp1Value, dmq1Value, coeffValue);
             var decrypted = RSA.decrypt(encrypted);
             if (decrypted != TEXT) {
+              print("decrypted: ${decrypted}");
+              print("TEXT: ${TEXT}");
               throw "Crypto operation failed";
             }
           };

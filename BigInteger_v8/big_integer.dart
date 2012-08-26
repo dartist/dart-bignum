@@ -29,6 +29,7 @@
  * All redistributions must retain an intact copy of this copyright notice
  * and disclaimer.
  */
+
 // Bits per digit
 var dbits;
 var BI_DB;
@@ -41,20 +42,14 @@ var BI_F1;
 var BI_F2;
 
 // Static methods
-nbi() { return new BigInteger(null, null, null); }
+BigInteger nbi() { return new BigInteger(null, null, null); }
 
 // Modular reduction using "classic" algorithm
 class Classic {
-  /*
-  Classic.prototype.convert = cConvert;
-  Classic.prototype.revert = cRevert;
-  Classic.prototype.reduce = cReduce;
-  Classic.prototype.mulTo = cMulTo;
-  Classic.prototype.sqrTo = cSqrTo;
-  */
+
   BigInteger m;
   
-  Classic(m) { this.m = m; }
+  Classic(this.m); 
   convert(x) {
     if(x.s < 0 || x.compareTo(this.m) >= 0) return x.mod(this.m);
     else return x;
@@ -66,13 +61,7 @@ class Classic {
 }
 
 class Montgomery {
-  /*
-  Montgomery.prototype.convert = montConvert;
-  Montgomery.prototype.revert = montRevert;
-  Montgomery.prototype.reduce = montReduce;
-  Montgomery.prototype.mulTo = montMulTo;
-  Montgomery.prototype.sqrTo = montSqrTo;
-  */
+
   BigInteger m;
   
   var mp; 
@@ -91,7 +80,7 @@ class Montgomery {
   this.mt2 = 2*m.t;
   }
   
-// xR mod m
+  // xR mod m
   convert(x) {
     var r = nbi();
     x.abs().dlShiftTo(this.m.t,r);
@@ -100,7 +89,7 @@ class Montgomery {
     return r;
   }
   
-// x/R mod m
+  // x/R mod m
   revert(x) {
     var r = nbi();
     x.copyTo(r);
@@ -108,7 +97,7 @@ class Montgomery {
     return r;
   }
   
-// x = x/R mod m (HAC 14.32)
+  // x = x/R mod m (HAC 14.32)
   reduce(x) {
     var x_array = x.array;
     while(x.t <= this.mt2)  // pad x so am has enough room later
@@ -136,13 +125,6 @@ class Montgomery {
 }
 
 class Barrett {
-  /*
-  Barrett.prototype.convert = barrettConvert;
-  Barrett.prototype.revert = barrettRevert;
-  Barrett.prototype.reduce = barrettReduce;
-  Barrett.prototype.mulTo = barrettMulTo;
-  Barrett.prototype.sqrTo = barrettSqrTo;
-  */
   
   BigInteger m;
   var r2;
@@ -186,58 +168,36 @@ class Barrett {
   
 }
 
-class NullExp {
-  /*
-  NullExp.prototype.convert = nNop;
-  NullExp.prototype.revert = nNop;
-  NullExp.prototype.mulTo = nMulTo;
-  NullExp.prototype.sqrTo = nSqrTo;
-  */
-  
-  NullExp() {
-    
-  }
-  
+class NullExp {  
+  NullExp();
   convert(x) { return x; }
   revert(x) { return x; }
   mulTo(x,y,r) { x.multiplyTo(y,r); }
   sqrTo(x,r) { x.squareTo(r); }
-  
 }
 
 
 
 class BigInteger {
-// Basic JavaScript BN library - subset useful for RSA encryption.
-
-//// Bits per digit
-//var dbits;
-//var BI_DB;
-//var BI_DM;
-//var BI_DV;
-//
-//var BI_FP;
-//var BI_FV;
-//var BI_F1;
-//var BI_F2;
-
-  //var lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509];
+  // Basic JavaScript BN library - subset useful for RSA encryption.
+  
   var lowprimes;
   var lplim;
   
-// JavaScript engine analysis
-var canary = 0xdeadbeefcafe;
-var j_lm; // = ((canary&0xffffff)==0xefcafe);
-Map array;
-
-var am;
-
-var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
-var BI_RC; // = new Map();
-
-var t; // NOTE: Who sets this?
-var s; // NOTE: Who sets this?
-// (public) Constructor
+  // JavaScript engine analysis
+  var canary = 0xdeadbeefcafe;
+  var j_lm; 
+  Map array;
+  
+  var am;
+  
+  var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
+  var BI_RC; 
+  
+  var t; // NOTE: Who sets this?
+  var s; // NOTE: Who sets this?
+  
+  // (public) Constructor
   BigInteger([a,b,c]) {
     lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509];
     BI_RC = new Map();
@@ -257,9 +217,6 @@ var s; // NOTE: Who sets this?
         this.fromString(a,b);
       }
     }
-    
-    
-
   }
   
   // Alternately, set max digit bits to 28 since some
@@ -267,11 +224,6 @@ var s; // NOTE: Who sets this?
   am3(i,x,w,j,c,n) {
     var this_array = this.array;
     var w_array    = w.array;
-  
-//    print("x = ${x}");
-//    print("x = ${x is double}");
-//    print("x = ${x is int}");
-//    print("x = ${x.toInt()}");
     var xl = x.toInt() & 0x3fff, xh = x.toInt() >> 14;
     while(--n >= 0) {
       var l = this_array[i]&0x3fff;
@@ -318,7 +270,6 @@ var s; // NOTE: Who sets this?
   }
   
   int2char(n) { 
-    //return BI_RM.charAt(n);
     return BI_RM[n];
   }
   
@@ -328,7 +279,6 @@ var s; // NOTE: Who sets this?
   }
   
   // (protected) copy this to r
-  //function bnpCopyTo(r) {
   copyTo(r) {
     var this_array = this.array;
     var r_array    = r.array;
@@ -452,6 +402,13 @@ var s; // NOTE: Who sets this?
 // returns bit length of the integer x
   nbits(x) {
     var r = 1, t;
+    // TODO: Assert here type is int
+    //    print("is double ${x is double}");
+    //    print(x);
+    //    print(x.toInt());
+    //    print(x.toInt()>>16);
+    //    if (x is double) x = x.toInt();
+    
     if((t=x>>16) != 0) { x = t; r += 16; }
     if((t=x>>8) != 0) { x = t; r += 8; }
     if((t=x>>4) != 0) { x = t; r += 4; }
@@ -531,13 +488,11 @@ var s; // NOTE: Who sets this?
   // (protected) clamp off excess high words
   clamp() {
     var this_array = this.array;
-//    print(this.s);
-//    print(BI_DM);
     var c = this.s&BI_DM;
     while(this.t > 0 && this_array[this.t-1] == c) --this.t;
   }
   
-// (protected) r = this - a
+  // (protected) r = this - a
   subTo(a,r) {
     var this_array = this.array;
     var r_array = r.array;
@@ -590,7 +545,7 @@ var s; // NOTE: Who sets this?
     if(this.s != a.s) BigInteger.ZERO.subTo(r,r);
   }
   
-// (protected) r = this^2, r != this (HAC 14.16)
+  // (protected) r = this^2, r != this (HAC 14.16)
   squareTo(r) {
     var x = this.abs();
     var x_array = x.array;
@@ -610,8 +565,8 @@ var s; // NOTE: Who sets this?
     r.clamp();
   }
   
-// (protected) divide this by m, quotient and remainder to q, r (HAC 14.20)
-// r != q, this != m.  q or r may be null.
+  // (protected) divide this by m, quotient and remainder to q, r (HAC 14.20)
+  // r != q, this != m.  q or r may be null.
   divRemTo(m,q,r) {
     var pm = m.abs();
     if(pm.t <= 0) return;
@@ -664,7 +619,7 @@ var s; // NOTE: Who sets this?
     if(ts < 0) BigInteger.ZERO.subTo(r,r);
   }
   
-// (public) this mod a
+  // (public) this mod a
   mod(a) {
     var r = nbi();
     this.abs().divRemTo(a,null,r);
@@ -673,16 +628,16 @@ var s; // NOTE: Who sets this?
   }
   
   
-// (protected) return "-1/this % 2^DB"; useful for Mont. reduction
-// justification:
-//         xy == 1 (mod m)
-//         xy =  1+km
-//   xy(2-xy) = (1+km)(1-km)
-// x[y(2-xy)] = 1-k^2m^2
-// x[y(2-xy)] == 1 (mod m^2)
-// if y is 1/x mod m, then y(2-xy) is 1/x mod m^2
-// should reduce x and y(2-xy) by m^2 at each step to keep size bounded.
-// JS multiply "overflows" differently from C/C++, so care is needed here.
+  // (protected) return "-1/this % 2^DB"; useful for Mont. reduction
+  // justification:
+  //         xy == 1 (mod m)
+  //         xy =  1+km
+  //   xy(2-xy) = (1+km)(1-km)
+  // x[y(2-xy)] = 1-k^2m^2
+  // x[y(2-xy)] == 1 (mod m^2)
+  // if y is 1/x mod m, then y(2-xy) is 1/x mod m^2
+  // should reduce x and y(2-xy) by m^2 at each step to keep size bounded.
+  // JS multiply "overflows" differently from C/C++, so care is needed here.
   invDigit() {
     var this_array = this.array;
     if(this.t < 1) return 0;
@@ -699,13 +654,13 @@ var s; // NOTE: Who sets this?
     return (y>0)?BI_DV-y:-y;
   }
   
-// (protected) true iff this is even
+  // (protected) true iff this is even
   isEven() {
     var this_array = this.array;
     return ((this.t>0)?(this_array[0]&1):this.s) == 0;
   }
  
-// (protected) this^e, e < 2^32, doing sqr and mul with "r" (HAC 14.79)
+  // (protected) this^e, e < 2^32, doing sqr and mul with "r" (HAC 14.79)
   exp(e,z) {
     if(e > 0xffffffff || e < 1) return BigInteger.ONE;
     var r = nbi(), r2 = nbi(), g = z.convert(this), i = nbits(e)-1;
@@ -718,7 +673,7 @@ var s; // NOTE: Who sets this?
     return z.revert(r);
   }
   
-// (public) this^e % m, 0 <= e < 2^32
+  // (public) this^e % m, 0 <= e < 2^32
   modPowInt(e,m) {
     var z;
     if(e < 256 || m.isEven()) z = new Classic(m); else z = new Montgomery(m);
@@ -726,42 +681,42 @@ var s; // NOTE: Who sets this?
   }
   
   
-// Extended JavaScript BN functions, required for RSA private ops.
+  // Extended JavaScript BN functions, required for RSA private ops.
   
 
-// (public)
+  // (public)
   clone() { var r = nbi(); this.copyTo(r); return r; }
   
   
-// (public) return value as integer
-intValue() {
-  var this_array = this.array;
-  if(this.s < 0) {
-    if(this.t == 1) return this_array[0]-BI_DV;
-    else if(this.t == 0) return -1;
+  // (public) return value as integer
+  intValue() {
+    var this_array = this.array;
+    if(this.s < 0) {
+      if(this.t == 1) return this_array[0]-BI_DV;
+      else if(this.t == 0) return -1;
+    }
+    else if(this.t == 1) return this_array[0];
+    else if(this.t == 0) return 0;
+    // assumes 16 < DB < 32
+    return ((this_array[1]&((1<<(32-BI_DB))-1))<<BI_DB)|this_array[0];
   }
-  else if(this.t == 1) return this_array[0];
-  else if(this.t == 0) return 0;
-  // assumes 16 < DB < 32
-  return ((this_array[1]&((1<<(32-BI_DB))-1))<<BI_DB)|this_array[0];
-}
   
-// (public) return value as byte
+  // (public) return value as byte
   byteValue() {
     var this_array = this.array;
     return (this.t==0)?this.s:(this_array[0]<<24)>>24;
   }
   
-// (public) return value as short (assumes DB>=16)
+  // (public) return value as short (assumes DB>=16)
   shortValue() {
     var this_array = this.array;
     return (this.t==0)?this.s:(this_array[0]<<16)>>16;
   }
     
-// (protected) return x s.t. r^x < DV
+  // (protected) return x s.t. r^x < DV
   chunkSize(r) { return (Math.LN2*BI_DB/Math.log(r)).floor(); }
   
-// (public) 0 if this == 0, 1 if this > 0
+  // (public) 0 if this == 0, 1 if this > 0
   signum() {
     var this_array = this.array;
     if(this.s < 0) return -1;
@@ -769,7 +724,7 @@ intValue() {
     else return 1;
   }
   
-// (protected) convert to radix string
+  // (protected) convert to radix string
   toRadix(b) {
     if(b == null) b = 10;
     if(this.signum() == 0 || b < 2 || b > 36) return "0";
@@ -778,13 +733,15 @@ intValue() {
     var d = nbv(a), y = nbi(), z = nbi(), r = "";
     this.divRemTo(d,y,z);
     while(y.signum() > 0) {
+//      print("y.signum() > 0");
+//      print(a+z.intValue());
       r = (a+z.intValue()).toString(b).substr(1) + r; // TODO: fix this, dart String not handled properly in this case
       y.divRemTo(d,y,z);
     }
     return z.intValue().toString(b) + r;
   }
   
-// (protected) convert from radix string
+  // (protected) convert from radix string
   fromRadix(s,b) {
     this.fromInt(0);
     if(b == null) b = 10;
@@ -1113,7 +1070,6 @@ intValue() {
   }
   
   
-  
   // (public) this^e % m (HAC 14.85)
   modPow(e,m) {
     var e_array = e.array;
@@ -1303,89 +1259,6 @@ intValue() {
   static BigInteger get ZERO() => nbv(0);
   static BigInteger get ONE() => nbv(1);
   
-
-
-  
-  
-  /*
-    
-// protected
-BigInteger.prototype.copyTo = bnpCopyTo;
-BigInteger.prototype.fromInt = bnpFromInt;
-BigInteger.prototype.fromString = bnpFromString;
-BigInteger.prototype.clamp = bnpClamp;
-BigInteger.prototype.dlShiftTo = bnpDLShiftTo;
-BigInteger.prototype.drShiftTo = bnpDRShiftTo;
-BigInteger.prototype.lShiftTo = bnpLShiftTo;
-BigInteger.prototype.rShiftTo = bnpRShiftTo;
-BigInteger.prototype.subTo = bnpSubTo;
-BigInteger.prototype.multiplyTo = bnpMultiplyTo;
-BigInteger.prototype.squareTo = bnpSquareTo;
-BigInteger.prototype.divRemTo = bnpDivRemTo;
-BigInteger.prototype.invDigit = bnpInvDigit;
-BigInteger.prototype.isEven = bnpIsEven;
-BigInteger.prototype.exp = bnpExp;
-
-// public
-BigInteger.prototype.toString = bnToString;
-BigInteger.prototype.negate = bnNegate;
-BigInteger.prototype.abs = bnAbs;
-BigInteger.prototype.compareTo = bnCompareTo;
-BigInteger.prototype.bitLength = bnBitLength;
-BigInteger.prototype.mod = bnMod;
-BigInteger.prototype.modPowInt = bnModPowInt;
-
-
-// protected
-BigInteger.prototype.chunkSize = bnpChunkSize;
-BigInteger.prototype.toRadix = bnpToRadix;
-BigInteger.prototype.fromRadix = bnpFromRadix;
-BigInteger.prototype.fromNumber = bnpFromNumber;
-BigInteger.prototype.bitwiseTo = bnpBitwiseTo;
-BigInteger.prototype.changeBit = bnpChangeBit;
-BigInteger.prototype.addTo = bnpAddTo;
-BigInteger.prototype.dMultiply = bnpDMultiply;
-BigInteger.prototype.dAddOffset = bnpDAddOffset;
-BigInteger.prototype.multiplyLowerTo = bnpMultiplyLowerTo;
-BigInteger.prototype.multiplyUpperTo = bnpMultiplyUpperTo;
-BigInteger.prototype.modInt = bnpModInt;
-BigInteger.prototype.millerRabin = bnpMillerRabin;
-
-// public
-BigInteger.prototype.clone = bnClone;
-BigInteger.prototype.intValue = bnIntValue;
-BigInteger.prototype.byteValue = bnByteValue;
-BigInteger.prototype.shortValue = bnShortValue;
-BigInteger.prototype.signum = bnSigNum;
-BigInteger.prototype.toByteArray = bnToByteArray;
-BigInteger.prototype.equals = bnEquals;
-BigInteger.prototype.min = bnMin;
-BigInteger.prototype.max = bnMax;
-BigInteger.prototype.and = bnAnd;
-BigInteger.prototype.or = bnOr;
-BigInteger.prototype.xor = bnXor;
-BigInteger.prototype.andNot = bnAndNot;
-BigInteger.prototype.not = bnNot;
-BigInteger.prototype.shiftLeft = bnShiftLeft;
-BigInteger.prototype.shiftRight = bnShiftRight;
-BigInteger.prototype.getLowestSetBit = bnGetLowestSetBit;
-BigInteger.prototype.bitCount = bnBitCount;
-BigInteger.prototype.testBit = bnTestBit;
-BigInteger.prototype.setBit = bnSetBit;
-BigInteger.prototype.clearBit = bnClearBit;
-BigInteger.prototype.flipBit = bnFlipBit;
-BigInteger.prototype.add = bnAdd;
-BigInteger.prototype.subtract = bnSubtract;
-BigInteger.prototype.multiply = bnMultiply;
-BigInteger.prototype.divide = bnDivide;
-BigInteger.prototype.remainder = bnRemainder;
-BigInteger.prototype.divideAndRemainder = bnDivideAndRemainder;
-BigInteger.prototype.modPow = bnModPow;
-BigInteger.prototype.modInverse = bnModInverse;
-BigInteger.prototype.pow = bnPow;
-BigInteger.prototype.gcd = bnGCD;
-BigInteger.prototype.isProbablePrime = bnIsProbablePrime;
-*/
 }
 
 
@@ -1435,7 +1308,9 @@ prng_newstate() {
 
 
 class SecureRandom {
+  Math.Random rng;
   SecureRandom() {
+    rng = new Math.Random();
     rng_pool_init();
     
   }
@@ -1478,9 +1353,10 @@ class SecureRandom {
       rng_pptr = 0;
       var t;
       while(rng_pptr < rng_psize) {  // extract some randomness from Math.random()
-        t = (65536 * Math.random()).floor();
-        rng_pool[rng_pptr++] = t >> 8;
-        rng_pool[rng_pptr++] = t & 255;
+        //t = (65536 * Math.random()).floor();
+        t = (65536 * rng.nextDouble()).floor();
+        rng_pool[rng_pptr++] = t.toInt() >> 8;
+        rng_pool[rng_pptr++] = t.toInt() & 255;
       }
       rng_pptr = 0;
       rng_seed_time();
@@ -1516,6 +1392,27 @@ parseBigInt(str,r) {
   return new BigInteger(str,r);
 }
 
+// PKCS#1 (type 2, random) pad input string s to n bytes, and return a bigint
+pkcs1pad2(s,n) {
+  if(n < s.length + 11) {
+    print("Message too long for RSA");
+    return null;
+  }
+  var ba = new Map();
+  var i = s.length - 1;
+  while(i >= 0 && n > 0) ba[--n] = s.charCodeAt(i--);
+  ba[--n] = 0;
+  var rng = new SecureRandom();
+  var x = new Map();
+  while(n > 2) { // random non-zero pad
+    x[0] = 0;
+    while(x[0] == 0) rng.nextBytes(x);
+    ba[--n] = x[0];
+  }
+  ba[--n] = 2;
+  ba[--n] = 0;
+  return new BigInteger(ba);
+}
 
 class RSAKey {
   var n;
@@ -1543,8 +1440,9 @@ class RSAKey {
   setPublic(N,E) {
     if(N != null && E != null && N.length > 0 && E.length > 0) {
       this.n = parseBigInt(N,16);
-      this.e = parseInt(E,16);
-      Math.parseInt("A");
+      //this.e = parseInt(E,16);
+      this.e = Fixnum.int32.parseHex(E);
+      //Math.parseInt("A");
     }
     else
       print("Invalid RSA public key");
@@ -1562,7 +1460,12 @@ class RSAKey {
     var c = this.doPublic(m);
     if(c == null) return null;
     var h = c.toString(16);
-    if((h.length & 1) == 0) return h; else return "0" + h;
+    if((h.length & 1) == 0) { 
+        return h;  
+      } else { 
+        //return "0" + h; 
+        return "0${h}"; 
+      }
   }
   
   // Undo PKCS#1 (type 2, random) padding and, if valid, return the plaintext
@@ -1576,8 +1479,11 @@ class RSAKey {
     while(b[i] != 0)
       if(++i >= b.length) return null;
     var ret = "";
-    while(++i < b.length)
-      ret += String.fromCharCode(b[i]);
+    while(++i < b.length) {
+      var c = new String.fromCharCodes([b[i]]);
+      ret = "$ret${c}";
+    }
+      //ret += String.fromCharCode(b[i]);
     return ret;
   }
   
@@ -1585,7 +1491,8 @@ class RSAKey {
   setPrivate(N,E,D) {
     if(N != null && E != null && N.length > 0 && E.length > 0) {
       this.n = parseBigInt(N,16);
-      this.e = parseInt(E,16);
+      //this.e = parseInt(E,16);
+      this.e = Fixnum.int32.parseHex(E);
       this.d = parseBigInt(D,16);
     }
     else
@@ -1596,7 +1503,8 @@ class RSAKey {
   setPrivateEx(N,E,D,P,Q,DP,DQ,C) {
     if(N != null && E != null && N.length > 0 && E.length > 0) {
       this.n = parseBigInt(N,16);
-      this.e = parseInt(E,16);
+      //this.e = parseInt(E,16);
+      this.e = Fixnum.int32.parseHex(E);
       this.d = parseBigInt(D,16);
       this.p = parseBigInt(P,16);
       this.q = parseBigInt(Q,16);
@@ -1612,7 +1520,8 @@ class RSAKey {
   generate(B,E) {
     var rng = new SecureRandom();
     var qs = B>>1;
-    this.e = parseInt(E,16);
+    //this.e = parseInt(E,16);
+    this.e = Fixnum.int32.parseHex(E);
     var ee = new BigInteger(E,16);
     for(;;) {
       for(;;) {

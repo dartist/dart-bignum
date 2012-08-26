@@ -1,3 +1,8 @@
 packages
 .project
 .children
+pubspec.lock
+
+tests/test_big_integer_v8_web/page.dart.js
+
+tests/test_big_integer_v8_web/page.dart.js.map
