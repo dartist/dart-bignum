@@ -31,6 +31,27 @@ class TestBigIntegerV8 {
         expect(x.toString(16), equals("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
       });
       
+      test("construct BigInteger num", (){
+        num n = 5;
+        var x = new BigInteger(n);
+        expect(x.toString(10), equals("${n}"));
+        expect(x.intValue(), equals(5));
+        n = 0x10;
+        x = new BigInteger(n);
+        expect(x.toString(16), equals("10"));
+        expect(x.intValue(), equals(16));
+        n = 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
+        x = new BigInteger(n);
+        expect(x.toString(16), equals("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+      });
+      
+      test("construct BigInteger double", (){
+        double n = 5.0;
+        var x = new BigInteger(n);
+        expect(x.toString(10), equals("5"));
+        expect(x.intValue(), equals(5));        
+      });
+      
       test("construct BigInteger base 10 String", () {
         var x = new BigInteger("5", 10);
         expect(x.toString(10), equals("5"));

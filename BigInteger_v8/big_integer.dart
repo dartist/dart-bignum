@@ -210,10 +210,12 @@ class BigInteger {
     this.array = new Map();
     
     if (a != null) {
-      if (a is num || a is int || a is double) {
+      if (a is int) {
         // this.fromNumber(a,b,c);
         // NOTE: the fromNumber implementation trys to exploit js numbers
         this.fromString(a.toString(), 10);
+      } else if (a is double || a is num) {
+        this.fromString(a.toInt().toString(), 10);
       } else if (b == null && a is! String) {
         this.fromString(a,256);
       } else {
