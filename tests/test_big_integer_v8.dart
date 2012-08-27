@@ -1,5 +1,5 @@
 //#import('package:unittest/unittest.dart');
-#import('dart:math', prefix:"Math");
+#import('dart:math', prefix:"Mathx");
 #import('../fixnum/fixnum.dart', prefix:"Fixnum");
 #import('../packages/unittest/unittest.dart');
 #source('../BigInteger_v8/big_integer.dart');
@@ -81,7 +81,7 @@ class TestBigIntegerV8 {
         
         
         test("arithmetric", () {
-          Math.Random rnd = new Math.Random();
+          Mathx.Random rnd = new Mathx.Random();
           for(int i=0; i<100; i++) {
             //print(rnd.nextInt(100000000));
             BigInteger x = new BigInteger(rnd.nextInt(100000000).toRadixString(16), 16);

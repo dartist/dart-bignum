@@ -1,5 +1,5 @@
 #import("dart:html");
-#import('dart:math', prefix:"Math");
+#import('dart:math', prefix:"Mathx");
 #import('../../fixnum/fixnum.dart', prefix:"Fixnum");
 #source('../../BigInteger_v8/big_integer.dart');
 
@@ -72,10 +72,10 @@ void main() {
   decrypt();
   
   appendText();
-  var sw = new Stopwatch.start();
-  appendText(new BigInteger("100", 16).pow(100).pow(100).toString(16));
-  sw.stop();
-  appendText(sw.elapsedInMs());
+//  var sw = new Stopwatch.start();
+//  appendText(new BigInteger("100", 16).pow(100).pow(100).toString(16));
+//  sw.stop();
+//  appendText(sw.elapsedInMs());
   
   
   

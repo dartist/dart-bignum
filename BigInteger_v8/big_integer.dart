@@ -251,7 +251,7 @@ class BigInteger {
     BI_DV = (1<<dbits);
   
     BI_FP = 52;
-    BI_FV = Math.pow(2,BI_FP);
+    BI_FV = Mathx.pow(2,BI_FP);
     BI_F1 = BI_FP-dbits;
     BI_F2 = 2*dbits-BI_FP;
   }
@@ -441,7 +441,7 @@ class BigInteger {
     var this_array = this.array;
     var r_array = r.array;
     for(var i = n; i < this.t; ++i) r_array[i-n] = this_array[i];
-    r.t = Math.max(this.t-n,0);
+    r.t = Mathx.max(this.t-n,0);
     r.s = this.s;
   }
 
@@ -498,7 +498,7 @@ class BigInteger {
     var this_array = this.array;
     var r_array = r.array;
     var a_array = a.array;
-    var i = 0, c = 0, m = Math.min(a.t,this.t);
+    var i = 0, c = 0, m = Mathx.min(a.t,this.t);
     while(i < m) {
       c += (this_array[i].toInt() - a_array[i].toInt()).toInt();
       r_array[i++] = c&BI_DM;
@@ -715,7 +715,7 @@ class BigInteger {
   }
     
   // (protected) return x s.t. r^x < DV
-  chunkSize(r) { return (Math.LN2*BI_DB/Math.log(r)).floor().toInt(); }
+  chunkSize(r) { return (Mathx.LN2*BI_DB/Mathx.log(r)).floor().toInt(); }
   
   // (public) 0 if this == 0, 1 if this > 0
   signum() {
@@ -730,7 +730,7 @@ class BigInteger {
     if(b == null) b = 10;
     if(this.signum() == 0 || b < 2 || b > 36) return "0";
     var cs = this.chunkSize(b);
-    var a = Math.pow(b,cs);
+    var a = Mathx.pow(b,cs);
     var d = nbv(a), y = nbi(), z = nbi(), r = "";
     this.divRemTo(d,y,z);
     while(y.signum() > 0) {
@@ -748,7 +748,7 @@ class BigInteger {
     this.fromInt(0);
     if(b == null) b = 10;
     var cs = this.chunkSize(b);
-    var d = Math.pow(b,cs), mi = false, j = 0, w = 0;
+    var d = Mathx.pow(b,cs), mi = false, j = 0, w = 0;
     for(var i = 0; i < s.length; ++i) {
       var x = intAt(s,i);
       if(x < 0) {
@@ -764,7 +764,7 @@ class BigInteger {
       }
     }
     if(j > 0) {
-      this.dMultiply(Math.pow(b,j));
+      this.dMultiply(Mathx.pow(b,j));
       this.dAddOffset(w,0);
     }
     if(mi) BigInteger.ZERO.subTo(this,this);
@@ -835,7 +835,7 @@ class BigInteger {
     var this_array = this.array;
     var a_array    = a.array;
     var r_array    = r.array;
-    var i, f, m = Math.min(a.t,this.t);
+    var i, f, m = Mathx.min(a.t,this.t);
     for(i = 0; i < m; ++i) r_array[i] = op(this_array[i],a_array[i]);
     if(a.t < this.t) {
       f = a.s&BI_DM;
@@ -960,7 +960,7 @@ class BigInteger {
     var this_array = this.array;
     var a_array = a.array;
     var r_array = r.array;
-    var i = 0, c = 0, m = Math.min(a.t,this.t);
+    var i = 0, c = 0, m = Mathx.min(a.t,this.t);
     while(i < m) {
       c += this_array[i]+a_array[i];
       r_array[i++] = c&BI_DM;
@@ -1046,13 +1046,13 @@ class BigInteger {
   multiplyLowerTo(a,n,r) {
     var r_array = r.array;
     var a_array = a.array;
-    var i = Math.min(this.t+a.t,n);
+    var i = Mathx.min(this.t+a.t,n);
     r.s = 0; // assumes a,this >= 0
     r.t = i;
     while(i > 0) r_array[--i] = 0;
     var j;
     for(j = r.t-this.t; i < j; ++i) r_array[i+this.t] = this.am(0,a_array[i],r,i,0,this.t);
-    for(j = Math.min(a.t,n); i < j; ++i) this.am(0,a_array[i],r,i,0,n-i);
+    for(j = Mathx.min(a.t,n); i < j; ++i) this.am(0,a_array[i],r,i,0,n-i);
     r.clamp();
   }
   
@@ -1065,7 +1065,7 @@ class BigInteger {
     var i = r.t = this.t+a.t-n;
     r.s = 0; // assumes a,this >= 0
     while(--i >= 0) r_array[i] = 0;
-    for(i = Math.max(n-this.t,0); i < a.t; ++i)
+    for(i = Mathx.max(n-this.t,0); i < a.t; ++i)
       r_array[this.t+i-n] = this.am(n-i,a_array[i],r,0,0,this.t+i-n);
     r.clamp();
     r.drShiftTo(1,r);
@@ -1310,9 +1310,9 @@ prng_newstate() {
 
 
 class SecureRandom {
-  Math.Random rng;
+  Mathx.Random rng;
   SecureRandom() {
-    rng = new Math.Random();
+    rng = new Mathx.Random();
     rng_pool_init();
     
   }
@@ -1354,8 +1354,8 @@ class SecureRandom {
       rng_pool = new Map();
       rng_pptr = 0;
       var t;
-      while(rng_pptr < rng_psize) {  // extract some randomness from Math.random()
-        //t = (65536 * Math.random()).floor();
+      while(rng_pptr < rng_psize) {  // extract some randomness from Mathx.random()
+        //t = (65536 * Mathx.random()).floor();
         t = (65536 * rng.nextDouble()).floor();
         rng_pool[rng_pptr++] = t.toInt() >> 8;
         rng_pool[rng_pptr++] = t.toInt() & 255;
@@ -1444,7 +1444,7 @@ class RSAKey {
       this.n = parseBigInt(N,16);
       //this.e = parseInt(E,16);
       this.e = Fixnum.int32.parseHex(E);
-      //Math.parseInt("A");
+      //Mathx.parseInt("A");
     }
     else
       print("Invalid RSA public key");

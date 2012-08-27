@@ -3,7 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 #library('fixnum');
-#import('dart:math', prefix: 'Math');
+#import('dart:math', prefix: 'Mathx');
 #source('intx.dart');
 #source('int32.dart');
 #source('int64.dart');
