@@ -1,13 +1,25 @@
 #import("dart:html");
 #import('dart:math', prefix:"Mathx");
 #import('../../fixnum/fixnum.dart', prefix:"Fixnum");
+#import('../../packages/unittest/unittest.dart');
 #source('../../BigInteger_v8/big_integer.dart');
-
+#source('../data/powpowpow.dart');
 appendText([s=""]) {
   query("#container").elements.add(new Element.html("<div>$s<br></div>"));
 }
 
 void main() {
+  var fail = new BigInteger("5", 10);
+  
+  expect(fail.toString(10), equals("5"));
+  expect(fail.toRadix(10), equals("5"));
+  expect(fail.toString(), equals("5"));
+  
+  var ppp = new BigInteger(powpowpow_base_16, 16);
+  var ppp_str = ppp.toString(16);
+  expect(ppp_str, equals(powpowpow_base_16));
+  appendText(ppp_str);
+  
   // 0xabcd1234 modulo 0xbeef = 0xB60C
   var x = new BigInteger("abcd1234", 16);
   var y = new BigInteger("beef", 16);
@@ -22,13 +34,15 @@ void main() {
   appendText(zz.toString(16));
   
   appendText(zz.toRadix(16));
-  assert(zz.toString(16) == zz.toRadix(16));
+  //assert(zz.toString(16) == zz.toRadix(16));
+  expect(zz.toString(16), equals(zz.toRadix(16)));
   int i =0;
   while(i<100) {
     appendText();
     zz = x.multiply(zz);
     appendText(zz.toString(16));
-    assert(zz.toString(16) == zz.toRadix(16));
+    //assert(zz.toString(16) == zz.toRadix(16));
+    expect(zz.toString(16), equals(zz.toRadix(16)));
     i++;
   }
   
@@ -61,6 +75,7 @@ void main() {
     var decrypted = RSA.decrypt(encrypted);
     appendText("decrypted: ${decrypted}");
     appendText("TEXT: ${TEXT}");
+    expect(decrypted, equals(TEXT));
     if (decrypted != TEXT) {
       throw "Crypto operation failed";
     }

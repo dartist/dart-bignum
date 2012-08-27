@@ -3,11 +3,30 @@
 #import('../fixnum/fixnum.dart', prefix:"Fixnum");
 #import('../packages/unittest/unittest.dart');
 #source('../BigInteger_v8/big_integer.dart');
+#source('data/powpowpow.dart');
+
+bool TEST_EXTRA_LARGE = false;
 
 class TestBigIntegerV8 {
   
   testBigInteger() {
     group("BigInteger v8", () {
+      test("construct BigInteger base 10", () {
+        var x = new BigInteger("5", 10);
+        expect(x.toString(10), equals("5"));
+        expect(x.toRadix(10), equals("5"));
+        expect(x.toString(), equals("5"));
+      });
+      
+      test("construct BigInteger base 16 to multi base String", () {
+        if (TEST_EXTRA_LARGE) {
+          var ppp = new BigInteger(powpowpow_base_16, 16);
+          expect(ppp.toString(16), equals(powpowpow_base_16));
+          expect(ppp.toString(10), equals(powpowpow_base_10));
+          expect(ppp.toString(2), equals(powpowpow_base_2));
+        }
+      });
+      
       test("construct BigInteger base 16", () {
         // 0xabcd1234 modulo 0xbeef = 0xB60C
         var x = new BigInteger("abcd1234", 16);
@@ -100,6 +119,8 @@ class TestBigIntegerV8 {
   void main() {
     testBigInteger();
   }
+  
+
 }
 
 void main() {
