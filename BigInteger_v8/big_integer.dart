@@ -211,7 +211,9 @@ class BigInteger {
     
     if (a != null) {
       if (a is num || a is int || a is double) {
-        this.fromNumber(a,b,c);
+        // this.fromNumber(a,b,c);
+        // NOTE: the fromNumber implementation trys to exploit js numbers
+        this.fromString(a.toString(), 10);
       } else if (b == null && a is! String) {
         this.fromString(a,256);
       } else {
@@ -772,31 +774,39 @@ class BigInteger {
   
   
 // (protected) alternate constructor
-  fromNumber(a,b,c) {
-    //if("number" == typeof b) {
-    if (b is num || b is int || b is double) {
-      // new BigInteger(int,int,RNG)
-      if(a < 2) this.fromInt(1);
-      else {
-        this.fromNumber(a,c, null);
-        if(!this.testBit(a-1))  // force MSB set
-          this.bitwiseTo(BigInteger.ONE.shiftLeft(a-1),op_or,this);
-        if(this.isEven()) this.dAddOffset(1,0); // force odd
-        while(!this.isProbablePrime(b)) {
-          this.dAddOffset(2,0);
-          if(this.bitLength() > a) this.subTo(BigInteger.ONE.shiftLeft(a-1),this);
-        }
-      }
-    }
-    else {
-      // new BigInteger(int,RNG)
-      var x = new Map(), t = a&7;
-      // x.length = (a>>3)+1; // TODO: do we really need to set the length for the Array when using something like map?
-      b.nextBytes(x);
-      if(t > 0) x[0] &= ((1<<t)-1); else x[0] = 0;
-      this.fromString(x,256);
-    }
-  }  
+//  fromNumber(a,b,c) {
+//    //if("number" == typeof b) {
+//    if (b is num || b is int || b is double) {
+//      // new BigInteger(int,int,RNG)
+//      if(a < 2) { 
+//        this.fromInt(1); 
+//      } else {
+//        this.fromNumber(a,c, null);
+//        if(!this.testBit(a-1))  // force MSB set
+//          this.bitwiseTo(BigInteger.ONE.shiftLeft(a-1),op_or,this);
+//        if(this.isEven()) this.dAddOffset(1,0); // force odd
+//        while(!this.isProbablePrime(b)) {
+//          this.dAddOffset(2,0);
+//          if(this.bitLength() > a) this.subTo(BigInteger.ONE.shiftLeft(a-1),this);
+//        }
+//      }
+//    }
+//    else {
+//      // new BigInteger(int,RNG)
+//      var x = new Map();
+//      StringBuffer sb = new StringBuffer();
+//      //x[0] = 0;
+//      var t = a & 7;
+//      // x.length = (a>>3)+1; // TODO: do we really need to set the length for the Array when using something like map?
+//      if(t > 0) { 
+//        x[0] = ((1<<t)-1);
+//      } else { 
+//        x[0] = 0;   
+//      }
+//      
+//      this.fromString(x,256);
+//    }
+//  }  
   
 // (public) convert to bigendian byte array
   toByteArray() {

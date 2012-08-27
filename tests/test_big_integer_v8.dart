@@ -20,7 +20,18 @@ class TestBigIntegerV8 {
   
   testBigInteger() {
     group("BigInteger v8", () {
-      test("construct BigInteger base 10", () {
+      test("construct BigInteger int", (){
+        var x = new BigInteger(5);
+        expect(x.toString(10), equals("5"));
+        expect(x.intValue(), equals(5));
+        x = new BigInteger(0x10);
+        expect(x.toString(16), equals("10"));
+        expect(x.intValue(), equals(16));
+        x = new BigInteger(0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff);
+        expect(x.toString(16), equals("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+      });
+      
+      test("construct BigInteger base 10 String", () {
         var x = new BigInteger("5", 10);
         expect(x.toString(10), equals("5"));
         expect(x.toRadix(10), equals("5"));
