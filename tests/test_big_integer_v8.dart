@@ -8,7 +8,7 @@ class TestBigIntegerV8 {
   
   testBigInteger() {
     group("BigInteger v8", () {
-      test("Construct BigInteger", () {
+      test("construct BigInteger base 16", () {
         // 0xabcd1234 modulo 0xbeef = 0xB60C
         var x = new BigInteger("abcd1234", 16);
         var y = new BigInteger("beef", 16);
@@ -17,17 +17,12 @@ class TestBigIntegerV8 {
         //0xabcd1234 * 0xbeef = 802297f6968c
         var zz = x.multiply(y);
         
-        print(x.toString(16));
-        print(y.toString(16));
-        print(z.toString(16));
-        print(zz.toString(16));
-        print(zz.toRadix(16));
-        
-//        while(true) {
-//          print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-//          zz = x.multiply(zz);
-//          print(zz.toString(16));
-//        }
+        expect(x.toString(16), equals("abcd1234"));
+        expect(y.toString(16), equals("beef"));
+        expect(z.toString(16), equals("b60c"));
+        expect(zz.toString(16), equals("802297f6968c"));
+        expect(zz.toRadix(16), equals("802297f6968c"));
+
         });
       
         test("Test by encrypt/decrypt", () {
@@ -64,27 +59,44 @@ class TestBigIntegerV8 {
           };
           
           encrypt();
-          decrypt();
-
-          BigInteger yy = new BigInteger("3", 16);
-          var iii = yy.pow(3);
-          print(yy.toString(16));
-          assert(yy.toString(16) == "3");
-          print(iii.toString(16));
-          assert(iii.toString(16) == "1b");
-          
-          var sw = new Stopwatch.start();
-          print(new BigInteger("100", 16).pow(100).pow(100).toString(16));
-          sw.stop();
-          print(sw.elapsedInMs());
+          decrypt(); 
+        });
+        
+        test("pow", () {
           // TODO: bug with recursive call to toRadix and toString
           //print(yy.toString());
           
+          BigInteger yy = new BigInteger("3", 16);
+          var iii = yy.pow(3);
+          expect(yy.toString(16), equals("3"));
+          expect(iii.toString(16), equals("1b"));
+          
+          
+          var sw = new Stopwatch.start();
+          //print(new BigInteger("100", 16).pow(100).pow(100).toString(16));
+          //print(new BigInteger("100", 16).pow(100).toString(16));
+          sw.stop();
+          //print(sw.elapsedInMs());
         });
+        
+        
+        test("arithmetric", () {
+          Math.Random rnd = new Math.Random();
+          for(int i=0; i<100; i++) {
+            //print(rnd.nextInt(100000000));
+            BigInteger x = new BigInteger(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigInteger y = new BigInteger(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigInteger z = x.divide(y);
+            z = z.multiply(y);
+            z = z.add(x.remainder(y));
+            z = z.subtract(x);
+            expect(z.equals(BigInteger.ZERO), equals(true));
+          }
+        });
+        
       });
     }
   
-
   void main() {
     testBigInteger();
   }

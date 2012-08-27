@@ -177,6 +177,7 @@ class NullExp {
 }
 
 
+// typedef AmplitudeModulation 
 
 class BigInteger {
   // Basic JavaScript BN library - subset useful for RSA encryption.
@@ -205,7 +206,7 @@ class BigInteger {
     // Setup all the global scope js code here
     setupDigitConversions();
     lplim = (1<<26)/lowprimes[lowprimes.length-1];
-    setupEngine(am3, 28);
+    setupEngine(_am3, 28);
     this.array = new Map();
     
     if (a != null) {
@@ -221,7 +222,7 @@ class BigInteger {
   
   // Alternately, set max digit bits to 28 since some
   // browsers slow down when dealing with 32-bit numbers.
-  am3(i,x,w,j,c,n) {
+  _am3(i,x,w,j,c,n) {
     var this_array = this.array;
     var w_array    = w.array;
     var xl = x.toInt() & 0x3fff, xh = x.toInt() >> 14;
