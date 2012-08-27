@@ -734,14 +734,13 @@ class BigInteger {
     var d = nbv(a), y = nbi(), z = nbi(), r = "";
     this.divRemTo(d,y,z);
     while(y.signum() > 0) {
-      // TODO: This is crazy slow
-      r = "${new BigInteger((a+z.intValue()).toString(), 10).toString(b).substring(1)}${r}";
+      r = "${(a+z.intValue()).toRadixString(b).substring(1)}${r}";
       y.divRemTo(d,y,z);
     }
     
-    // TODO: This is crazy slow
-    return "${new BigInteger(z.intValue().toString(), 10).toString(b)}${r}";
+    return "${z.intValue().toRadixString(b)}${r}";
   }
+  
   
   // (protected) convert from radix string
   fromRadix(s,b) {
