@@ -6,6 +6,15 @@
 #source('data/powpowpow.dart');
 
 bool TEST_EXTRA_LARGE = false;
+run_sequence(t) {
+  if (TEST_EXTRA_LARGE) {
+    for (int i = 0; i < 100; i++) {
+      t();
+    }
+  } else {
+    t();
+  }
+}
 
 class TestBigIntegerV8 {
   
@@ -99,10 +108,9 @@ class TestBigIntegerV8 {
         });
         
         
-        test("arithmetric", () {
+        test("arithmetic 1", () {
           Mathx.Random rnd = new Mathx.Random();
-          for(int i=0; i<100; i++) {
-            //print(rnd.nextInt(100000000));
+          t() {
             BigInteger x = new BigInteger(rnd.nextInt(100000000).toRadixString(16), 16);
             BigInteger y = new BigInteger(rnd.nextInt(100000000).toRadixString(16), 16);
             BigInteger z = x.divide(y);
@@ -110,9 +118,87 @@ class TestBigIntegerV8 {
             z = z.add(x.remainder(y));
             z = z.subtract(x);
             expect(z.equals(BigInteger.ZERO), equals(true));
-          }
+          };
+          
+          run_sequence(t);
         });
         
+        test("arithmetic 2", () {
+          Mathx.Random rnd = new Mathx.Random();
+          t() {
+            BigInteger x = new BigInteger(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigInteger y = new BigInteger(rnd.nextInt(100000000).toRadixString(16), 16);
+            var z = x.divideAndRemainder(y);
+            z[0] = z[0].multiply(y);
+            z[0] = z[0].add(z[1]);
+            z[0] = z[0].subtract(x);
+            expect(z[0].equals(BigInteger.ZERO), equals(true));
+          };
+          
+          run_sequence(t);
+        });
+        
+        test("arithmetic 3", () {
+          Mathx.Random rnd = new Mathx.Random();
+          t() {
+            BigInteger x = new BigInteger(powpowpow_base_16, 16);
+            BigInteger y = new BigInteger("${powpowpow_base_16}" "${rnd.nextInt(100000000).toRadixString(16)}", 16);
+            var z = x.divideAndRemainder(y);
+            z[0] = z[0].multiply(y);
+            z[0] = z[0].add(z[1]);
+            z[0] = z[0].subtract(x);
+            expect(z[0].equals(BigInteger.ZERO), equals(true));
+          };
+          
+          run_sequence(t);
+        });
+        
+        test("bitCount", () {
+          Mathx.Random rnd = new Mathx.Random();
+          t() {
+            int x = rnd.nextInt(100000000);
+            BigInteger bx = new BigInteger(x.toString(), 10);
+            int bit = (x < 0 ? 0 : 1);
+            int tmp = x, bitCount = 0;
+            for (int j = 0; j < 32; j++) {
+              bitCount += ((tmp & 1) == bit ? 1 : 0);
+              tmp >>= 1;
+            }
+            
+            expect(bx.bitCount(),  equals(bitCount));
+          };
+          
+          run_sequence(t);
+        });
+        
+        test("bitLength", () {
+          Mathx.Random rnd = new Mathx.Random();
+          t() {
+            int x = rnd.nextInt(100000000);
+            BigInteger bx = new BigInteger(x.toString(), 10);
+            int signBit = (x < 0 ? 0x80000000 : 0);
+            int tmp = x, bitLength, j;
+            for (j = 0; j < 32 && (tmp & 0x80000000) == signBit; j++) {
+              tmp <<= 1;
+            }
+            
+            bitLength = 32 - j;
+            
+            expect(bx.bitLength(),  equals(bitLength));
+          };
+          run_sequence(t);
+        });
+        
+        test("bit ops", () {});
+        test("bitwise", () {});
+        test("shift", () {});
+        test("divideAndRemainder", () {});
+        test("stringConv", () {});
+        test("byteArrayConv", () {});
+        test("modInv", () {});
+        test("modExp", () {});
+        test("modExp2", () {});
+        test("prime", () {});
       });
     }
   
