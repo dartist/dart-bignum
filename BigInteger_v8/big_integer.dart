@@ -724,12 +724,16 @@ class BigInteger {
   // (public) 0 if this == 0, 1 if this > 0
   signum() {
     var this_array = this.array;
-    if(this.s < 0) return -1;
-    else if(this.t <= 0 || (this.t == 1 && this_array[0] <= 0)) return 0;
-    else return 1;
+    if(this.s < 0) { 
+      return -1; 
+    } else if(this.t <= 0 || (this.t == 1 && this_array[0] <= 0)) { 
+      return 0;   
+    } else { 
+      return 1;   
+    }
   }
   
-  // (protected) convert to radix string
+  // (protected) convert to radix string , dartbug.com/461 num only supports up to radix 16
   toRadix(b) {
     if(b == null) b = 10;
     if(this.signum() == 0 || b < 2 || b > 36) return "0";
@@ -755,7 +759,7 @@ class BigInteger {
     for(var i = 0; i < s.length; ++i) {
       var x = intAt(s,i);
       if(x < 0) {
-        if(s.charAt(i) == "-" && this.signum() == 0) mi = true;
+        if(s.charCodeAt(i) == "-" && this.signum() == 0) mi = true;
         continue;
       }
       w = b*w+x;
@@ -1017,7 +1021,7 @@ class BigInteger {
   // (public) this % a
   remainder(a) { var r = nbi(); this.divRemTo(a,null,r); return r; }
   
-  // (public) [this/a,this%a]
+  // (public) [this/a,this%a] Map<BigInteger>
   divideAndRemainder(a) {
     var q = nbi(), r = nbi();
     this.divRemTo(a,q,r);
