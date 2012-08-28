@@ -30,19 +30,9 @@
  * and disclaimer.
  */
 
-// Bits per digit
-var dbits;
-var BI_DB;
-var BI_DM;
-var BI_DV;
 
-var BI_FP;
-var BI_FV;
-var BI_F1;
-var BI_F2;
 
-// Static methods
-BigInteger nbi() { return new BigInteger(null, null, null); }
+
 
 // Modular reduction using "classic" algorithm
 class Classic {
@@ -76,13 +66,13 @@ class Montgomery {
   this.mp = m.invDigit();
   this.mpl = this.mp&0x7fff;
   this.mph = this.mp>>15;
-  this.um = (1<<(BI_DB-15))-1;
+  this.um = (1<<(BigInteger.BI_DB-15))-1;
   this.mt2 = 2*m.t;
   }
   
   // xR mod m
   convert(x) {
-    var r = nbi();
+    var r = BigInteger.nbi();
     x.abs().dlShiftTo(this.m.t,r);
     r.divRemTo(this.m,null,r);
     if(x.s < 0 && r.compareTo(BigInteger.ZERO) > 0) this.m.subTo(r,r);
@@ -91,7 +81,7 @@ class Montgomery {
   
   // x/R mod m
   revert(x) {
-    var r = nbi();
+    var r = BigInteger.nbi();
     x.copyTo(r);
     this.reduce(r);
     return r;
@@ -105,12 +95,12 @@ class Montgomery {
     for(var i = 0; i < this.m.t; ++i) {
       // faster way of calculating u0 = x[i]*mp mod DV
       var j = x_array[i]&0x7fff;
-      var u0 = (j*this.mpl+(((j*this.mph+(x_array[i]>>15)*this.mpl)&this.um)<<15))&BI_DM;
+      var u0 = (j*this.mpl+(((j*this.mph+(x_array[i]>>15)*this.mpl)&this.um)<<15))&BigInteger.BI_DM;
       // use am to combine the multiply-shift-add into one call
       j = i+this.m.t;
       x_array[j] += this.m.am(0,u0,x,i,0,this.m.t);
       // propagate carry
-      while(x_array[j] >= BI_DV) { x_array[j] -= BI_DV; x_array[++j]++; }
+      while(x_array[j] >= BigInteger.BI_DV) { x_array[j] -= BigInteger.BI_DV; x_array[++j]++; }
     }
     x.clamp();
     x.drShiftTo(this.m.t,x);
@@ -127,15 +117,15 @@ class Montgomery {
 class Barrett {
   
   BigInteger m;
-  var r2;
-  var q3;
+  BigInteger r2;
+  BigInteger q3;
   var mu;
    
   // Barrett modular reduction
   Barrett(m) {
     // setup Barrett
-    this.r2 = nbi();
-    this.q3 = nbi();
+    this.r2 = BigInteger.nbi();
+    this.q3 = BigInteger.nbi();
     BigInteger.ONE.dlShiftTo(2*m.t,this.r2);
     this.mu = this.r2.divide(m);
     this.m = m;
@@ -144,7 +134,7 @@ class Barrett {
   convert(x) {
     if(x.s < 0 || x.t > 2*this.m.t) return x.mod(this.m);
     else if(x.compareTo(this.m) < 0) return x;
-    else { var r = nbi(); x.copyTo(r); this.reduce(r); return r; }
+    else { var r = BigInteger.nbi(); x.copyTo(r); this.reduce(r); return r; }
   }
 
   revert(x) { return x; }
@@ -180,7 +170,21 @@ class NullExp {
 // typedef AmplitudeModulation 
 
 class BigInteger {
-  // Basic JavaScript BN library - subset useful for RSA encryption.
+  // Bits per digit
+  static int dbits;
+  static int BI_DB;
+  static int BI_DM;
+  static int BI_DV;
+  
+  static int BI_FP;
+  static int BI_FV;
+  static int BI_F1;
+  static int BI_F2;
+
+  // Static methods
+  static BigInteger nbi() { return new BigInteger(null, null, null); }
+
+  // Basic dart BN library - subset useful for RSA encryption.
   
   var lowprimes;
   var lplim;
@@ -188,15 +192,15 @@ class BigInteger {
   // JavaScript engine analysis
   var canary = 0xdeadbeefcafe;
   var j_lm; 
-  Map array;
+  Map array; // TODO: create an array implementation that can handle out of bounds issues. 
   
   var am;
   
   var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
   var BI_RC; 
   
-  var t; // NOTE: Who sets this?
-  var s; // NOTE: Who sets this?
+  num t; 
+  num s; 
   
   // (public) Constructor
   BigInteger([a,b,c]) {
@@ -463,7 +467,7 @@ class BigInteger {
       c = (this_array[i]&bm)<<bs;
     }
     for(i = ds-1; i >= 0; --i) r_array[i] = 0;
-    r_array[ds] = c;
+    r_array[ds] = c; 
     r.t = this.t+ds+1;
     r.s = this.s;
     r.clamp();
