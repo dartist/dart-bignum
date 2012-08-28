@@ -1,5 +1,5 @@
-name: BigInteger
-description: BigInteger implementation for Dart
+name: dart-bignum
+description: Big Number library for Dart
 version: 0.0.1
 dependencies:
   unittest:
