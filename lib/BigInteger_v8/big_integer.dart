@@ -1498,6 +1498,38 @@ class BigInteger {
     }
     return true;
   }
+  
+  
+  // Arithmetic operations.
+  BigInteger operator +(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator -(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator *(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator %(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator /(BigInteger other) { throw "Not Implemented"; }
+  
+  // Truncating division.
+  BigInteger operator ~/(BigInteger other) { throw "Not Implemented"; }
+  
+  // The unary '-' operator.
+  BigInteger operator negate() { throw "Not Implemented"; }
+  
+  // NOTE: This is implemented above. 
+  //BigInteger remainder(BigInteger other) { throw "Not Implemented"; }
+
+  // Relational operations.
+  bool operator <(BigInteger other) { throw "Not Implemented"; }
+  bool operator <=(BigInteger other) { throw "Not Implemented"; }
+  bool operator >(BigInteger other) { throw "Not Implemented"; }
+  bool operator >=(BigInteger other) { throw "Not Implemented"; }
+  
+  // Bit-operations.
+  BigInteger operator &(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator |(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator ^(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator ~() { throw "Not Implemented"; }
+  BigInteger operator <<(int shiftAmount) { throw "Not Implemented"; }
+  BigInteger operator >>(int shiftAmount) { throw "Not Implemented"; }
+  
 }
 
 
