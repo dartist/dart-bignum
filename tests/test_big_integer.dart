@@ -1,6 +1,6 @@
 //#import('package:unittest/unittest.dart');
 #import('../packages/unittest/unittest.dart');
-#source('../BigInteger/big_integer.dart');
+#source('../lib/BigInteger/big_integer.dart');
 
 class TestBigInteger {
   testDigitsArray() {

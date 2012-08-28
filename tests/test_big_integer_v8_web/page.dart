@@ -1,9 +1,9 @@
 #import("dart:html");
 #import('dart:math', prefix:"Mathx");
-#import('../../fixnum/fixnum.dart', prefix:"Fixnum");
+#import('../../lib.dart');
 #import('../../packages/unittest/unittest.dart');
-#source('../../BigInteger_v8/big_integer.dart');
 #source('../data/powpowpow.dart');
+
 appendText([s=""]) {
   query("#container").elements.add(new Element.html("<div>$s<br></div>"));
 }
