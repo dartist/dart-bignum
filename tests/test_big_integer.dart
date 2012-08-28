@@ -1,5 +1,5 @@
-//#import('package:unittest/unittest.dart');
-#import('../packages/unittest/unittest.dart');
+#import('package:unittest/unittest.dart');
+//#import('../packages/unittest/unittest.dart');
 #source('../lib/BigInteger/big_integer.dart');
 
 class TestBigInteger {

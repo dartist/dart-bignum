@@ -1,7 +1,7 @@
-//#import('package:unittest/unittest.dart');
+#import('package:unittest/unittest.dart');
 #import('dart:math', prefix:"Mathx");
 #import('../lib.dart');
-#import('../packages/unittest/unittest.dart');
+//#import('../packages/unittest/unittest.dart');
 
 #source('data/powpowpow.dart');
 
@@ -516,14 +516,182 @@ class TestBigIntegerV8 {
             });
           }
         });
+        
+        test("operator +", () {
+          var x = new BigInteger(10);
+          var y = new BigInteger(20);
+          var z = x + y;
+          expect(z.toString(), equals("30"));
+        });
+        
+        test("operator -", () {
+          var x = new BigInteger(10);
+          var y = new BigInteger(20);
+          var z = x - y;
+          expect(z.toString(), equals("-10"));
+        });
+        
+        test("operator *", () {
+          var x = new BigInteger(10);
+          var y = new BigInteger(20);
+          var z = x * y;
+          expect(z.toString(), equals("200"));
+        });
+        
+        test("operator %", () {
+          var x = new BigInteger(10);
+          var y = new BigInteger(20);
+          var z = x % y;
+          expect(z.toString(), equals("10"));
+        });
+        
+        test("operator /", () {
+          var x = new BigInteger(10);
+          var y = new BigInteger(20);
+          var z = x / y;
+          expect(z.toString(), equals("0"));
+          z = y / x;
+          expect(z.toString(), equals("2"));
+        });
+        
+        test("operator ~/", () {
+          
+        });
+        
+        test("operator unary -", () {
+          var x = new BigInteger(10);
+          var z = -x;
+          expect(z.toString(), equals("-10"));
+        });
+        
+        test("operator <", () {
+          var x = new BigInteger(10);
+          var y = new BigInteger(20);
+          var z = x < y;
+          expect(z, equals(true));
+          z = y < x;
+          expect(z, equals(false));
+          y = new BigInteger(10);
+          z = x < y;
+          expect(z, equals(false));
+        });
+        
+        test("operator <=", () {
+          var x = new BigInteger(10);
+          var y = new BigInteger(20);
+          var z = x <= y;
+          expect(z, equals(true));
+          z = y <= x;
+          expect(z, equals(false));
+          x = new BigInteger(20);
+          z = y <= x;
+          expect(z, equals(true));
+        });
+        
+        test("operator >", () {
+          var x = new BigInteger(20);
+          var y = new BigInteger(10);
+          var z = x > y;
+          expect(z, equals(true));
+          z = y > x;
+          expect(z, equals(false));
+          y = new BigInteger(20);
+          z = x > y;
+          expect(z, equals(false));
+        });
+        
+        test("operator >=", () {
+          var x = new BigInteger(20);
+          var y = new BigInteger(10);
+          var z = x >= y;
+          expect(z, equals(true));
+          z = y >= x;
+          expect(z, equals(false));
+          y = new BigInteger(20);
+          z = x >= y;
+          expect(z, equals(true));
+        });
+        
+        test("operator ==", () {
+          var x = new BigInteger(20);
+          var y = new BigInteger(20);
+          var z = x == y;
+          expect(z, equals(true));
+          y = new BigInteger(30);
+          z = y == x;
+          expect(z, equals(false));
+          y = new BigInteger(10);
+          z = y == x;
+          expect(z, equals(false));
+        });
+        
+        test("operator &", () {
+          var x = new BigInteger(10);
+          var y = new BigInteger(20);
+          var z = x & y;
+          expect(z.toString(), equals("0"));
+          y = new BigInteger(10);
+          z = x & y;
+          expect(z.toString(), equals("10"));
+        });
+        
+        test("operator |", () {
+          var x = new BigInteger(10);
+          var y = new BigInteger(20);
+          var z = x | y;
+          expect(z.toString(), equals("30"));
+          y = new BigInteger(10);
+          z = x | y;
+          expect(z.toString(), equals("10"));
+        });
+        
+        test("operator ^", () {
+          var x = new BigInteger("1001", 2);
+          var y = new BigInteger("0110", 2);
+          var z = x ^ y;
+          expect(z.toString(2), equals("1111"));
+          
+          x = new BigInteger("0110", 2);
+          y = new BigInteger("0110", 2);
+          z = x ^ y;
+          expect(z.toString(2), equals("0"));
+        });
+        
+        test("operator ~", () {
+          var x = new BigInteger("1001", 2);
+          var z = ~x;
+          expect(z.toString(2), equals("-1010"));
+          
+          x = new BigInteger("1111", 2);
+          z = ~x;
+          expect(z.toString(2), equals("-10000"));
+          
+          x = new BigInteger("1101", 2);
+          z = ~x;
+          expect(z.toString(2), equals("-1110"));
+          
+          x = new BigInteger(25);
+          z = ~x;
+          expect(z.toString(), equals("-26"));
+        });
+        
+        test("operator <<", () {
+          var x = new BigInteger("1001", 2);
+          var z = x << 2;
+          expect(z.toString(2), equals("100100"));
+        });
+        
+        test("operator >>", () {
+          var x = new BigInteger("1001", 2);
+          var z = x >> 2;
+          expect(z.toString(2), equals("10"));
+        });
       });
     }
   
   void main() {
     testBigInteger();
   }
-  
-
 }
 
 void main() {
