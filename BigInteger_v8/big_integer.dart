@@ -30,10 +30,6 @@
  * and disclaimer.
  */
 
-
-
-
-
 // Modular reduction using "classic" algorithm
 class Classic {
 
@@ -137,7 +133,9 @@ class Barrett {
     else { var r = BigInteger.nbi(); x.copyTo(r); this.reduce(r); return r; }
   }
 
-  revert(x) { return x; }
+  revert(x) { 
+    return x;   
+  }
 
   // x = x mod m (HAC 14.42)
   reduce(x) {
@@ -186,31 +184,31 @@ class BigInteger {
 
   // Basic dart BN library - subset useful for RSA encryption.
   
-  var lowprimes;
-  var lplim;
+  List<int> _lowprimes;
+  int _lplim;
   
   // JavaScript engine analysis
-  var canary = 0xdeadbeefcafe;
-  var j_lm; 
+  int canary = 0xdeadbeefcafe;
+  bool _j_lm; 
   Map array; // TODO: create an array implementation that can handle out of bounds issues. 
   
-  var am;
+  Function am;
   
   var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
   var BI_RC; 
   
-  num t; 
-  num s; 
+  int t; 
+  int s; 
   
   // (public) Constructor
   BigInteger([a,b,c]) {
-    lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509];
+    _lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509];
     BI_RC = new Map();
-    j_lm = ((canary&0xffffff)==0xefcafe);
+    _j_lm = ((canary&0xffffff)==0xefcafe);
     // Setup all the global scope js code here
     setupDigitConversions();
-    lplim = (1<<26)/lowprimes[lowprimes.length-1];
-    setupEngine(_am3, 28);
+    _lplim = (1<<26)~/_lowprimes[_lowprimes.length-1];
+    _setupEngine(_am3, 28);
     this.array = new Map();
     
     if (a != null) {
@@ -249,8 +247,7 @@ class BigInteger {
   // Kestrel (Opera 9.5) gets its best result with am4/26.
   // IE7 does 9% better with am3/28 than with am4/26.
   // Firefox (SM) gets 10% faster with am3/28 than with am4/26.
-  
-  setupEngine(fn, bits) { // = function(fn, bits) {
+  _setupEngine(fn, bits) { 
     this.am = fn;
     dbits = bits;
   
@@ -298,7 +295,7 @@ class BigInteger {
   }
 
   // (protected) set from integer value x, -DV <= x < DV
-  fromInt(x) {
+  void fromInt(x) {
     var this_array = this.array;
     this.t = 1;
     this.s = (x<0)?-1:0;
@@ -308,14 +305,14 @@ class BigInteger {
   }
   
   // return bigint initialized to value
-  static nbv(i) { 
+  static BigInteger nbv(i) { 
     var r = nbi(); 
     r.fromInt(i); 
-    return r; 
-    }
+    return r;   
+  }
 
   // (protected) set from string and radix
-  fromString(s,b) {
+  void fromString(s,b) {
     var this_array = this.array;
     var k;
     if(b == 16) k = 4;
@@ -392,10 +389,12 @@ class BigInteger {
   }
   
   // (public) |this|
-  abs() { return (this.s<0)?this.negate():this; }
+  BigInteger abs() { 
+    return (this.s<0)?this.negate():this;   
+  }
   
-// (public) return + if this > a, - if this < a, 0 if equal
-  compareTo(a) {
+  // (public) return + if this > a, - if this < a, 0 if equal
+  int compareTo(a) {
     var this_array = this.array;
     var a_array = a.array;
   
@@ -408,15 +407,15 @@ class BigInteger {
     return 0;
   }
   
-// returns bit length of the integer x
-  nbits(x) {
+  // returns bit length of the integer x
+  int nbits(x) {
     var r = 1, t;
     // TODO: Assert here type is int
     //    print("is double ${x is double}");
     //    print(x);
     //    print(x.toInt());
     //    print(x.toInt()>>16);
-        if (x is double) x = x.toInt();
+    if (x is double) x = x.toInt();
     
     if((t=x>>16) != 0) { x = t; r += 16; }
     if((t=x>>8) != 0) { x = t; r += 8; }
@@ -461,7 +460,9 @@ class BigInteger {
     var bs = n%BI_DB;
     var cbs = BI_DB-bs;
     var bm = (1<<cbs)-1;
-    var ds = (n/BI_DB).floor(), c = (this.s<<bs)&BI_DM, i;
+    int ds = n~/BI_DB;
+    var c = (this.s<<bs)&BI_DM; 
+    var i;
     for(i = this.t-1; i >= 0; --i) {
       r_array[i+ds+1] = (this_array[i]>>cbs)|c;
       c = (this_array[i]&bm)<<bs;
@@ -478,7 +479,7 @@ class BigInteger {
       var this_array = this.array;
       var r_array = r.array;
       r.s = this.s;
-      var ds = (n/BI_DB).floor();
+      var ds = n~/BI_DB;
       if(ds >= this.t) { r.t = 0; return; }
       var bs = n%BI_DB;
       var cbs = BI_DB-bs;
@@ -1237,18 +1238,18 @@ class BigInteger {
   isProbablePrime(t) {
     var i, x = this.abs();
     var x_array = x.array;
-    if(x.t == 1 && x_array[0] <= lowprimes[lowprimes.length-1]) {
-      for(i = 0; i < lowprimes.length; ++i)
-        if(x_array[0] == lowprimes[i]) return true;
+    if(x.t == 1 && x_array[0] <= _lowprimes[_lowprimes.length-1]) {
+      for(i = 0; i < _lowprimes.length; ++i)
+        if(x_array[0] == _lowprimes[i]) return true;
       return false;
     }
     if(x.isEven()) return false;
     i = 1;
-    while(i < lowprimes.length) {
-      var m = lowprimes[i], j = i+1;
-      while(j < lowprimes.length && m < lplim) m *= lowprimes[j++];
+    while(i < _lowprimes.length) {
+      var m = _lowprimes[i], j = i+1;
+      while(j < _lowprimes.length && m < _lplim) m *= _lowprimes[j++];
       m = x.modInt(m);
-      while(i < j) if(m%lowprimes[i++] == 0) return false;
+      while(i < j) if(m%_lowprimes[i++] == 0) return false;
     }
     return x.millerRabin(t);
   }
@@ -1260,10 +1261,10 @@ class BigInteger {
     if(k <= 0) return false;
     var r = n1.shiftRight(k);
     t = (t+1)>>1;
-    if(t > lowprimes.length) t = lowprimes.length;
+    if(t > _lowprimes.length) t = _lowprimes.length;
     var a = nbi();
     for(var i = 0; i < t; ++i) {
-      a.fromInt(lowprimes[i]);
+      a.fromInt(_lowprimes[i]);
       var y = a.modPow(r,this);
       if(y.compareTo(BigInteger.ONE) != 0 && y.compareTo(n1) != 0) {
         var j = 1;
