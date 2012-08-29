@@ -255,9 +255,12 @@ class BigInteger {
   static BigInteger get ZERO => nbv(0);
   static BigInteger get ONE => nbv(1);
   
-//  static const xxx() {
-//    new BigInteger(5).mod(new BigInteger(5));
-//  }
+  /**
+   * Current work around against dart2js optimization bug. http://dartbug.com/4799 
+   */
+  static InitDart2js() {
+    new BigInteger(5).mod(new BigInteger(5));
+  }
   
   // Basic dart BN library - subset useful for RSA encryption.
   

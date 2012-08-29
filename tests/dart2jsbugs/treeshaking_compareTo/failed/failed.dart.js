@@ -1663,7 +1663,7 @@ $$.BigInteger = {"":
   $.intTypeCheck(b);
   var this_array = this.array;
   if ($.ltB(this.s, 0))
-    return '-' + $.S(this.negate$0().toString$1(b));
+    return '-' + $.S(this.negate_op$0().toString$1(b));
   if ($.eqB(b, 16))
     var k = 4;
   else if ($.eqB(b, 8))
@@ -1683,7 +1683,7 @@ $$.BigInteger = {"":
   var i = this.t;
   var p = $.sub($.BigInteger_BI_DB, $.mod($.mul(i, $.BigInteger_BI_DB), k));
   if (p !== (p | 0))
-    return this.toString$1$bailout(1, this_array, i, p, km, k, 0, 0, 0);
+    return this.toString$1$bailout(1, i, this_array, p, km, k, 0, 0, 0);
   var i0 = $.sub(i, 1);
   if (i0 !== (i0 | 0))
     return this.toString$1$bailout(2, i, p, k, i0, this_array, km, 0, 0);
@@ -1743,8 +1743,8 @@ $$.BigInteger = {"":
  toString$1$bailout: function(state, env0, env1, env2, env3, env4, env5, env6, env7) {
   switch (state) {
     case 1:
-      this_array = env0;
-      i = env1;
+      i = env0;
+      this_array = env1;
       p = env2;
       km = env3;
       k = env4;
@@ -1773,7 +1773,7 @@ $$.BigInteger = {"":
       $.intTypeCheck(b);
       var this_array = this.array;
       if ($.ltB(this.s, 0))
-        return '-' + $.S(this.negate$0().toString$1(b));
+        return '-' + $.S(this.negate_op$0().toString$1(b));
       if ($.eqB(b, 16))
         var k = 4;
       else if ($.eqB(b, 8))
@@ -1855,13 +1855,13 @@ $$.BigInteger = {"":
  toString$0: function() {
   return this.toString$1(null)
 },
- negate$0: function() {
+ negate_op$0: function() {
   var r = $.BigInteger$(null, null, null);
   $.BigInteger_ZERO().subTo$2(this, r);
   return r;
 },
  abs$0: function() {
-  return $.ltB(this.s, 0) ? this.negate$0() : this;
+  return $.ltB(this.s, 0) ? this.negate_op$0() : this;
 },
  compareTo$1: function(a) {
   var this_array = this.array;
@@ -3031,21 +3031,19 @@ $$.BigInteger = {"":
   }
 },
  divRemTo$3: function(m, q, r) {
-  $.propertyTypeCheck(m, 'is$BigInteger');
-  $.propertyTypeCheck(r, 'is$BigInteger');
   var pm = $.abs(m);
   var t1 = pm.get$t();
   if (typeof t1 !== 'number')
-    return this.divRemTo$3$bailout(1, pm, q, t1, m, r, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    return this.divRemTo$3$bailout(1, m, q, r, pm, t1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
   if (t1 <= 0)
     return;
   var pt = this.abs$0();
   t1 = pt.get$t();
   if (typeof t1 !== 'number')
-    return this.divRemTo$3$bailout(2, q, m, r, t1, pm, pt, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    return this.divRemTo$3$bailout(2, m, q, r, t1, pm, pt, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
   var t3 = pm.get$t();
   if (typeof t3 !== 'number')
-    return this.divRemTo$3$bailout(3, q, m, r, t1, pm, pt, t3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    return this.divRemTo$3$bailout(3, m, q, r, t1, t3, pm, pt, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
   if (t1 < t3) {
     if (!(q == null))
       q.fromInt$1(0);
@@ -3058,7 +3056,7 @@ $$.BigInteger = {"":
   var y = $.BigInteger$(null, null, null);
   var ts = this.s;
   if (typeof ts !== 'number')
-    return this.divRemTo$3$bailout(4, q, ts, m, pm, pt, r, y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    return this.divRemTo$3$bailout(4, m, q, ts, pm, pt, r, y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
   var ms = m.get$s();
   var pm_array = pm.get$array();
   if (typeof pm_array !== 'string' && (typeof pm_array !== 'object' || pm_array === null || pm_array.constructor !== Array && !pm_array.is$JavaScriptIndexingBehavior()))
@@ -3239,33 +3237,33 @@ $$.BigInteger = {"":
  divRemTo$3$bailout: function(state, env0, env1, env2, env3, env4, env5, env6, env7, env8, env9, env10, env11, env12, env13, env14, env15, env16, env17, env18) {
   switch (state) {
     case 1:
-      pm = env0;
+      var m = env0;
       var q = env1;
-      t1 = env2;
-      var m = env3;
-      var r = env4;
+      var r = env2;
+      pm = env3;
+      t1 = env4;
       break;
     case 2:
-      q = env0;
-      m = env1;
+      m = env0;
+      q = env1;
       r = env2;
       t1 = env3;
       pm = env4;
       pt = env5;
       break;
     case 3:
-      q = env0;
-      m = env1;
+      m = env0;
+      q = env1;
       r = env2;
       t1 = env3;
-      pm = env4;
-      pt = env5;
-      t3 = env6;
+      t3 = env4;
+      pm = env5;
+      pt = env6;
       break;
     case 4:
-      q = env0;
-      ts = env1;
-      m = env2;
+      m = env0;
+      q = env1;
+      ts = env2;
       pm = env3;
       pt = env4;
       r = env5;
@@ -3689,8 +3687,6 @@ $$.BigInteger = {"":
   }
   switch (state) {
     case 0:
-      $.propertyTypeCheck(m, 'is$BigInteger');
-      $.propertyTypeCheck(r, 'is$BigInteger');
       var pm = $.abs(m);
       var t1 = pm.get$t();
     case 1:
@@ -3915,13 +3911,6 @@ $$.BigInteger = {"":
       if ($.ltB(ts, 0))
         $.BigInteger_ZERO().subTo$2(r, r);
   }
-},
- mod$1: function(a) {
-  var r = $.BigInteger$(null, null, null);
-  this.abs$0().divRemTo$3(a, null, r);
-  if ($.ltB(this.s, 0) && $.gtB(r.compareTo$1($.BigInteger_ZERO()), 0))
-    a.subTo$2(r, r);
-  return r;
 },
  intValue$0: function() {
   var this_array = this.array;
@@ -4911,6 +4900,9 @@ $$.BigInteger = {"":
   $.propertyTypeCheck(other, 'is$BigInteger');
   throw $.captureStackTrace('Not Implemented');
 },
+ negate$0: function() {
+  return this.negate_op$0();
+},
  operator$lt$1: function(other) {
   return $.ltB(this.compareTo$1($.propertyTypeCheck(other, 'is$BigInteger')), 0) && true;
 },
@@ -5353,10 +5345,7 @@ $.floor = function(receiver) {
 };
 
 $.isNaN = function(receiver) {
-  if (typeof receiver === 'number')
-    return isNaN(receiver);
-  else
-    return receiver.isNaN$0();
+  return isNaN(receiver);
 };
 
 $.isInfinite = function(receiver) {
@@ -5507,6 +5496,12 @@ $.listTypeCheck = function(value) {
   throw $.captureStackTrace($.TypeErrorImplementation$($.S(value) + ' does not implement List'));
 };
 
+$.clear = function(receiver) {
+  if (!$.isJsArray(receiver))
+    return receiver.clear$0();
+  $.set$length(receiver, 0);
+};
+
 $.constructorNameFallback = function(obj) {
   var constructor$ = obj.constructor;
   if (typeof(constructor$) === 'function') {
@@ -5520,12 +5515,6 @@ $.constructorNameFallback = function(obj) {
   }
   var string = Object.prototype.toString.call(obj);
   return string.substring(8, string.length - 1);
-};
-
-$.clear = function(receiver) {
-  if (!$.isJsArray(receiver))
-    return receiver.clear$0();
-  $.set$length(receiver, 0);
 };
 
 $.regExpMatchStart = function(m) {
@@ -5676,10 +5665,6 @@ $.getRange = function(receiver, start, length$) {
   return receiver.slice(start, end);
 };
 
-$.log = function(value) {
-  return Math.log($.checkNum(value));
-};
-
 $.pow = function(value, exponent) {
   $.numTypeCheck(exponent);
   $.checkNum(value);
@@ -5738,6 +5723,10 @@ $.shr = function(a, b) {
     return (a >> b) >>> 0;
   }
   return a.operator$shr$1(b);
+};
+
+$.log = function(value) {
+  return Math.log($.checkNum(value));
 };
 
 $.ObjectImplementation_toStringImpl = function(object) {
@@ -6346,10 +6335,7 @@ $.gt$slow = function(a, b) {
 };
 
 $.isNegative = function(receiver) {
-  if (typeof receiver === 'number')
-    return receiver === 0 ? 1 / receiver < 0 : receiver < 0;
-  else
-    return receiver.isNegative$0();
+  return receiver === 0 ? 1 / receiver < 0 : receiver < 0;
 };
 
 $.Collections_forEach = function(iterable, f) {
@@ -6549,40 +6535,6 @@ $.dynamicBind = function(obj, name$, methods, arguments$) {
   if (!proto.hasOwnProperty(name$))
     $.defineProperty(proto, name$, method);
   return method.apply(obj, arguments$);
-};
-
-$.compareTo = function(a, b) {
-  if ($.checkNumbers(a, b))
-    if (a.operator$lt$1(b))
-      return -1;
-    else if (a.operator$gt$1(b))
-      return 1;
-    else if ($.eqB(a, b)) {
-      if ($.eqB(a, 0)) {
-        var aIsNegative = $.boolTypeCheck($.isNegative(a));
-        if ($.eqB(aIsNegative, $.boolTypeCheck($.isNegative(b))))
-          return 0;
-        if (aIsNegative === true)
-          return -1;
-        return 1;
-      }
-      return 0;
-    } else if ($.isNaN(a) === true) {
-      if ($.isNaN(b) === true)
-        return 0;
-      return 1;
-    } else
-      return -1;
-  else if (typeof a === 'string') {
-    if (!(typeof b === 'string'))
-      throw $.captureStackTrace($.IllegalArgumentException$(b));
-    if (a == b)
-      var t1 = 0;
-    else
-      t1 = a < b ? -1 : 1;
-    return t1;
-  } else
-    return a.compareTo$1(b);
 };
 
 $._document = function() {
@@ -6811,7 +6763,6 @@ $.main = function() {
     z = $.remainder(x, y);
     var t2 = z;
     $.add$1($.query('#container').get$elements(), $._ElementFactoryProvider_Element$html('<div>' + $.S(t2) + '<br></div>'));
-    z = x.mod$1(y);
   } catch (exception) {
     t1 = $.unwrapException(exception);
     var ex = t1;

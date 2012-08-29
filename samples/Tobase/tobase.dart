@@ -10,9 +10,10 @@ InputElement baseInput;
 ButtonElement buttonElement; 
 
 void main() {  
-  var x = new BigInteger("abcd1234", 16);
-  var y = new BigInteger("beef", 16);
-  var z = x.mod(y);
+
+  // Required only once when compiling from dart2js. 
+  // Based on a known bug with dart2js http://dartbug.com/4799
+  BigInteger.InitDart2js();
   
   number1Input = query('#number1');
   number2Input = query('#number2');

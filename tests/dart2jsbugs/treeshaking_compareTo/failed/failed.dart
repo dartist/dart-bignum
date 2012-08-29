@@ -8,6 +8,9 @@ appendText([s=""]) {
 
 void main() {
   try {
+    //Uncomment this and everything works.
+    //BigInteger.InitDart2js();
+    
     // 0xabcd1234 modulo 0xbeef = 0xB60C
     var x = new BigInteger("abcd1234", 16);
     var y = new BigInteger("beef", 16);
@@ -15,7 +18,7 @@ void main() {
     appendText(z);
     z = x.remainder(y);
     appendText(z);
-    // z = x.mod(y); // Uncomment this and everything works. 
+    
   } catch (ex) {
     appendText(ex);
   }

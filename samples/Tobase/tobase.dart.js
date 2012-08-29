@@ -2220,7 +2220,7 @@ $$.BigInteger = {"":
  toString$1: function(b) {
   var this_array = this.array;
   if ($.ltB(this.s, 0))
-    return '-' + $.S(this.negate$0().toString$1(b));
+    return '-' + $.S(this.negate_op$0().toString$1(b));
   if ($.eqB(b, 16))
     var k = 4;
   else if ($.eqB(b, 8))
@@ -2240,10 +2240,10 @@ $$.BigInteger = {"":
   var i = this.t;
   var p = $.sub($.BigInteger_BI_DB, $.mod($.mul(i, $.BigInteger_BI_DB), k));
   if (p !== (p | 0))
-    return this.toString$1$bailout(1, this_array, i, p, km, k, 0, 0, 0);
+    return this.toString$1$bailout(1, km, p, i, k, this_array, 0, 0, 0);
   var i0 = $.sub(i, 1);
   if (i0 !== (i0 | 0))
-    return this.toString$1$bailout(2, i, p, k, i0, this_array, km, 0, 0);
+    return this.toString$1$bailout(2, p, k, i0, this_array, km, i, 0, 0);
   if ($.gtB(i, 0)) {
     if ($.ltB(p, $.BigInteger_BI_DB)) {
       var d = $.shr(this_array.operator$index$1(i0), p);
@@ -2300,19 +2300,19 @@ $$.BigInteger = {"":
  toString$1$bailout: function(state, env0, env1, env2, env3, env4, env5, env6, env7) {
   switch (state) {
     case 1:
-      this_array = env0;
-      i = env1;
-      p = env2;
-      km = env3;
-      k = env4;
+      km = env0;
+      p = env1;
+      i = env2;
+      k = env3;
+      this_array = env4;
       break;
     case 2:
-      i = env0;
-      p = env1;
-      k = env2;
-      i0 = env3;
-      this_array = env4;
-      km = env5;
+      p = env0;
+      k = env1;
+      i0 = env2;
+      this_array = env3;
+      km = env4;
+      i = env5;
       break;
     case 3:
       p = env0;
@@ -2329,7 +2329,7 @@ $$.BigInteger = {"":
     case 0:
       var this_array = this.array;
       if ($.ltB(this.s, 0))
-        return '-' + $.S(this.negate$0().toString$1(b));
+        return '-' + $.S(this.negate_op$0().toString$1(b));
       if ($.eqB(b, 16))
         var k = 4;
       else if ($.eqB(b, 8))
@@ -2411,13 +2411,13 @@ $$.BigInteger = {"":
  toString$0: function() {
   return this.toString$1(null)
 },
- negate$0: function() {
+ negate_op$0: function() {
   var r = $.BigInteger$(null, null, null);
   $.BigInteger_ZERO().subTo$2(this, r);
   return r;
 },
  abs$0: function() {
-  return $.ltB(this.s, 0) ? this.negate$0() : this;
+  return $.ltB(this.s, 0) ? this.negate_op$0() : this;
 },
  compareTo$1: function(a) {
   var this_array = this.array;
@@ -5441,6 +5441,9 @@ $$.BigInteger = {"":
  operator$tdiv$1: function(other) {
   throw $.captureStackTrace('Not Implemented');
 },
+ operator$negate$0: function() {
+  return this.negate_op$0();
+},
  operator$lt$1: function(other) {
   return $.ltB(this.compareTo$1(other), 0) && true;
 },
@@ -6702,7 +6705,7 @@ $.iterator = function(receiver) {
 };
 
 $.main = function() {
-  $.BigInteger$('abcd1234', 16, null).mod$1($.BigInteger$('beef', 16, null));
+  $.BigInteger_InitDart2js();
   $.number1Input = $.query('#number1');
   $.number2Input = $.query('#number2');
   $.baseInput = $.query('#base');
@@ -7365,6 +7368,10 @@ $.checkString = function(value) {
   return value;
 };
 
+$.BigInteger_InitDart2js = function() {
+  $.BigInteger$(5, null, null).mod$1($.BigInteger$(5, null, null));
+};
+
 $._DoubleLinkedQueueIterator$ = function(_sentinel) {
   var t1 = new $._DoubleLinkedQueueIterator(_sentinel, null);
   t1._DoubleLinkedQueueIterator$1(_sentinel);
@@ -7459,14 +7466,6 @@ $._AudioContextEventsImpl$ = function(_ptr) {
   return new $._AudioContextEventsImpl(_ptr);
 };
 
-$.addAll = function(receiver, collection) {
-  if (!$.isJsArray(receiver))
-    return receiver.addAll$1(collection);
-  var iterator = $.iterator(collection);
-  for (; iterator.hasNext$0() === true;)
-    $.add$1(receiver, iterator.next$0());
-};
-
 $._TextTrackCueEventsImpl$ = function(_ptr) {
   return new $._TextTrackCueEventsImpl(_ptr);
 };
@@ -7485,6 +7484,14 @@ $.contains$2 = function(receiver, other, startIndex) {
     return receiver.contains$2(other, startIndex);
   $.checkNull(other);
   return $.stringContainsUnchecked(receiver, other, startIndex);
+};
+
+$.addAll = function(receiver, collection) {
+  if (!$.isJsArray(receiver))
+    return receiver.addAll$1(collection);
+  var iterator = $.iterator(collection);
+  for (; iterator.hasNext$0() === true;)
+    $.add$1(receiver, iterator.next$0());
 };
 
 $._WorkerContextEventsImpl$ = function(_ptr) {
@@ -7549,12 +7556,6 @@ $._HttpRequestUploadEventsImpl$ = function(_ptr) {
   return new $._HttpRequestUploadEventsImpl(_ptr);
 };
 
-$.checkNull = function(object) {
-  if (object == null)
-    throw $.captureStackTrace($.NullPointerException$(null, $.CTC0));
-  return object;
-};
-
 $.Arrays_indexOf = function(a, element, startIndex, endIndex) {
   if (typeof a !== 'string' && (typeof a !== 'object' || a === null || a.constructor !== Array && !a.is$JavaScriptIndexingBehavior()))
     return $.Arrays_indexOf$bailout(1, a, element, startIndex, endIndex);
@@ -7569,6 +7570,12 @@ $.Arrays_indexOf = function(a, element, startIndex, endIndex) {
       return i;
   }
   return -1;
+};
+
+$.checkNull = function(object) {
+  if (object == null)
+    throw $.captureStackTrace($.NullPointerException$(null, $.CTC0));
+  return object;
 };
 
 $._PeerConnection00EventsImpl$ = function(_ptr) {
