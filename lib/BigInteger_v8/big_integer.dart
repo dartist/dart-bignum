@@ -252,8 +252,8 @@ class BigInteger {
     return r;   
   }
 
-  static BigInteger get ZERO() => nbv(0);
-  static BigInteger get ONE() => nbv(1);
+  static BigInteger get ZERO => nbv(0);
+  static BigInteger get ONE => nbv(1);
   
 //  static const xxx() {
 //    new BigInteger(5).mod(new BigInteger(5));
@@ -1538,7 +1538,7 @@ class BigInteger {
   BigInteger operator ~/(BigInteger other) { throw "Not Implemented"; }
   
   // The unary '-' operator.
-  BigInteger operator negate() => this.negate();
+  //BigInteger operator negate() => this.negate();
   
   // NOTE: This is implemented above. 
   //BigInteger remainder(BigInteger other) { throw "Not Implemented"; }
