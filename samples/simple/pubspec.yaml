@@ -1,0 +1,6 @@
+name: dart-bignum-simple
+description: Big Number sample 
+version: 0.0.1
+dependencies:
+  dart-bignum:
+    git: git://github.com/Solvr/dart-bignum.git

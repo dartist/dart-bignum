@@ -1,0 +1,232 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Montgomery Class / solvr:bignum Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="solvr:bignum" data-type="Montgomery">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../solvr_bignum.html">solvr:bignum</a> &rsaquo; <a href="../solvr_bignum/Montgomery.html">Montgomery</a></div>
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Montgomery</strong>
+          Class
+        </h2>
+        
+<div class="doc">
+<p>Montgomery reduction on <a class="crossref" href="../solvr_bignum/BigInteger.html">BigInteger</a></p>
+</div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="Montgomery">
+<span class="show-code">Code</span>
+new <strong>Montgomery</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> m) <a class="anchor-link" href="#Montgomery"
+              title="Permalink to Montgomery.Montgomery">#</a></h4>
+<div class="doc">
+<p>Montgomery reduction</p>
+<pre class="source">
+Montgomery(this.m) {
+this.mp = m.invDigit();
+this.mpl = this.mp&amp;0x7fff;
+this.mph = this.mp&gt;&gt;15;
+this.um = (1&lt;&lt;(BigInteger.BI_DB-15))-1;
+this.mt2 = 2*m.t;
+}
+</pre>
+</div>
+</div>
+<h3>Methods</h3>
+<div class="method"><h4 id="convert">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>convert</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> x) <a class="anchor-link" href="#convert"
+              title="Permalink to Montgomery.convert">#</a></h4>
+<div class="doc">
+<p>xR mod m</p>
+<pre class="source">
+BigInteger convert(BigInteger x) {
+  var r = BigInteger.nbi();
+  x.abs().dlShiftTo(this.m.t,r);
+  r.divRemTo(this.m,null,r);
+  if(x.s &lt; 0 &amp;&amp; r.compareTo(BigInteger.ZERO) &gt; 0) this.m.subTo(r,r);
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="mulTo">
+<span class="show-code">Code</span>
+<strong>mulTo</strong>(x, y, r) <a class="anchor-link" href="#mulTo"
+              title="Permalink to Montgomery.mulTo">#</a></h4>
+<div class="doc">
+<p>r = "xy/R mod m"; x,y != r</p>
+<pre class="source">
+mulTo(x,y,r) { 
+  x.multiplyTo(y,r); 
+  this.reduce(r);   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="reduce">
+<span class="show-code">Code</span>
+void <strong>reduce</strong>(x) <a class="anchor-link" href="#reduce"
+              title="Permalink to Montgomery.reduce">#</a></h4>
+<div class="doc">
+<p>x = x/R mod m (HAC 14.32)</p>
+<pre class="source">
+void reduce(x) {
+  var x_array = x.array;
+  while(x.t &lt;= this.mt2) { // pad x so am has enough room later
+    x_array[x.t++] = 0;
+  }
+  
+  for(var i = 0; i &lt; this.m.t; ++i) {
+    // faster way of calculating u0 = x[i]*mp mod DV
+    var j = x_array[i]&amp;0x7fff;
+    var u0 = (j*this.mpl+(((j*this.mph+(x_array[i]&gt;&gt;15)*this.mpl)&amp;this.um)&lt;&lt;15))&amp;BigInteger.BI_DM;
+    // use am to combine the multiply-shift-add into one call
+    j = i+this.m.t;
+    x_array[j] += this.m.am(0,u0,x,i,0,this.m.t);
+    // propagate carry
+    while(x_array[j] &gt;= BigInteger.BI_DV) { 
+      x_array[j] -= BigInteger.BI_DV; 
+      x_array[++j]++;   
+    }
+  }
+  x.clamp();
+  x.drShiftTo(this.m.t,x);
+  if(x.compareTo(this.m) &gt;= 0) { 
+    x.subTo(this.m,x);   
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="revert">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>revert</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> x) <a class="anchor-link" href="#revert"
+              title="Permalink to Montgomery.revert">#</a></h4>
+<div class="doc">
+<p>x/R mod m</p>
+<pre class="source">
+BigInteger revert(BigInteger x) {
+  var r = BigInteger.nbi();
+  x.copyTo(r);
+  this.reduce(r);
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="sqrTo">
+<span class="show-code">Code</span>
+<strong>sqrTo</strong>(x, r) <a class="anchor-link" href="#sqrTo"
+              title="Permalink to Montgomery.sqrTo">#</a></h4>
+<div class="doc">
+<p>r = "x^2/R mod m"; x != r</p>
+<pre class="source">
+sqrTo(x,r) { 
+  x.squareTo(r); 
+  this.reduce(r); 
+}
+</pre>
+</div>
+</div>
+<h3>Fields</h3>
+<div class="field"><h4 id="m">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a>         <strong>m</strong> <a class="anchor-link"
+            href="#m"
+            title="Permalink to Montgomery.m">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+BigInteger m;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="mp">
+<span class="show-code">Code</span>
+var         <strong>mp</strong> <a class="anchor-link"
+            href="#mp"
+            title="Permalink to Montgomery.mp">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+var mp;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="mph">
+<span class="show-code">Code</span>
+var         <strong>mph</strong> <a class="anchor-link"
+            href="#mph"
+            title="Permalink to Montgomery.mph">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+var mph;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="mpl">
+<span class="show-code">Code</span>
+var         <strong>mpl</strong> <a class="anchor-link"
+            href="#mpl"
+            title="Permalink to Montgomery.mpl">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+var mpl;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="mt2">
+<span class="show-code">Code</span>
+var         <strong>mt2</strong> <a class="anchor-link"
+            href="#mt2"
+            title="Permalink to Montgomery.mt2">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+var mt2;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="um">
+<span class="show-code">Code</span>
+var         <strong>um</strong> <a class="anchor-link"
+            href="#um"
+            title="Permalink to Montgomery.um">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+var um;
+</pre>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        
+        <div class="footer">
+          <div>This page was generated at 2012-08-29 12:31:51.055</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

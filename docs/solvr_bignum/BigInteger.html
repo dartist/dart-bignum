@@ -1,0 +1,2210 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>BigInteger Class / solvr:bignum Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="solvr:bignum" data-type="BigInteger">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../solvr_bignum.html">solvr:bignum</a> &rsaquo; <a href="../solvr_bignum/BigInteger.html">BigInteger</a></div>
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>BigInteger</strong>
+          Class
+        </h2>
+        
+<div class="doc">
+<p>Basic dart <a class="crossref" href="../solvr_bignum/BigInteger.html#new:BigInteger">BigInteger</a> class. Implementation works across
+dart and dart2js.</p>
+</div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="BigInteger">
+<span class="show-code">Code</span>
+new <strong>BigInteger</strong>([a, b, c]) <a class="anchor-link" href="#BigInteger"
+              title="Permalink to BigInteger.BigInteger">#</a></h4>
+<div class="doc">
+<p>Constructor of <a class="crossref" href="../solvr_bignum/BigInteger.html#new:BigInteger">BigInteger</a></p>
+<p>Constructor can be called in mutiple ways</p>
+<p>1) Passing byte array <code>List</code>
+   var x = new BigInteger(<code>0x5</code>);
+   x.toString() == "5";</p>
+<p>2) Passing <code>int</code>
+   int i = 5;
+   var x = new BigInteger(i);
+   x.toString() == "5";</p>
+<p>3) Passing <code>num</code>
+   num i = 5;
+   var x = new BigInteger(i);
+   x.toString() == "5";</p>
+<p>4) Passing <code>double</code>
+   double i = 5.0;
+   var x = new BigInteger(i);
+   x.toString() == "5";</p>
+<p>5) Passing <code>String</code> with optional base <code>int</code>
+   String s = "5";
+   var x = new BigInteger(s);
+   x.toString() == "5";</p>
+<p>   String s = "beef";
+   var x = new BigInteger(s);
+   x.toString() == "beef";</p>
+<pre class="source">
+BigInteger([a,b,c]) { // TODO: create mutiple constructors, instead of constructing based on the dynamimc type
+  _lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509];
+  BI_RC = new Map();
+  _j_lm = ((canary&amp;0xffffff)==0xefcafe);
+  // Setup all the global scope js code here
+  _setupDigitConversions();
+  _lplim = (1&lt;&lt;26)~/_lowprimes[_lowprimes.length-1];
+  _setupEngine(_am3, 28);
+  this.array = new Map();
+  
+  if (a != null) {
+    if (a is int) {
+      // this.fromNumber(a,b,c);
+      // NOTE: the fromNumber implementation trys to exploit js numbers
+      this.fromString(a.toString(), 10);
+    } else if (a is double || a is num) {
+      this.fromString(a.toInt().toString(), 10);
+    } else if (b == null &amp;&amp; a is! String) {
+      this.fromString(a,256);
+    } else {
+      this.fromString(a,b);
+    }
+  }
+}
+</pre>
+</div>
+</div>
+<h3>Static Methods</h3>
+<div class="method"><h4 id="ONE">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>ONE</strong>() <a class="anchor-link" href="#ONE"
+              title="Permalink to BigInteger.ONE">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+static BigInteger get ONE =&gt; nbv(1);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="ZERO">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>ZERO</strong>() <a class="anchor-link" href="#ZERO"
+              title="Permalink to BigInteger.ZERO">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+static BigInteger get ZERO =&gt; nbv(0);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="nbi">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>nbi</strong>() <a class="anchor-link" href="#nbi"
+              title="Permalink to BigInteger.nbi">#</a></h4>
+<div class="doc">
+<p>Create a new <a class="crossref" href="../solvr_bignum/BigInteger.html#new:BigInteger">BigInteger</a></p>
+<pre class="source">
+static BigInteger nbi() { return new BigInteger(null, null, null); }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="nbv">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>nbv</strong>(int i) <a class="anchor-link" href="#nbv"
+              title="Permalink to BigInteger.nbv">#</a></h4>
+<div class="doc">
+<p>return <a class="crossref" href="../solvr_bignum/BigInteger.html#new:BigInteger">BigInteger</a> initialized to 
+<span class="param">i</span></p>
+<pre class="source">
+static BigInteger nbv(int i) { 
+  var r = nbi(); 
+  r.fromInt(i); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<h3>Static Fields</h3>
+<div class="field"><h4 id="BI_DB">
+<span class="show-code">Code</span>
+int         <strong>BI_DB</strong> <a class="anchor-link"
+            href="#BI_DB"
+            title="Permalink to BigInteger.BI_DB">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+static int BI_DB;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BI_DM">
+<span class="show-code">Code</span>
+int         <strong>BI_DM</strong> <a class="anchor-link"
+            href="#BI_DM"
+            title="Permalink to BigInteger.BI_DM">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+static int BI_DM;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BI_DV">
+<span class="show-code">Code</span>
+int         <strong>BI_DV</strong> <a class="anchor-link"
+            href="#BI_DV"
+            title="Permalink to BigInteger.BI_DV">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+static int BI_DV;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BI_F1">
+<span class="show-code">Code</span>
+int         <strong>BI_F1</strong> <a class="anchor-link"
+            href="#BI_F1"
+            title="Permalink to BigInteger.BI_F1">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+static int BI_F1;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BI_F2">
+<span class="show-code">Code</span>
+int         <strong>BI_F2</strong> <a class="anchor-link"
+            href="#BI_F2"
+            title="Permalink to BigInteger.BI_F2">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+static int BI_F2;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BI_FP">
+<span class="show-code">Code</span>
+int         <strong>BI_FP</strong> <a class="anchor-link"
+            href="#BI_FP"
+            title="Permalink to BigInteger.BI_FP">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+static int BI_FP;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BI_FV">
+<span class="show-code">Code</span>
+int         <strong>BI_FV</strong> <a class="anchor-link"
+            href="#BI_FV"
+            title="Permalink to BigInteger.BI_FV">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+static int BI_FV;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="dbits">
+<span class="show-code">Code</span>
+int         <strong>dbits</strong> <a class="anchor-link"
+            href="#dbits"
+            title="Permalink to BigInteger.dbits">#</a>
+        </h4>
+        <div class="doc">
+<p>Bits per digit</p>
+<pre class="source">
+static int dbits;
+</pre>
+</div>
+</div>
+<h3>Methods</h3>
+<div class="method"><h4 id="abs">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>abs</strong>() <a class="anchor-link" href="#abs"
+              title="Permalink to BigInteger.abs">#</a></h4>
+<div class="doc">
+<p>|this|</p>
+<pre class="source">
+BigInteger abs() { 
+  return (this.s&lt;0)?this.negate():this;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="add">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>add</strong>(a) <a class="anchor-link" href="#add"
+              title="Permalink to BigInteger.add">#</a></h4>
+<div class="doc">
+<p>this + a</p>
+<pre class="source">
+BigInteger add(a) { 
+  var r = nbi(); 
+  this.addTo(a,r); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="addTo">
+<span class="show-code">Code</span>
+<strong>addTo</strong>(a, r) <a class="anchor-link" href="#addTo"
+              title="Permalink to BigInteger.addTo">#</a></h4>
+<div class="doc">
+<p>r = this + a</p>
+<pre class="source">
+addTo(a,r) {
+  var this_array = this.array;
+  var a_array = a.array;
+  var r_array = r.array;
+  var i = 0, c = 0, m = Mathx.min(a.t,this.t);
+  while(i &lt; m) {
+    c += this_array[i]+a_array[i];
+    r_array[i++] = c&amp;BI_DM;
+    c &gt;&gt;= BI_DB;
+  }
+  if(a.t &lt; this.t) {
+    c += a.s;
+    while(i &lt; this.t) {
+      c += this_array[i];
+      r_array[i++] = c&amp;BI_DM;
+      c &gt;&gt;= BI_DB;
+    }
+    c += this.s;
+  }
+  else {
+    c += this.s;
+    while(i &lt; a.t) {
+      c += a_array[i];
+      r_array[i++] = c&amp;BI_DM;
+      c &gt;&gt;= BI_DB;
+    }
+    c += a.s;
+  }
+  r.s = (c&lt;0)?-1:0;
+  if(c &gt; 0) r_array[i++] = c;
+  else if(c &lt; -1) r_array[i++] = BI_DV+c;
+  r.t = i;
+  r.clamp();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="and">
+<span class="show-code">Code</span>
+<strong>and</strong>(a) <a class="anchor-link" href="#and"
+              title="Permalink to BigInteger.and">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+and(a) { 
+  var r = nbi(); 
+  this.bitwiseTo(a,op_and,r); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="andNot">
+<span class="show-code">Code</span>
+<strong>andNot</strong>(a) <a class="anchor-link" href="#andNot"
+              title="Permalink to BigInteger.andNot">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+andNot(a) { 
+  var r = nbi(); 
+  this.bitwiseTo(a,op_andnot,r); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="bitCount">
+<span class="show-code">Code</span>
+<strong>bitCount</strong>() <a class="anchor-link" href="#bitCount"
+              title="Permalink to BigInteger.bitCount">#</a></h4>
+<div class="doc">
+<p>return number of set bits</p>
+<pre class="source">
+bitCount() {
+  var this_array = this.array;
+  var r = 0, x = this.s&amp;BI_DM;
+  for(var i = 0; i &lt; this.t; ++i) r += cbit(this_array[i]^x);
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="bitLength">
+<span class="show-code">Code</span>
+int <strong>bitLength</strong>() <a class="anchor-link" href="#bitLength"
+              title="Permalink to BigInteger.bitLength">#</a></h4>
+<div class="doc">
+<p>return the number of bits in <code>this</code></p>
+<pre class="source">
+int bitLength() {
+  var this_array = this.array;
+  if(this.t &lt;= 0) return 0;
+  return BI_DB*(this.t-1)+nbits(this_array[this.t-1]^(this.s&amp;BI_DM));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="bitwiseTo">
+<span class="show-code">Code</span>
+void <strong>bitwiseTo</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> a, Function op, <a href="../solvr_bignum/BigInteger.html">BigInteger</a> r) <a class="anchor-link" href="#bitwiseTo"
+              title="Permalink to BigInteger.bitwiseTo">#</a></h4>
+<div class="doc">
+<p>r = this op a (bitwise)</p>
+<pre class="source">
+void bitwiseTo(BigInteger a, Function op, BigInteger r) {
+  var this_array = this.array;
+  var a_array    = a.array;
+  var r_array    = r.array;
+  var i, f, m = Mathx.min(a.t,this.t);
+  for(i = 0; i &lt; m; ++i) r_array[i] = op(this_array[i],a_array[i]);
+  if(a.t &lt; this.t) {
+    f = a.s&amp;BI_DM;
+    for(i = m; i &lt; this.t; ++i) r_array[i] = op(this_array[i],f);
+    r.t = this.t;
+  }
+  else {
+    f = this.s&amp;BI_DM;
+    for(i = m; i &lt; a.t; ++i) r_array[i] = op(f,a_array[i]);
+    r.t = a.t;
+  }
+  r.s = op(this.s,a.s);
+  r.clamp();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="byteValue">
+<span class="show-code">Code</span>
+<strong>byteValue</strong>() <a class="anchor-link" href="#byteValue"
+              title="Permalink to BigInteger.byteValue">#</a></h4>
+<div class="doc">
+<p>return value as byte</p>
+<pre class="source">
+byteValue() {
+  var this_array = this.array;
+  return (this.t==0)?this.s:(this_array[0]&lt;&lt;24)&gt;&gt;24;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="cbit">
+<span class="show-code">Code</span>
+<strong>cbit</strong>(x) <a class="anchor-link" href="#cbit"
+              title="Permalink to BigInteger.cbit">#</a></h4>
+<div class="doc">
+<p>return number of 1 bits in x</p>
+<pre class="source">
+cbit(x) {
+  var r = 0;
+  while(x != 0) { x &amp;= x-1; ++r; }
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="changeBit">
+<span class="show-code">Code</span>
+<strong>changeBit</strong>(n, op) <a class="anchor-link" href="#changeBit"
+              title="Permalink to BigInteger.changeBit">#</a></h4>
+<div class="doc">
+<p>this op (1&lt;&lt;n)</p>
+<pre class="source">
+changeBit(n,op) {
+  var r = BigInteger.ONE.shiftLeft(n);
+  this.bitwiseTo(r,op,r);
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="chunkSize">
+<span class="show-code">Code</span>
+int <strong>chunkSize</strong>(r) <a class="anchor-link" href="#chunkSize"
+              title="Permalink to BigInteger.chunkSize">#</a></h4>
+<div class="doc">
+<p>return x s.t. r^x &lt; DV</p>
+<pre class="source">
+int chunkSize(r) { 
+  return (Mathx.LN2*BI_DB/Mathx.log(r)).floor().toInt();   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="clamp">
+<span class="show-code">Code</span>
+void <strong>clamp</strong>() <a class="anchor-link" href="#clamp"
+              title="Permalink to BigInteger.clamp">#</a></h4>
+<div class="doc">
+<p>clamp off excess high words</p>
+<pre class="source">
+void clamp() {
+  var this_array = this.array;
+  var c = this.s&amp;BI_DM;
+  
+  while(this.t &gt; 0 &amp;&amp; this_array[this.t-1] == c) {
+    --this.t;
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="clearBit">
+<span class="show-code">Code</span>
+<strong>clearBit</strong>(n) <a class="anchor-link" href="#clearBit"
+              title="Permalink to BigInteger.clearBit">#</a></h4>
+<div class="doc">
+<p>this &amp; ~(1&lt;&lt;n)</p>
+<pre class="source">
+clearBit(n) { return this.changeBit(n,op_andnot); }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="clone">
+<span class="show-code">Code</span>
+<strong>clone</strong>() <a class="anchor-link" href="#clone"
+              title="Permalink to BigInteger.clone">#</a></h4>
+<div class="doc">
+<p>clone</p>
+<pre class="source">
+clone() { 
+  var r = nbi(); 
+  this.copyTo(r); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="compareTo">
+<span class="show-code">Code</span>
+int <strong>compareTo</strong>(a) <a class="anchor-link" href="#compareTo"
+              title="Permalink to BigInteger.compareTo">#</a></h4>
+<div class="doc">
+<p>return + if <code>this</code> > 
+<span class="param">a</span>, - if <code>this</code> &lt; 
+<span class="param">a</span>, 0 if equal *</p>
+<pre class="source">
+int compareTo(a) {
+  var this_array = this.array;
+  var a_array = a.array;
+
+  var r = this.s-a.s;
+  if(r != 0) return r;
+  var i = this.t;
+  r = i-a.t;
+  if(r != 0) return r;
+  while(--i &gt;= 0) if((r=this_array[i]-a_array[i]) != 0) return r;
+  return 0;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="copyTo">
+<span class="show-code">Code</span>
+void <strong>copyTo</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> r) <a class="anchor-link" href="#copyTo"
+              title="Permalink to BigInteger.copyTo">#</a></h4>
+<div class="doc">
+<p>copy <code>this</code> to 
+<span class="param">r</span></p>
+<pre class="source">
+void copyTo(BigInteger r) {
+  var this_array = this.array;
+  var r_array    = r.array;
+
+  for(var i = this.t-1; i &gt;= 0; --i) r_array[i] = this_array[i];
+  r.t = this.t;
+  r.s = this.s;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="dAddOffset">
+<span class="show-code">Code</span>
+<strong>dAddOffset</strong>(n, w) <a class="anchor-link" href="#dAddOffset"
+              title="Permalink to BigInteger.dAddOffset">#</a></h4>
+<div class="doc">
+<p>this += n &lt;&lt; w words, this >= 0</p>
+<pre class="source">
+dAddOffset(n,w) {
+  var this_array = this.array;
+  while(this.t &lt;= w) this_array[this.t++] = 0;
+  this_array[w] += n;
+  while(this_array[w] &gt;= BI_DV) {
+    this_array[w] -= BI_DV;
+    if(++w &gt;= this.t) this_array[this.t++] = 0;
+    ++this_array[w];
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="dMultiply">
+<span class="show-code">Code</span>
+<strong>dMultiply</strong>(n) <a class="anchor-link" href="#dMultiply"
+              title="Permalink to BigInteger.dMultiply">#</a></h4>
+<div class="doc">
+<p>this *= n, this >= 0, 1 &lt; n &lt; <a class="crossref" href="../solvr_bignum/BigInteger.html#BI_DV">BI_DV</a></p>
+<pre class="source">
+dMultiply(n) {
+  var this_array = this.array;
+  this_array[this.t] = this.am(0,n-1,this,0,0,this.t);
+  ++this.t;
+  this.clamp();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="divRemTo">
+<span class="show-code">Code</span>
+<strong>divRemTo</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> m, q, <a href="../solvr_bignum/BigInteger.html">BigInteger</a> r) <a class="anchor-link" href="#divRemTo"
+              title="Permalink to BigInteger.divRemTo">#</a></h4>
+<div class="doc">
+<p>divide this by m, quotient and remainder to q, r (HAC 14.20)
+r != q, this != m.  q or r may be null.</p>
+<pre class="source">
+divRemTo(BigInteger m,q,BigInteger r) {
+  var pm = m.abs();
+  if(pm.t &lt;= 0) return;
+  var pt = this.abs();
+  if(pt.t &lt; pm.t) {
+    if(q != null) q.fromInt(0);
+    if(r != null) this.copyTo(r);
+    return;
+  }
+  if(r == null) r = nbi();
+  var y = nbi(), ts = this.s, ms = m.s;
+  var pm_array = pm.array;
+  var nsh = BI_DB-nbits(pm_array[pm.t-1]);  // normalize modulus
+  if(nsh &gt; 0) { pm.lShiftTo(nsh,y); pt.lShiftTo(nsh,r); }
+  else { pm.copyTo(y); pt.copyTo(r); }
+  var ys = y.t;
+
+  var y_array = y.array;
+  var y0 = y_array[ys-1];
+  if(y0 == 0) return;
+  var yt = y0*(1&lt;&lt;BI_F1)+((ys&gt;1)?y_array[ys-2]&gt;&gt;BI_F2:0);
+  var d1 = BI_FV/yt, d2 = (1&lt;&lt;BI_F1)/yt, e = 1&lt;&lt;BI_F2;
+  var i = r.t, 
+      j = i-ys; 
+  BigInteger t = (q==null) ?nbi() : q;
+  
+  y.dlShiftTo(j,t);
+
+  var r_array = r.array;
+  if(r.compareTo(t) &gt;= 0) {
+    r_array[r.t++] = 1;
+    r.subTo(t,r);
+  }
+  BigInteger.ONE.dlShiftTo(ys,t);
+  t.subTo(y,y); // "negative" y so we can replace sub with am later
+  while(y.t &lt; ys) y_array[y.t++] = 0;
+  while(--j &gt;= 0) {
+    // Estimate quotient digit
+    var qd = (r_array[--i]==y0)?BI_DM:(r_array[i]*d1+(r_array[i-1]+e)*d2).floor();
+    if((r_array[i]+=y.am(0,qd,r,j,0,ys)) &lt; qd) {  // Try it out
+      y.dlShiftTo(j,t);
+      r.subTo(t,r);
+      while(r_array[i] &lt; --qd) r.subTo(t,r);
+    }
+  }
+  if(q != null) {
+    r.drShiftTo(ys,q);
+    if(ts != ms) BigInteger.ZERO.subTo(q,q);
+  }
+  r.t = ys;
+  r.clamp();
+  if(nsh &gt; 0) r.rShiftTo(nsh,r);  // Denormalize remainder
+  if(ts &lt; 0) BigInteger.ZERO.subTo(r,r);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="divide">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>divide</strong>(a) <a class="anchor-link" href="#divide"
+              title="Permalink to BigInteger.divide">#</a></h4>
+<div class="doc">
+<p>this / a</p>
+<pre class="source">
+BigInteger divide(a) { 
+  var r = nbi(); 
+  this.divRemTo(a,r,null); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="divideAndRemainder">
+<span class="show-code">Code</span>
+Map&lt;int, <a href="../solvr_bignum/BigInteger.html">BigInteger</a>&gt; <strong>divideAndRemainder</strong>(a) <a class="anchor-link" href="#divideAndRemainder"
+              title="Permalink to BigInteger.divideAndRemainder">#</a></h4>
+<div class="doc">
+<p><code>this/a, this%a</code> returns Map&lt;BigInteger>
+<code>0</code> = this/a
+<code>1</code> = this%a</p>
+<pre class="source">
+Map&lt;int, BigInteger&gt; divideAndRemainder(a) {
+  var q = nbi(), r = nbi();
+  this.divRemTo(a,q,r);
+  //return new Array(q,r);
+  Map ret_m = new Map();
+  ret_m[0] = q;
+  ret_m[1] = r;
+  return ret_m;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="dlShiftTo">
+<span class="show-code">Code</span>
+void <strong>dlShiftTo</strong>(n, r) <a class="anchor-link" href="#dlShiftTo"
+              title="Permalink to BigInteger.dlShiftTo">#</a></h4>
+<div class="doc">
+<p>r = this &lt;&lt; n*DB</p>
+<pre class="source">
+void dlShiftTo(n,r) {
+  var this_array = this.array;
+  var r_array = r.array;
+  var i;
+  for(i = this.t-1; i &gt;= 0; --i) r_array[i+n] = this_array[i];
+  for(i = n-1; i &gt;= 0; --i) r_array[i] = 0;
+  r.t = this.t+n;
+  r.s = this.s;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="drShiftTo">
+<span class="show-code">Code</span>
+void <strong>drShiftTo</strong>(n, r) <a class="anchor-link" href="#drShiftTo"
+              title="Permalink to BigInteger.drShiftTo">#</a></h4>
+<div class="doc">
+<p>r = this >> n*DB</p>
+<pre class="source">
+void drShiftTo(n,r) {
+  var this_array = this.array;
+  var r_array = r.array;
+  for(var i = n; i &lt; this.t; ++i) r_array[i-n] = this_array[i];
+  r.t = Mathx.max(this.t-n,0);
+  r.s = this.s;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="equals">
+<span class="show-code">Code</span>
+bool <strong>equals</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> a) <a class="anchor-link" href="#equals"
+              title="Permalink to BigInteger.equals">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool equals(BigInteger a) { 
+  return this.compareTo(a)==0 ? true : false;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="exp">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>exp</strong>(int e, z) <a class="anchor-link" href="#exp"
+              title="Permalink to BigInteger.exp">#</a></h4>
+<div class="doc">
+<p>this^e, e &lt; 2^32, doing sqr and mul with "r" (HAC 14.79)</p>
+<pre class="source">
+BigInteger exp(int e, z) { // TODO: z is one of the reduction algorithms, pass interface class 
+  if(e &gt; 0xffffffff || e &lt; 1) return BigInteger.ONE;
+  BigInteger r = nbi(); 
+  BigInteger r2 = nbi();
+  
+  BigInteger  g = z.convert(this); 
+  int i = nbits(e)-1;
+  
+  g.copyTo(r);
+  while(--i &gt;= 0) {
+    z.sqrTo(r,r2);
+    if((e&amp;(1&lt;&lt;i)) &gt; 0) z.mulTo(r2,g,r);
+    else { var t = r; r = r2; r2 = t; }
+  }
+  
+  return z.revert(r);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="flipBit">
+<span class="show-code">Code</span>
+<strong>flipBit</strong>(n) <a class="anchor-link" href="#flipBit"
+              title="Permalink to BigInteger.flipBit">#</a></h4>
+<div class="doc">
+<p>this ^ (1&lt;&lt;n)</p>
+<pre class="source">
+flipBit(n) { return this.changeBit(n,op_xor); }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="fromInt">
+<span class="show-code">Code</span>
+void <strong>fromInt</strong>(int x) <a class="anchor-link" href="#fromInt"
+              title="Permalink to BigInteger.fromInt">#</a></h4>
+<div class="doc">
+<p>set from integer value 
+<span class="param">x</span>, -<a class="crossref" href="../solvr_bignum/BigInteger.html#BI_DV">BI_DV</a> &lt;= 
+<span class="param">x</span> &lt; <a class="crossref" href="../solvr_bignum/BigInteger.html#BI_DV">BI_DV</a></p>
+<pre class="source">
+void fromInt(int x) {
+  var this_array = this.array;
+  this.t = 1;
+  this.s = (x&lt;0)?-1:0;
+  if(x &gt; 0) this_array[0] = x;
+  else if(x &lt; -1) this_array[0] = x+BI_DV;
+  else this.t = 0;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="fromRadix">
+<span class="show-code">Code</span>
+void <strong>fromRadix</strong>(s, b) <a class="anchor-link" href="#fromRadix"
+              title="Permalink to BigInteger.fromRadix">#</a></h4>
+<div class="doc">
+<p>convert from radix string</p>
+<pre class="source">
+void fromRadix(s,b) {
+  this.fromInt(0);
+  
+  if(b == null) b = 10;
+  
+  var cs = this.chunkSize(b);
+  num d = Mathx.pow(b,cs); 
+  bool mi = false;
+  int j = 0, 
+      w = 0;
+  
+  for(var i = 0; i &lt; s.length; ++i) {
+    var x = _intAt(s,i);
+    if(x &lt; 0) {
+      if (s is String) { 
+        if(s[0] == "-" &amp;&amp; this.signum() == 0) {   
+          mi = true;   
+        }
+      }
+      continue;
+    }
+    w = b*w+x;
+    if(++j &gt;= cs) {
+      this.dMultiply(d);
+      this.dAddOffset(w,0);
+      j = 0;
+      w = 0;
+    }
+  }
+  
+  if(j &gt; 0) {
+    this.dMultiply(Mathx.pow(b,j));
+    this.dAddOffset(w,0);
+  }
+  
+  if(mi)  {
+    BigInteger.ZERO.subTo(this,this);
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="fromString">
+<span class="show-code">Code</span>
+void <strong>fromString</strong>(s, int b) <a class="anchor-link" href="#fromString"
+              title="Permalink to BigInteger.fromString">#</a></h4>
+<div class="doc">
+<p>set from string 
+<span class="param">s</span> and radix 
+<span class="param">b</span></p>
+<pre class="source">
+void fromString(s, int b) {
+  var this_array = this.array;
+  var k;
+  if(b == 16) k = 4;
+  else if(b == 8) k = 3;
+  else if(b == 256) k = 8; // byte array
+  else if(b == 2) k = 1;
+  else if(b == 32) k = 5;
+  else if(b == 4) k = 2;
+  else { this.fromRadix(s,b); return; }
+  this.t = 0;
+  this.s = 0;
+  var i = s.length, mi = false, sh = 0;
+  while(--i &gt;= 0) {
+    var x = (k==8) ? s[i] &amp; 0xff : _intAt(s,i); // if k==8 its a byte array
+    if(x &lt; 0) {
+      //if(s.charAt(i) == "-") mi = true;
+      if(s[i] == "-") mi = true;
+      continue;
+    }
+    mi = false;
+    if(sh == 0)
+      this_array[this.t++] = x;
+    else if(sh+k &gt; BI_DB) {
+      this_array[this.t-1] |= (x&amp;((1&lt;&lt;(BI_DB-sh))-1))&lt;&lt;sh;
+      this_array[this.t++] = (x&gt;&gt;(BI_DB-sh));
+    }
+    else
+      this_array[this.t-1] |= x&lt;&lt;sh;
+    sh += k;
+    if(sh &gt;= BI_DB) sh -= BI_DB;
+  }
+  if(k == 8 &amp;&amp; (s[0]&amp;0x80) != 0) {
+    this.s = -1;
+    if(sh &gt; 0) this_array[this.t-1] |= ((1&lt;&lt;(BI_DB-sh))-1)&lt;&lt;sh;
+  }
+  this.clamp();
+  if(mi) BigInteger.ZERO.subTo(this,this);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="gcd">
+<span class="show-code">Code</span>
+<strong>gcd</strong>(a) <a class="anchor-link" href="#gcd"
+              title="Permalink to BigInteger.gcd">#</a></h4>
+<div class="doc">
+<p>gcd(this,a) (HAC 14.54)</p>
+<pre class="source">
+gcd(a) {
+  var x = (this.s&lt;0)?this.negate():this.clone();
+  var y = (a.s&lt;0)?a.negate():a.clone();
+  if(x.compareTo(y) &lt; 0) { var t = x; x = y; y = t; }
+  var i = x.getLowestSetBit(), g = y.getLowestSetBit();
+  if(g &lt; 0) return x;
+  if(i &lt; g) g = i;
+  if(g &gt; 0) {
+    x.rShiftTo(g,x);
+    y.rShiftTo(g,y);
+  }
+  while(x.signum() &gt; 0) {
+    if((i = x.getLowestSetBit()) &gt; 0) x.rShiftTo(i,x);
+    if((i = y.getLowestSetBit()) &gt; 0) y.rShiftTo(i,y);
+    if(x.compareTo(y) &gt;= 0) {
+      x.subTo(y,x);
+      x.rShiftTo(1,x);
+    }
+    else {
+      y.subTo(x,y);
+      y.rShiftTo(1,y);
+    }
+  }
+  if(g &gt; 0) y.lShiftTo(g,y);
+  return y;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getLowestSetBit">
+<span class="show-code">Code</span>
+<strong>getLowestSetBit</strong>() <a class="anchor-link" href="#getLowestSetBit"
+              title="Permalink to BigInteger.getLowestSetBit">#</a></h4>
+<div class="doc">
+<p>returns index of lowest 1-bit (or -1 if none)</p>
+<pre class="source">
+getLowestSetBit() {
+  var this_array = this.array;
+  for(var i = 0; i &lt; this.t; ++i)
+    if(this_array[i] != 0) return i*BI_DB+lbit(this_array[i]);
+  if(this.s &lt; 0) return this.t*BI_DB;
+  return -1;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="intValue">
+<span class="show-code">Code</span>
+<strong>intValue</strong>() <a class="anchor-link" href="#intValue"
+              title="Permalink to BigInteger.intValue">#</a></h4>
+<div class="doc">
+<p>return value as integer</p>
+<pre class="source">
+intValue() {
+  var this_array = this.array;
+  if(this.s &lt; 0) {
+    if(this.t == 1) return this_array[0]-BI_DV;
+    else if(this.t == 0) return -1;
+  }
+  else if(this.t == 1) return this_array[0];
+  else if(this.t == 0) return 0;
+  // assumes 16 &lt; DB &lt; 32
+  return ((this_array[1]&amp;((1&lt;&lt;(32-BI_DB))-1))&lt;&lt;BI_DB)|this_array[0];
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="invDigit">
+<span class="show-code">Code</span>
+<strong>invDigit</strong>() <a class="anchor-link" href="#invDigit"
+              title="Permalink to BigInteger.invDigit">#</a></h4>
+<div class="doc">
+<p>return "-1/this % 2^DB"; useful for Mont. reduction
+justification:</p>
+<pre><code>    xy == 1 (mod m)
+    xy =  1+km
+</code></pre>
+<p>  xy(2-xy) = (1+km)(1-km)
+x<code>y(2-xy)</code> = 1-k^2m^2
+x<code>y(2-xy)</code> == 1 (mod m^2)
+if y is 1/x mod m, then y(2-xy) is 1/x mod m^2
+should reduce x and y(2-xy) by m^2 at each step to keep size bounded.
+JS multiply "overflows" differently from C/C++, so care is needed here.</p>
+<pre class="source">
+invDigit() {
+  var this_array = this.array;
+  if(this.t &lt; 1) return 0;
+  var x = this_array[0];
+  if((x&amp;1) == 0) return 0;
+  var y = x&amp;3;    // y == 1/x mod 2^2
+  y = (y*(2-(x&amp;0xf)*y))&amp;0xf;  // y == 1/x mod 2^4
+  y = (y*(2-(x&amp;0xff)*y))&amp;0xff;  // y == 1/x mod 2^8
+  y = (y*(2-(((x&amp;0xffff)*y)&amp;0xffff)))&amp;0xffff; // y == 1/x mod 2^16
+  // last step - calculate inverse mod DV directly;
+  // assumes 16 &lt; DB &lt;= 32 and assumes ability to handle 48-bit ints
+  y = (y*(2-x*y%BI_DV))%BI_DV;    // y == 1/x mod 2^dbits
+  // we really want the negative inverse, and -DV &lt; y &lt; DV
+  return (y&gt;0)?BI_DV-y:-y;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isEven">
+<span class="show-code">Code</span>
+<strong>isEven</strong>() <a class="anchor-link" href="#isEven"
+              title="Permalink to BigInteger.isEven">#</a></h4>
+<div class="doc">
+<p>true iff <code>this</code> is even</p>
+<pre class="source">
+isEven() {
+  var this_array = this.array;
+  return ((this.t&gt;0)?(this_array[0]&amp;1):this.s) == 0;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isProbablePrime">
+<span class="show-code">Code</span>
+bool <strong>isProbablePrime</strong>(int t) <a class="anchor-link" href="#isProbablePrime"
+              title="Permalink to BigInteger.isProbablePrime">#</a></h4>
+<div class="doc">
+<p>test primality with certainty >= 1-.5^t</p>
+<pre class="source">
+bool isProbablePrime(int t) {
+  var i, x = this.abs();
+  var x_array = x.array;
+  if(x.t == 1 &amp;&amp; x_array[0] &lt;= _lowprimes[_lowprimes.length-1]) {
+    for(i = 0; i &lt; _lowprimes.length; ++i)
+      if(x_array[0] == _lowprimes[i]) return true;
+    return false;
+  }
+  if(x.isEven()) return false;
+  i = 1;
+  while(i &lt; _lowprimes.length) {
+    var m = _lowprimes[i], j = i+1;
+    while(j &lt; _lowprimes.length &amp;&amp; m &lt; _lplim) m *= _lowprimes[j++];
+    m = x.modInt(m);
+    while(i &lt; j) if(m%_lowprimes[i++] == 0) return false;
+  }
+  return x.millerRabin(t);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="lShiftTo">
+<span class="show-code">Code</span>
+void <strong>lShiftTo</strong>(n, r) <a class="anchor-link" href="#lShiftTo"
+              title="Permalink to BigInteger.lShiftTo">#</a></h4>
+<div class="doc">
+<p>r = this &lt;&lt; n</p>
+<pre class="source">
+void lShiftTo(n,r) {
+  var this_array = this.array;
+  var r_array = r.array;
+  var bs = n%BI_DB;
+  var cbs = BI_DB-bs;
+  var bm = (1&lt;&lt;cbs)-1;
+  int ds = n~/BI_DB;
+  var c = (this.s&lt;&lt;bs)&amp;BI_DM; 
+  var i;
+  for(i = this.t-1; i &gt;= 0; --i) {
+    r_array[i+ds+1] = (this_array[i]&gt;&gt;cbs)|c;
+    c = (this_array[i]&amp;bm)&lt;&lt;bs;
+  }
+  for(i = ds-1; i &gt;= 0; --i) r_array[i] = 0;
+  r_array[ds] = c; 
+  r.t = this.t+ds+1;
+  r.s = this.s;
+  r.clamp();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="lbit">
+<span class="show-code">Code</span>
+<strong>lbit</strong>(x) <a class="anchor-link" href="#lbit"
+              title="Permalink to BigInteger.lbit">#</a></h4>
+<div class="doc">
+<p>return index of lowest 1-bit in x, x &lt; 2^31</p>
+<pre class="source">
+lbit(x) {
+  if(x == 0) return -1;
+  var r = 0;
+  if((x&amp;0xffff) == 0) { x &gt;&gt;= 16; r += 16; }
+  if((x&amp;0xff) == 0) { x &gt;&gt;= 8; r += 8; }
+  if((x&amp;0xf) == 0) { x &gt;&gt;= 4; r += 4; }
+  if((x&amp;3) == 0) { x &gt;&gt;= 2; r += 2; }
+  if((x&amp;1) == 0) ++r;
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="max">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>max</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> a) <a class="anchor-link" href="#max"
+              title="Permalink to BigInteger.max">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger max(BigInteger a) { 
+  return(this.compareTo(a)&gt;0)?this:a;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="millerRabin">
+<span class="show-code">Code</span>
+bool <strong>millerRabin</strong>(t) <a class="anchor-link" href="#millerRabin"
+              title="Permalink to BigInteger.millerRabin">#</a></h4>
+<div class="doc">
+<p>true if probably prime (HAC 4.24, Miller-Rabin)</p>
+<pre class="source">
+bool millerRabin(t) {
+  var n1 = this.subtract(BigInteger.ONE);
+  var k = n1.getLowestSetBit();
+  if(k &lt;= 0) return false;
+  var r = n1.shiftRight(k);
+  t = (t+1)&gt;&gt;1;
+  if(t &gt; _lowprimes.length) t = _lowprimes.length;
+  var a = nbi();
+  for(var i = 0; i &lt; t; ++i) {
+    a.fromInt(_lowprimes[i]);
+    var y = a.modPow(r,this);
+    if(y.compareTo(BigInteger.ONE) != 0 &amp;&amp; y.compareTo(n1) != 0) {
+      var j = 1;
+      while(j++ &lt; k &amp;&amp; y.compareTo(n1) != 0) {
+        y = y.modPowInt(2,this);
+        if(y.compareTo(BigInteger.ONE) == 0) return false;
+      }
+      if(y.compareTo(n1) != 0) return false;
+    }
+  }
+  return true;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="min">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>min</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> a) <a class="anchor-link" href="#min"
+              title="Permalink to BigInteger.min">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger min(BigInteger a) { 
+  return(this.compareTo(a)&lt;0)?this:a;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="mod">
+<span class="show-code">Code</span>
+<strong>mod</strong>(a) <a class="anchor-link" href="#mod"
+              title="Permalink to BigInteger.mod">#</a></h4>
+<div class="doc">
+<p>this mod a</p>
+<pre class="source">
+mod(a) {
+  var r = nbi();
+  this.abs().divRemTo(a,null,r);
+  if(this.s &lt; 0 &amp;&amp; r.compareTo(BigInteger.ZERO) &gt; 0) a.subTo(r,r);
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="modInt">
+<span class="show-code">Code</span>
+int <strong>modInt</strong>(int n) <a class="anchor-link" href="#modInt"
+              title="Permalink to BigInteger.modInt">#</a></h4>
+<div class="doc">
+<p>this % n, n &lt; 2^26</p>
+<pre class="source">
+int modInt(int n) {
+  var this_array = this.array;
+  if(n &lt;= 0) return 0;
+  var d = BI_DV%n, r = (this.s&lt;0)?n-1:0;
+  if(this.t &gt; 0)
+    if(d == 0) r = this_array[0]%n;
+    else for(var i = this.t-1; i &gt;= 0; --i) r = (d*r+this_array[i])%n;
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="modInverse">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>modInverse</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> m) <a class="anchor-link" href="#modInverse"
+              title="Permalink to BigInteger.modInverse">#</a></h4>
+<div class="doc">
+<p>1/this % m (HAC 14.61)</p>
+<pre class="source">
+BigInteger modInverse(BigInteger m) {
+  var ac = m.isEven();
+  if((this.isEven() &amp;&amp; ac) || m.signum() == 0) return BigInteger.ZERO;
+  var u = m.clone(), v = this.clone();
+  var a = nbv(1), b = nbv(0), c = nbv(0), d = nbv(1);
+  while(u.signum() != 0) {
+    while(u.isEven()) {
+      u.rShiftTo(1,u);
+      if(ac) {
+        if(!a.isEven() || !b.isEven()) { a.addTo(this,a); b.subTo(m,b); }
+        a.rShiftTo(1,a);
+      }
+      else if(!b.isEven()) b.subTo(m,b);
+      b.rShiftTo(1,b);
+    }
+    while(v.isEven()) {
+      v.rShiftTo(1,v);
+      if(ac) {
+        if(!c.isEven() || !d.isEven()) { c.addTo(this,c); d.subTo(m,d); }
+        c.rShiftTo(1,c);
+      }
+      else if(!d.isEven()) d.subTo(m,d);
+      d.rShiftTo(1,d);
+    }
+    if(u.compareTo(v) &gt;= 0) {
+      u.subTo(v,u);
+      if(ac) a.subTo(c,a);
+      b.subTo(d,b);
+    }
+    else {
+      v.subTo(u,v);
+      if(ac) c.subTo(a,c);
+      d.subTo(b,d);
+    }
+  }
+  if(v.compareTo(BigInteger.ONE) != 0) return BigInteger.ZERO;
+  if(d.compareTo(m) &gt;= 0) return d.subtract(m);
+  if(d.signum() &lt; 0) d.addTo(m,d); else return d;
+  if(d.signum() &lt; 0) return d.add(m); else return d;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="modPow">
+<span class="show-code">Code</span>
+<strong>modPow</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> e, <a href="../solvr_bignum/BigInteger.html">BigInteger</a> m) <a class="anchor-link" href="#modPow"
+              title="Permalink to BigInteger.modPow">#</a></h4>
+<div class="doc">
+<p>this^e % m (HAC 14.85)</p>
+<pre class="source">
+modPow(BigInteger e, BigInteger m) {
+  // TODO: need to create interface for the reduction algorithms
+  var e_array = e.array;
+  var i = e.bitLength(), k, r = nbv(1), z;
+  if(i &lt;= 0) return r;
+  else if(i &lt; 18) k = 1;
+  else if(i &lt; 48) k = 3;
+  else if(i &lt; 144) k = 4;
+  else if(i &lt; 768) k = 5;
+  else k = 6;
+  if(i &lt; 8)
+    z = new Classic(m);
+  else if(m.isEven())
+    z = new Barrett(m);
+  else
+    z = new Montgomery(m);
+
+   
+  // precomputation
+  var g = new Map(), n = 3, k1 = k-1, km = (1&lt;&lt;k)-1;
+  g[1] = z.convert(this);
+  if(k &gt; 1) {
+    var g2 = nbi();
+    z.sqrTo(g[1],g2);
+    while(n &lt;= km) {
+      g[n] = nbi();
+      z.mulTo(g2,g[n-2],g[n]);
+      n += 2;
+    }
+  }
+
+  var j = e.t-1, w, is1 = true, r2 = nbi(), t;
+  i = nbits(e_array[j])-1;
+  while(j &gt;= 0) {
+    if(i &gt;= k1) w = (e_array[j]&gt;&gt;(i-k1))&amp;km;
+    else {
+      w = (e_array[j]&amp;((1&lt;&lt;(i+1))-1))&lt;&lt;(k1-i);
+      if(j &gt; 0) w |= e_array[j-1]&gt;&gt;(BI_DB+i-k1);
+    }
+
+    n = k;
+    while((w&amp;1) == 0) { w &gt;&gt;= 1; --n; }
+    if((i -= n) &lt; 0) { i += BI_DB; --j; }
+    if(is1) { // ret == 1, don't bother squaring or multiplying it
+      g[w].copyTo(r);
+      is1 = false;
+    }
+    else {
+      while(n &gt; 1) { z.sqrTo(r,r2); z.sqrTo(r2,r); n -= 2; }
+      if(n &gt; 0) z.sqrTo(r,r2); else { t = r; r = r2; r2 = t; }
+      z.mulTo(r2,g[w],r);
+    }
+
+    while(j &gt;= 0 &amp;&amp; (e_array[j]&amp;(1&lt;&lt;i)) == 0) {
+      z.sqrTo(r,r2); t = r; r = r2; r2 = t;
+      if(--i &lt; 0) { i = BI_DB-1; --j; }
+    }
+  }
+  return z.revert(r);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="modPowInt">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>modPowInt</strong>(int e, <a href="../solvr_bignum/BigInteger.html">BigInteger</a> m) <a class="anchor-link" href="#modPowInt"
+              title="Permalink to BigInteger.modPowInt">#</a></h4>
+<div class="doc">
+<p>this^e % m, 0 &lt;= e &lt; 2^32</p>
+<pre class="source">
+BigInteger modPowInt(int e, BigInteger m) {
+  var z;
+  if(e &lt; 256 || m.isEven()) { 
+    z = new Classic(m); 
+  } else { 
+    z = new Montgomery(m);
+  }
+  
+  return this.exp(e,z);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="multiply">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>multiply</strong>(a) <a class="anchor-link" href="#multiply"
+              title="Permalink to BigInteger.multiply">#</a></h4>
+<div class="doc">
+<p>this * a</p>
+<pre class="source">
+BigInteger multiply(a) { 
+  var r = nbi(); 
+  this.multiplyTo(a,r); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="multiplyLowerTo">
+<span class="show-code">Code</span>
+<strong>multiplyLowerTo</strong>(a, n, r) <a class="anchor-link" href="#multiplyLowerTo"
+              title="Permalink to BigInteger.multiplyLowerTo">#</a></h4>
+<div class="doc">
+<p>r = lower n words of "this * a", a.t &lt;= n
+"this" should be the larger one if appropriate.</p>
+<pre class="source">
+multiplyLowerTo(a,n,r) {
+  var r_array = r.array;
+  var a_array = a.array;
+  var i = Mathx.min(this.t+a.t,n);
+  r.s = 0; // assumes a,this &gt;= 0
+  r.t = i;
+  while(i &gt; 0) r_array[--i] = 0;
+  var j;
+  for(j = r.t-this.t; i &lt; j; ++i) r_array[i+this.t] = this.am(0,a_array[i],r,i,0,this.t);
+  for(j = Mathx.min(a.t,n); i &lt; j; ++i) this.am(0,a_array[i],r,i,0,n-i);
+  r.clamp();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="multiplyTo">
+<span class="show-code">Code</span>
+void <strong>multiplyTo</strong>(a, r) <a class="anchor-link" href="#multiplyTo"
+              title="Permalink to BigInteger.multiplyTo">#</a></h4>
+<div class="doc">
+<p>r = this * a, r != this,a (HAC 14.12)
+<code>this</code> should be the larger one if appropriate.</p>
+<pre class="source">
+void multiplyTo(a,r) {
+  var this_array = this.array;
+  var r_array = r.array;
+  var x = this.abs(), y = a.abs();
+  var y_array = y.array;
+
+  var i = x.t;
+  r.t = i+y.t;
+  while(--i &gt;= 0) r_array[i] = 0;
+  for(i = 0; i &lt; y.t; ++i) r_array[i+x.t] = x.am(0,y_array[i],r,i,0,x.t);
+  r.s = 0;
+  r.clamp();
+  if(this.s != a.s) BigInteger.ZERO.subTo(r,r);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="multiplyUpperTo">
+<span class="show-code">Code</span>
+<strong>multiplyUpperTo</strong>(a, n, r) <a class="anchor-link" href="#multiplyUpperTo"
+              title="Permalink to BigInteger.multiplyUpperTo">#</a></h4>
+<div class="doc">
+<p>r = "this * a" without lower n words, n > 0
+"this" should be the larger one if appropriate.</p>
+<pre class="source">
+multiplyUpperTo(a,n,r) {
+  var r_array = r.array;
+  var a_array = a.array;
+  --n;
+  var i = r.t = this.t+a.t-n;
+  r.s = 0; // assumes a,this &gt;= 0
+  while(--i &gt;= 0) r_array[i] = 0;
+  for(i = Mathx.max(n-this.t,0); i &lt; a.t; ++i)
+    r_array[this.t+i-n] = this.am(n-i,a_array[i],r,0,0,this.t+i-n);
+  r.clamp();
+  r.drShiftTo(1,r);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="nbits">
+<span class="show-code">Code</span>
+int <strong>nbits</strong>(x) <a class="anchor-link" href="#nbits"
+              title="Permalink to BigInteger.nbits">#</a></h4>
+<div class="doc">
+<p>returns bit length of the integer 
+<span class="param">x</span></p>
+<pre class="source">
+int nbits(x) {
+  var r = 1, t;
+  
+  if (x is double) x = x.toInt();
+  
+  if((t=x&gt;&gt;16) != 0) { x = t; r += 16; }
+  if((t=x&gt;&gt;8) != 0) { x = t; r += 8; }
+  if((t=x&gt;&gt;4) != 0) { x = t; r += 4; }
+  if((t=x&gt;&gt;2) != 0) { x = t; r += 2; }
+  if((t=x&gt;&gt;1) != 0) { x = t; r += 1; }
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="negate">
+<span class="show-code">Code</span>
+<strong>negate</strong>() <a class="anchor-link" href="#negate"
+              title="Permalink to BigInteger.negate">#</a></h4>
+<div class="doc">
+<p>-this</p>
+<pre class="source">
+negate() { 
+  var r = nbi(); 
+  BigInteger.ZERO.subTo(this,r); 
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="not">
+<span class="show-code">Code</span>
+<strong>not</strong>() <a class="anchor-link" href="#not"
+              title="Permalink to BigInteger.not">#</a></h4>
+<div class="doc">
+<p>~this</p>
+<pre class="source">
+not() {
+  var this_array = this.array;
+  var r = nbi();
+  var r_array = r.array;
+
+  for(var i = 0; i &lt; this.t; ++i) { 
+    r_array[i] = BI_DM &amp; ~this_array[i];   
+  }
+  
+  r.t = this.t;
+  r.s = ~this.s;
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="op_and">
+<span class="show-code">Code</span>
+<strong>op_and</strong>(x, y) <a class="anchor-link" href="#op_and"
+              title="Permalink to BigInteger.op_and">#</a></h4>
+<div class="doc">
+<p>this &amp; a</p>
+<pre class="source">
+op_and(x,y) { return x&amp;y; }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="op_andnot">
+<span class="show-code">Code</span>
+<strong>op_andnot</strong>(x, y) <a class="anchor-link" href="#op_andnot"
+              title="Permalink to BigInteger.op_andnot">#</a></h4>
+<div class="doc">
+<p>this &amp; ~a</p>
+<pre class="source">
+op_andnot(x,y) { return x&amp;~y; }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="op_or">
+<span class="show-code">Code</span>
+<strong>op_or</strong>(x, y) <a class="anchor-link" href="#op_or"
+              title="Permalink to BigInteger.op_or">#</a></h4>
+<div class="doc">
+<p>this | a</p>
+<pre class="source">
+op_or(x,y) { 
+  return x|y;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="op_xor">
+<span class="show-code">Code</span>
+<strong>op_xor</strong>(x, y) <a class="anchor-link" href="#op_xor"
+              title="Permalink to BigInteger.op_xor">#</a></h4>
+<div class="doc">
+<p>this ^ a</p>
+<pre class="source">
+op_xor(x,y) { return x^y; }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+bool <strong>operator ==</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator ==">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator ==(BigInteger other) =&gt; compareTo(other) == 0 ? true : false;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator ^</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator ^">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator ^(BigInteger other) =&gt; xor(other);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+bool <strong>operator <=</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator <=">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &lt;=(BigInteger other) =&gt; compareTo(other) &lt;= 0 ? true : false;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator %</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator %">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator %(BigInteger other) =&gt; remainder(other);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator |</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator |">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator |(BigInteger other) =&gt; or(other);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+bool <strong>operator <</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator <">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &lt;(BigInteger other) =&gt; compareTo(other) &lt; 0 ? true : false;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+bool <strong>operator >=</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator >=">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &gt;=(BigInteger other) =&gt; compareTo(other) &gt;= 0 ? true : false;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator -</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator -">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator -(BigInteger other) =&gt; subtract(other);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator *</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator *">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator *(BigInteger other) =&gt; multiply(other);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator ~/</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator ~/">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator ~/(BigInteger other) { throw "Not Implemented"; }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator <<</strong>(int shiftAmount) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator <<">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator &lt;&lt;(int shiftAmount) =&gt; shiftLeft(shiftAmount);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator &</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator &">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator &amp;(BigInteger other) =&gt; and(other);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator >></strong>(int shiftAmount) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator >>">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator &gt;&gt;(int shiftAmount) =&gt; shiftRight(shiftAmount);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator ~</strong>() <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator ~">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator ~() =&gt; not();
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator /</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator /">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator /(BigInteger other) =&gt; divide(other);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+bool <strong>operator ></strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator >">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &gt;(BigInteger other) =&gt; compareTo(other) &gt; 0 ? true : false;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>operator +</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> other) <a class="anchor-link" href="#operator"
+              title="Permalink to BigInteger.operator +">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+BigInteger operator +(BigInteger other) =&gt; add(other);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="or">
+<span class="show-code">Code</span>
+<strong>or</strong>(a) <a class="anchor-link" href="#or"
+              title="Permalink to BigInteger.or">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+or(a) { 
+  var r = nbi(); 
+  this.bitwiseTo(a,op_or,r); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="pow">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>pow</strong>(int e) <a class="anchor-link" href="#pow"
+              title="Permalink to BigInteger.pow">#</a></h4>
+<div class="doc">
+<p>this^e</p>
+<pre class="source">
+BigInteger pow(int e) { 
+  return this.exp(e,new NullExp());   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="rShiftTo">
+<span class="show-code">Code</span>
+void <strong>rShiftTo</strong>(n, r) <a class="anchor-link" href="#rShiftTo"
+              title="Permalink to BigInteger.rShiftTo">#</a></h4>
+<div class="doc">
+<p>r = this >> n</p>
+<pre class="source">
+void rShiftTo(n,r) {
+    var this_array = this.array;
+    var r_array = r.array;
+    r.s = this.s;
+    var ds = n~/BI_DB;
+    
+    if(ds &gt;= this.t) { 
+      r.t = 0; 
+      return;   
+    }
+    var bs = n%BI_DB;
+    var cbs = BI_DB-bs;
+    var bm = (1&lt;&lt;bs)-1;
+    r_array[0] = this_array[ds]&gt;&gt;bs;
+    for(var i = ds+1; i &lt; this.t; ++i) {
+      r_array[i-ds-1] |= (this_array[i]&amp;bm)&lt;&lt;cbs;
+      r_array[i-ds] = this_array[i]&gt;&gt;bs;
+    }
+    if(bs &gt; 0) r_array[this.t-ds-1] |= (this.s&amp;bm)&lt;&lt;cbs;
+    r.t = this.t-ds;
+    r.clamp();  
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="remainder">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>remainder</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> a) <a class="anchor-link" href="#remainder"
+              title="Permalink to BigInteger.remainder">#</a></h4>
+<div class="doc">
+<p>this % a</p>
+<pre class="source">
+BigInteger remainder(BigInteger a) { 
+  BigInteger r = nbi(); 
+  this.divRemTo(a,null,r); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="setBit">
+<span class="show-code">Code</span>
+<strong>setBit</strong>(n) <a class="anchor-link" href="#setBit"
+              title="Permalink to BigInteger.setBit">#</a></h4>
+<div class="doc">
+<p>this | (1&lt;&lt;n)</p>
+<pre class="source">
+setBit(n) { return this.changeBit(n,op_or); }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="shiftLeft">
+<span class="show-code">Code</span>
+<strong>shiftLeft</strong>(n) <a class="anchor-link" href="#shiftLeft"
+              title="Permalink to BigInteger.shiftLeft">#</a></h4>
+<div class="doc">
+<p>this &lt;&lt; n</p>
+<pre class="source">
+shiftLeft(n) {
+  var r = nbi();
+  if(n &lt; 0) { 
+    this.rShiftTo(-n,r);   
+  } else { 
+    this.lShiftTo(n,r);   
+  }
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="shiftRight">
+<span class="show-code">Code</span>
+<strong>shiftRight</strong>(n) <a class="anchor-link" href="#shiftRight"
+              title="Permalink to BigInteger.shiftRight">#</a></h4>
+<div class="doc">
+<p>this >> n</p>
+<pre class="source">
+shiftRight(n) {
+  var r = nbi();
+  if(n &lt; 0) { 
+    this.lShiftTo(-n,r);   
+  } else { 
+    this.rShiftTo(n,r);   
+  }
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="shortValue">
+<span class="show-code">Code</span>
+<strong>shortValue</strong>() <a class="anchor-link" href="#shortValue"
+              title="Permalink to BigInteger.shortValue">#</a></h4>
+<div class="doc">
+<p>return value as short (assumes DB>=16)</p>
+<pre class="source">
+shortValue() {
+  var this_array = this.array;
+  return (this.t==0)?this.s:(this_array[0]&lt;&lt;16)&gt;&gt;16;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="signum">
+<span class="show-code">Code</span>
+int <strong>signum</strong>() <a class="anchor-link" href="#signum"
+              title="Permalink to BigInteger.signum">#</a></h4>
+<div class="doc">
+<p>0 if this == 0, 1 if this > 0</p>
+<pre class="source">
+int signum() {
+  var this_array = this.array;
+  if(this.s &lt; 0) { 
+    return -1; 
+  } else if(this.t &lt;= 0 || (this.t == 1 &amp;&amp; this_array[0] &lt;= 0)) { 
+    return 0;   
+  } else { 
+    return 1;   
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="squareTo">
+<span class="show-code">Code</span>
+void <strong>squareTo</strong>(r) <a class="anchor-link" href="#squareTo"
+              title="Permalink to BigInteger.squareTo">#</a></h4>
+<div class="doc">
+<p>r = this^2, r != this (HAC 14.16)</p>
+<pre class="source">
+void squareTo(r) {
+  var x = this.abs();
+  var x_array = x.array;
+  var r_array = r.array;
+
+  var i = r.t = 2*x.t;
+  while(--i &gt;= 0) r_array[i] = 0;
+  for(i = 0; i &lt; x.t-1; ++i) {
+    var c = x.am(i,x_array[i],r,2*i,0,1);
+    if((r_array[i+x.t]+=x.am(i+1,2*x_array[i],r,2*i+1,c,x.t-i-1)) &gt;= BI_DV) {
+      r_array[i+x.t] -= BI_DV;
+      r_array[i+x.t+1] = 1;
+    }
+  }
+  if(r.t &gt; 0) r_array[r.t-1] += x.am(i,x_array[i],r,2*i,0,1);
+  r.s = 0;
+  r.clamp();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="subTo">
+<span class="show-code">Code</span>
+void <strong>subTo</strong>(a, r) <a class="anchor-link" href="#subTo"
+              title="Permalink to BigInteger.subTo">#</a></h4>
+<div class="doc">
+<p>r = this - a</p>
+<pre class="source">
+void subTo(a,r) {
+  var this_array = this.array;
+  var r_array = r.array;
+  var a_array = a.array;
+  int i = 0; 
+  int c = 0; 
+  int m = Mathx.min(a.t, this.t);
+  
+  while(i &lt; m) {
+    c += (this_array[i].toInt() - a_array[i].toInt()).toInt();
+    r_array[i++] = c&amp;BI_DM;
+    c &gt;&gt;= BI_DB;
+    // NOTE: this is to bypass a dart2js bug
+    if (c == 4294967295) {
+      c = -1;
+    }
+  }
+  
+  if(a.t &lt; this.t) {
+    c -= a.s;
+    while(i &lt; this.t) {
+      c += this_array[i];
+      r_array[i++] = c&amp;BI_DM;
+      c &gt;&gt;= BI_DB;
+      // NOTE: this is to bypass a dart2js bug
+      if (c == 4294967295) {
+        c = -1;
+      }
+    }
+    c += this.s;
+  } else {
+    c += this.s;
+    while(i &lt; a.t) {
+      c -= a_array[i];
+      r_array[i++] = c&amp;BI_DM;
+      c &gt;&gt;= BI_DB;
+      if (c == 4294967295) {
+        c = -1;
+      }
+    }
+    c -= a.s;
+  }
+  
+  r.s = (c&lt;0) ? -1 : 0;
+  
+  if(c &lt; -1) { 
+    r_array[i++] = BI_DV+c; 
+  } else if(c &gt; 0) { 
+    r_array[i++] = c;
+  }
+  
+  r.t = i;
+  r.clamp();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="subtract">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a> <strong>subtract</strong>(a) <a class="anchor-link" href="#subtract"
+              title="Permalink to BigInteger.subtract">#</a></h4>
+<div class="doc">
+<p>this - a</p>
+<pre class="source">
+BigInteger subtract(a) { 
+  var r = nbi(); 
+  this.subTo(a,r); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="testBit">
+<span class="show-code">Code</span>
+<strong>testBit</strong>(n) <a class="anchor-link" href="#testBit"
+              title="Permalink to BigInteger.testBit">#</a></h4>
+<div class="doc">
+<p>true iff nth bit is set</p>
+<pre class="source">
+testBit(n) {
+  var this_array = this.array;
+  var j = (n/BI_DB).floor();
+  if(j &gt;= this.t) return(this.s!=0);
+  return((this_array[j]&amp;(1&lt;&lt;(n%BI_DB)))!=0);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toByteArray">
+<span class="show-code">Code</span>
+Map <strong>toByteArray</strong>() <a class="anchor-link" href="#toByteArray"
+              title="Permalink to BigInteger.toByteArray">#</a></h4>
+<div class="doc">
+<p>convert to bigendian byte array <code>Map</code></p>
+<pre class="source">
+Map toByteArray() {
+  var this_array = this.array;
+  var i = this.t, r = new Map();
+  r[0] = this.s;
+  var p = BI_DB-(i*BI_DB)%8, d, k = 0;
+  if(i-- &gt; 0) {
+    if(p &lt; BI_DB &amp;&amp; (d = this_array[i]&gt;&gt;p) != (this.s&amp;BI_DM)&gt;&gt;p)
+      r[k++] = d|(this.s&lt;&lt;(BI_DB-p));
+    while(i &gt;= 0) {
+      if(p &lt; 8) {
+        d = (this_array[i]&amp;((1&lt;&lt;p)-1))&lt;&lt;(8-p);
+        d |= this_array[--i]&gt;&gt;(p+=BI_DB-8);
+      }
+      else {
+        d = (this_array[i]&gt;&gt;(p-=8))&amp;0xff;
+        if(p &lt;= 0) { p += BI_DB; --i; }
+      }
+      if((d&amp;0x80) != 0) d |= -256;
+      if(k == 0 &amp;&amp; (this.s&amp;0x80) != (d&amp;0x80)) ++k;
+      if(k &gt; 0 || d != this.s) r[k++] = d;
+    }
+  }
+  return r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toRadix">
+<span class="show-code">Code</span>
+String <strong>toRadix</strong>([int b = 10]) <a class="anchor-link" href="#toRadix"
+              title="Permalink to BigInteger.toRadix">#</a></h4>
+<div class="doc">
+<p>convert to radix string , http://dartbug.com/461 num only supports up to radix 16</p>
+<pre class="source">
+String toRadix([int b=10]) {
+  if(b == null) b = 10;
+  if(this.signum() == 0 || b &lt; 2 || b &gt; 36) return "0";
+  var cs = this.chunkSize(b);
+  var a = Mathx.pow(b,cs);
+  var d = nbv(a), y = nbi(), z = nbi(), r = "";
+  this.divRemTo(d,y,z);
+  while(y.signum() &gt; 0) {
+    r = "${(a+z.intValue()).toRadixString(b).substring(1)}${r}";
+    y.divRemTo(d,y,z);
+  }
+  
+  return "${z.intValue().toRadixString(b)}${r}";
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+<span class="show-code">Code</span>
+String <strong>toString</strong>([int b]) <a class="anchor-link" href="#toString"
+              title="Permalink to BigInteger.toString">#</a></h4>
+<div class="doc">
+<p>return string representation in given radix 
+<span class="param">b</span></p>
+<pre class="source">
+String toString([int b]) { // NOTE: overriding toString like this is probably bad. 
+  var this_array = this.array;
+  if(this.s &lt; 0) { 
+    return "-${this.negate().toString(b)}"; //return "-"+this.negate().toString(b);
+  }
+  
+  var k;
+  if(b == 16) k = 4;
+  else if(b == 8) k = 3;
+  else if(b == 2) k = 1;
+  else if(b == 32) k = 5;
+  else if(b == 4) k = 2;
+  else return this.toRadix(b);
+  var km = (1&lt;&lt;k)-1, d, m = false, r = "", i = this.t;
+  var p = BI_DB-(i*BI_DB)%k;
+  if(i-- &gt; 0) {
+    if(p &lt; BI_DB &amp;&amp; (d = this_array[i]&gt;&gt;p) &gt; 0) { m = true; r = _int2char(d); }
+    while(i &gt;= 0) {
+      if(p &lt; k) {
+        d = (this_array[i]&amp;((1&lt;&lt;p)-1))&lt;&lt;(k-p);
+        d |= this_array[--i]&gt;&gt;(p+=BI_DB-k);
+      }
+      else {
+        d = (this_array[i].toInt()&gt;&gt;(p-=k.toInt()).toInt())&amp;km.toInt();
+        if(p &lt;= 0) { p += BI_DB; --i; }
+      }
+      if(d &gt; 0) m = true;
+      if(m) r = "${r}${_int2char(d)}"; //r += int2char(d); // NOTE: Might not be best use of string
+    }
+  }
+  return m ? r : "0";
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="xor">
+<span class="show-code">Code</span>
+<strong>xor</strong>(a) <a class="anchor-link" href="#xor"
+              title="Permalink to BigInteger.xor">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+xor(a) { 
+  var r = nbi(); 
+  this.bitwiseTo(a,op_xor,r); 
+  return r;   
+}
+</pre>
+</div>
+</div>
+<h3>Fields</h3>
+<div class="field"><h4 id="BI_RC">
+<span class="show-code">Code</span>
+Map         <strong>BI_RC</strong> <a class="anchor-link"
+            href="#BI_RC"
+            title="Permalink to BigInteger.BI_RC">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+Map BI_RC;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BI_RM">
+<span class="show-code">Code</span>
+var         <strong>BI_RM</strong> <a class="anchor-link"
+            href="#BI_RM"
+            title="Permalink to BigInteger.BI_RM">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="am">
+<span class="show-code">Code</span>
+Function         <strong>am</strong> <a class="anchor-link"
+            href="#am"
+            title="Permalink to BigInteger.am">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+Function am;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="array">
+<span class="show-code">Code</span>
+Map         <strong>array</strong> <a class="anchor-link"
+            href="#array"
+            title="Permalink to BigInteger.array">#</a>
+        </h4>
+        <div class="doc">
+<p>Internal data structure of <a class="crossref" href="../solvr_bignum/BigInteger.html#new:BigInteger">BigInteger</a> implementation.
+Holds the bits in a <code>Map</code> that is keyed by its integer values
+that represent its location in an Array type structure. While
+This is not the most optimal implementation, it was done to
+support a rapid implementation. This will be replaced at a later
+time for a <code>List</code> data structure.</p>
+<pre class="source">
+Map array;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="canary">
+<span class="show-code">Code</span>
+int         <strong>canary</strong> <a class="anchor-link"
+            href="#canary"
+            title="Permalink to BigInteger.canary">#</a>
+        </h4>
+        <div class="doc">
+<p>JavaScript engine analysis</p>
+<pre class="source">
+int canary = 0xdeadbeefcafe;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="s">
+<span class="show-code">Code</span>
+var         <strong>s</strong> <a class="anchor-link"
+            href="#s"
+            title="Permalink to BigInteger.s">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+var s;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="t">
+<span class="show-code">Code</span>
+int         <strong>t</strong> <a class="anchor-link"
+            href="#t"
+            title="Permalink to BigInteger.t">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+int t;
+</pre>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        
+        <div class="footer">
+          <div>This page was generated at 2012-08-29 12:31:51.195</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
