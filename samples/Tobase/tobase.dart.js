@@ -5441,9 +5441,6 @@ $$.BigInteger = {"":
  operator$tdiv$1: function(other) {
   throw $.captureStackTrace('Not Implemented');
 },
- operator$negate$0: function() {
-  return this.negate$0();
-},
  operator$lt$1: function(other) {
   return $.ltB(this.compareTo$1(other), 0) && true;
 },
