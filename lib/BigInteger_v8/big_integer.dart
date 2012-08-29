@@ -255,6 +255,10 @@ class BigInteger {
   static BigInteger get ZERO() => nbv(0);
   static BigInteger get ONE() => nbv(1);
   
+//  static const xxx() {
+//    new BigInteger(5).mod(new BigInteger(5));
+//  }
+  
   // Basic dart BN library - subset useful for RSA encryption.
   
   /** [List] of low primes */
@@ -280,7 +284,7 @@ class BigInteger {
   Map BI_RC; 
   
   int t; 
-  int s; 
+  var s; 
   
   /**
    * Constructor of [BigInteger]
@@ -526,11 +530,7 @@ class BigInteger {
   /** returns bit length of the integer [x] */
   int nbits(x) {
     var r = 1, t;
-    // TODO: Assert here type is int
-    //    print("is double ${x is double}");
-    //    print(x);
-    //    print(x.toInt());
-    //    print(x.toInt()>>16);
+    
     if (x is double) x = x.toInt();
     
     if((t=x>>16) != 0) { x = t; r += 16; }
@@ -630,33 +630,53 @@ class BigInteger {
     var this_array = this.array;
     var r_array = r.array;
     var a_array = a.array;
-    var i = 0, c = 0, m = Mathx.min(a.t,this.t);
+    int i = 0; 
+    int c = 0; 
+    int m = Mathx.min(a.t, this.t);
+    
     while(i < m) {
       c += (this_array[i].toInt() - a_array[i].toInt()).toInt();
       r_array[i++] = c&BI_DM;
       c >>= BI_DB;
+      // NOTE: this is to bypass a dart2js bug
+      if (c == 4294967295) {
+        c = -1;
+      }
     }
+    
     if(a.t < this.t) {
       c -= a.s;
       while(i < this.t) {
         c += this_array[i];
         r_array[i++] = c&BI_DM;
         c >>= BI_DB;
+        // NOTE: this is to bypass a dart2js bug
+        if (c == 4294967295) {
+          c = -1;
+        }
       }
       c += this.s;
-    }
-    else {
+    } else {
       c += this.s;
       while(i < a.t) {
         c -= a_array[i];
         r_array[i++] = c&BI_DM;
         c >>= BI_DB;
+        if (c == 4294967295) {
+          c = -1;
+        }
       }
       c -= a.s;
     }
-    r.s = (c<0)?-1:0;
-    if(c < -1) r_array[i++] = BI_DV+c;
-    else if(c > 0) r_array[i++] = c;
+    
+    r.s = (c<0) ? -1 : 0;
+    
+    if(c < -1) { 
+      r_array[i++] = BI_DV+c; 
+    } else if(c > 0) { 
+      r_array[i++] = c;
+    }
+    
     r.t = i;
     r.clamp();
   }
@@ -704,7 +724,7 @@ class BigInteger {
    * divide this by m, quotient and remainder to q, r (HAC 14.20)
    * r != q, this != m.  q or r may be null.
    */
-  divRemTo(m,q,r) {
+  divRemTo(BigInteger m,q,BigInteger r) {
     var pm = m.abs();
     if(pm.t <= 0) return;
     var pt = this.abs();
@@ -913,7 +933,11 @@ class BigInteger {
     for(var i = 0; i < s.length; ++i) {
       var x = _intAt(s,i);
       if(x < 0) {
-        if(s.charCodeAt(i) == "-" && this.signum() == 0) mi = true;
+        if (s is String) { 
+          if(s[0] == "-" && this.signum() == 0) {   
+            mi = true;   
+          }
+        }
         continue;
       }
       w = b*w+x;
@@ -1233,8 +1257,8 @@ class BigInteger {
   }
   
   /** this % a */
-  BigInteger remainder(a) { 
-    var r = nbi(); 
+  BigInteger remainder(BigInteger a) { 
+    BigInteger r = nbi(); 
     this.divRemTo(a,null,r); 
     return r;   
   }

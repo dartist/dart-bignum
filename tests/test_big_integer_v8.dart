@@ -687,7 +687,58 @@ class TestBigIntegerV8 {
           expect(z.toString(2), equals("10"));
         });
       });
-    }
+    
+    group("sign test", () {
+      test("-5 from int constructor", () {
+        BigInteger x = new BigInteger(-5);
+        expect(x.toString(), equals("-5"));
+      });
+      
+      test("-5 from String constructor", () {
+        BigInteger x = new BigInteger("-5");
+        expect(x.toString(), equals("-5"));
+      });
+      
+      test("-5 from String constructor base 16", () {
+        BigInteger x = new BigInteger("-5", 16);
+        expect(x.toString(), equals("-5"));
+      });
+      
+      test("-5 + (-5)", () {
+        BigInteger x = new BigInteger("-5");
+        BigInteger y = new BigInteger("-5");
+        BigInteger z = x + y;
+        expect(z.toString(), equals("-10"));
+      });
+      
+      test("-5 + (-5)", () {
+        BigInteger x = new BigInteger("-5");
+        BigInteger y = new BigInteger("-5");
+        BigInteger z = x + y;
+        expect(z.toString(), equals("-10"));
+      });
+      
+      test("-5 + 5", () {
+        BigInteger x = new BigInteger("-5");
+        BigInteger y = new BigInteger("5");
+        BigInteger z = x + y;
+        expect(z.toString(), equals("0"));
+      });
+      
+      test("-5", () {
+        BigInteger x = new BigInteger("-5");
+        expect(x.toString(), equals("-5"));
+      });
+      
+      test("-5 - (-5)", () {
+        BigInteger x = new BigInteger("-5");
+        BigInteger y = new BigInteger("-5");
+        BigInteger z = x - y;
+        expect(z.toString(), equals("0"));
+      });
+    });
+    
+  }
   
   void main() {
     testBigInteger();
