@@ -275,7 +275,7 @@ class TestBigIntegerV8 {
             if (x.signum() == 0) {
               expect(k, equals(-1));
             } else {
-              BigInteger z = x.and(x.negate());
+              BigInteger z = x.and(x.negate_op());
               int j;
               for (j = 0; j < z.bitLength() && !z.testBit(j); j++);
               
