@@ -736,6 +736,44 @@ class TestBigIntegerV8 {
         BigInteger z = x - y;
         expect(z.toString(), equals("0"));
       });
+      
+
+      test("0 * 1 == 0", () { 
+        BigInteger x = new BigInteger("0");
+        BigInteger y = new BigInteger("-1");
+        BigInteger z = x * y;
+        expect(z.compareTo(x), equals(0));
+        expect(z == x, equals(true));
+        expect(z, equals(x));
+        expect(BigInteger.ZERO, equals(x));
+      });
+      
+      test("1 * 1 == 1", () { 
+        BigInteger x = new BigInteger("1");
+        BigInteger y = new BigInteger("1");
+        BigInteger z = x * y;
+        expect(z.compareTo(x), equals(0));
+        expect(z == x, equals(true));
+        expect(z, equals(x));
+        expect(BigInteger.ONE, equals(x));
+      });
+      
+      test("1 * -1 == -1", () { 
+        BigInteger x = new BigInteger("1");
+        BigInteger y = new BigInteger("-1");
+        BigInteger z = x * y;
+        expect(z.compareTo(x), equals(-1));
+        expect(z == x, equals(false));
+        expect(z == -x, equals(true));
+        expect(z != -x, equals(false));
+        expect(z != x, equals(true));
+        expect(z > x, equals(false));
+        expect(z >= x, equals(false));
+        expect(z <= x, equals(true));
+        expect(z < x, equals(true));
+        expect(z, equals(-x));
+        expect(-BigInteger.ONE, equals(z));
+      });
     });
     
   }

@@ -619,7 +619,7 @@ class BigInteger {
 
   
   /** clamp off excess high words */
-  void clamp() {
+  void clamp() { 
     var this_array = this.array;
     var c = this.s&BI_DM;
     
@@ -684,6 +684,13 @@ class BigInteger {
     r.clamp();
   }
   
+  bool _debugging = true;
+  _dump_state(a) {
+    if (_debugging) {
+      return "t=${a.t}, s=${a.s}, array = ${a.array}";
+    } 
+  }
+  
   /**
    * r = this * a, r != this,a (HAC 14.12)
    * [this] should be the larger one if appropriate.
@@ -691,16 +698,20 @@ class BigInteger {
   void multiplyTo(a,r) {
     var this_array = this.array;
     var r_array = r.array;
-    var x = this.abs(), y = a.abs();
+    BigInteger x = this.abs(); 
+    BigInteger y = a.abs();
     var y_array = y.array;
-  
     var i = x.t;
     r.t = i+y.t;
     while(--i >= 0) r_array[i] = 0;
     for(i = 0; i < y.t; ++i) r_array[i+x.t] = x.am(0,y_array[i],r,i,0,x.t);
     r.s = 0;
     r.clamp();
-    if(this.s != a.s) BigInteger.ZERO.subTo(r,r);
+    
+    if(this.s != a.s) { 
+      BigInteger.ZERO.subTo(r,r);   
+    }
+    
   }
   
   /** r = this^2, r != this (HAC 14.16) */
@@ -927,7 +938,7 @@ class BigInteger {
     
     if(b == null) b = 10;
     
-    var cs = this.chunkSize(b);
+    var cs = this.chunkSize(b);  
     num d = Mathx.pow(b,cs); 
     bool mi = false;
     int j = 0, 
@@ -954,10 +965,13 @@ class BigInteger {
     
     if(j > 0) {
       this.dMultiply(Mathx.pow(b,j));
-      this.dAddOffset(w,0);
+      // w is zero there should not add offset
+      if (w != 0) { 
+        this.dAddOffset(w,0); 
+      }
     }
     
-    if(mi)  {
+    if(mi)  {   
       BigInteger.ZERO.subTo(this,this);
     }
   }
