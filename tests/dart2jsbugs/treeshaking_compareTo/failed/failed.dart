@@ -9,7 +9,7 @@ appendText([s=""]) {
 void main() {
   try {
     //Uncomment this and everything works.
-    //BigInteger.InitDart2js();
+    // BigInteger.InitDart2js();
     
     // 0xabcd1234 modulo 0xbeef = 0xB60C
     var x = new BigInteger("abcd1234", 16);
