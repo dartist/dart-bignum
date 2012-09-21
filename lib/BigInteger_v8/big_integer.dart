@@ -1548,7 +1548,7 @@ class BigInteger {
   BigInteger operator ~/(BigInteger other) { throw "Not Implemented"; }
   
   // The unary '-' operator.
-  BigInteger operator negate() => this.negate_op();
+  BigInteger operator -() => this.negate_op();
   
   // NOTE: This is implemented above. 
   //BigInteger remainder(BigInteger other) { throw "Not Implemented"; }

@@ -1,4 +1,4 @@
-name: dart-bignum
+name: bignum
 description: Big Number library for Dart
 version: 0.0.1
 dependencies:
