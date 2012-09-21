@@ -1,6 +1,6 @@
 #import('package:unittest/unittest.dart');
 #import('dart:math', prefix:"Mathx");
-#import('../lib.dart');
+#import('package:bignum/bignum.dart');
 //#import('../packages/unittest/unittest.dart');
 
 #source('data/powpowpow.dart');
@@ -139,7 +139,8 @@ class TestBigIntegerV8 {
           expect(iii.toString(16), equals("1b"));
           
           
-          var sw = new Stopwatch.start();
+          var sw = new Stopwatch();
+          sw.start();
           //print(new BigInteger("100", 16).pow(100).pow(100).toString(16));
           //print(new BigInteger("100", 16).pow(100).toString(16));
           sw.stop();
