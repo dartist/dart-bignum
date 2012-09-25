@@ -1,0 +1,1155 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>int64 Class / fixnum Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="fixnum" data-type="int64">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../fixnum.html">fixnum</a> &rsaquo; <a href="../fixnum/int64.html">int64</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>int64</strong>
+          Class
+        </h2>
+        
+<div class="doc">
+<p>An immutable 64-bit signed integer, in the range <code>-2^63, 2^63 - 1</code>.
+Arithmetic operations may overflow in order to maintain this range.</p>
+</div>
+<h3>Implements</h3>
+<p>
+<span class="type-box"><span class="icon-interface"></span><a href="../fixnum/intx.html">intx</a></span></p>
+<h3>Constructors</h3>
+<div class="method"><h4 id="int64._copy">
+<span class="show-code">Code</span>
+new <strong>int64</strong>._copy(<a href="../fixnum/int64.html">int64</a> other) <a class="anchor-link" href="#int64._copy"
+              title="Permalink to int64.int64">#</a></h4>
+<div class="doc">
+<p>Constructs an <a class="crossref" href="../fixnum/int64.html#int64">int64</a> with the same value as an existing <a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
+<pre class="source">
+int64._copy(int64 other) {
+  _l = other._l;
+  _m = other._m;
+  _h = other._h;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="int64._bits">
+<span class="show-code">Code</span>
+new <strong>int64</strong>._bits(int _l, int _m, int _h) <a class="anchor-link" href="#int64._bits"
+              title="Permalink to int64.int64">#</a></h4>
+<div class="doc">
+<p>Constructs an <a class="crossref" href="../fixnum/int64.html#int64">int64</a> with a given bitwise representation.  No validation
+is performed.</p>
+<pre class="source">
+int64._bits(int this._l, int this._m, int this._h);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="int64.fromInts">
+<span class="show-code">Code</span>
+new <strong>int64</strong>.fromInts(int top, int bottom) <a class="anchor-link" href="#int64.fromInts"
+              title="Permalink to int64.int64">#</a></h4>
+<div class="doc">
+<p>Constructs an <a class="crossref" href="../fixnum/int64.html#int64">int64</a> from a pair of 32-bit integers having the value
+<code>((top &amp; 0xffffffff) &lt;&lt; 32) | (bottom &amp; 0xffffffff)</code>.</p>
+<pre class="source">
+int64.fromInts(int top, int bottom) {
+  top &amp;= 0xffffffff;
+  bottom &amp;= 0xffffffff;
+  _l = bottom &amp; _MASK;
+  _m = ((top &amp; 0xfff) &lt;&lt; 10) | ((bottom &gt;&gt; _BITS) &amp; 0x3ff);
+  _h = (top &gt;&gt; 12) &amp; _MASK_2;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="int64.fromBytesBigEndian">
+<span class="show-code">Code</span>
+factory <strong>int64</strong>.fromBytesBigEndian(List&lt;int&gt; bytes) <a class="anchor-link" href="#int64.fromBytesBigEndian"
+              title="Permalink to int64.int64">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+factory int64.fromBytesBigEndian(List&lt;int&gt; bytes) {
+  int top = bytes[0] &amp; 0xff; 
+  top &lt;&lt;= 8;
+  top |= bytes[1] &amp; 0xff;
+  top &lt;&lt;= 8;
+  top |= bytes[2] &amp; 0xff;
+  top &lt;&lt;= 8;
+  top |= bytes[3] &amp; 0xff;
+
+  int bottom = bytes[4] &amp; 0xff; 
+  bottom &lt;&lt;= 8;
+  bottom |= bytes[5] &amp; 0xff;
+  bottom &lt;&lt;= 8;
+  bottom |= bytes[6] &amp; 0xff;
+  bottom &lt;&lt;= 8;
+  bottom |= bytes[7] &amp; 0xff;
+
+  return new int64.fromInts(top, bottom);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="int64.fromBytes">
+<span class="show-code">Code</span>
+factory <strong>int64</strong>.fromBytes(List&lt;int&gt; bytes) <a class="anchor-link" href="#int64.fromBytes"
+              title="Permalink to int64.int64">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+factory int64.fromBytes(List&lt;int&gt; bytes) {
+  int top = bytes[7] &amp; 0xff; 
+  top &lt;&lt;= 8;
+  top |= bytes[6] &amp; 0xff;
+  top &lt;&lt;= 8;
+  top |= bytes[5] &amp; 0xff;
+  top &lt;&lt;= 8;
+  top |= bytes[4] &amp; 0xff;
+
+  int bottom = bytes[3] &amp; 0xff; 
+  bottom &lt;&lt;= 8;
+  bottom |= bytes[2] &amp; 0xff;
+  bottom &lt;&lt;= 8;
+  bottom |= bytes[1] &amp; 0xff;
+  bottom &lt;&lt;= 8;
+  bottom |= bytes[0] &amp; 0xff;
+
+  return new int64.fromInts(top, bottom);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="int64.fromInt">
+<span class="show-code">Code</span>
+new <strong>int64</strong>.fromInt(int value) <a class="anchor-link" href="#int64.fromInt"
+              title="Permalink to int64.int64">#</a></h4>
+<div class="doc">
+<p>Constructs an <a class="crossref" href="../fixnum/int64.html#int64">int64</a> with a given <code>int</code> value.</p>
+<pre class="source">
+int64.fromInt(int value) {
+  bool negative = false;
+  if (value &lt; 0) {
+    negative = true;
+    value = -value - 1;
+  }
+  if (_haveBigInts) {
+    _l = value &amp; _MASK;
+    _m = (value &gt;&gt; _BITS) &amp; _MASK;
+    _h = (value &gt;&gt; _BITS01) &amp; _MASK_2;
+  } else {
+    // Avoid using bitwise operations that coerce their input to 32 bits.
+    _h = value ~/ 17592186044416; // 2^44
+    value -= _h * 17592186044416;
+    _m = value ~/ 4194304; // 2^22
+    value -= _m * 4194304;
+    _l = value;
+  }
+
+  if (negative) {
+    _l = ~_l &amp; _MASK;
+    _m = ~_m &amp; _MASK;
+    _h = ~_h &amp; _MASK_2;
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="int64">
+<span class="show-code">Code</span>
+new <strong>int64</strong>() <a class="anchor-link" href="#int64"
+              title="Permalink to int64.int64">#</a></h4>
+<div class="doc">
+<p>Constructs an <a class="crossref" href="../fixnum/int64.html#int64">int64</a> equal to 0.</p>
+<pre class="source">
+int64() : _l = 0, _m = 0, _h = 0;
+</pre>
+</div>
+</div>
+<h3>Static Methods</h3>
+<div class="method"><h4 id="MAX_VALUE">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>get MAX_VALUE</strong>() <a class="anchor-link" href="#MAX_VALUE"
+              title="Permalink to int64.get MAX_VALUE">#</a></h4>
+<div class="doc">
+<p>The maximum positive value attainable by an <a class="crossref" href="../fixnum/int64.html#int64">int64</a>, namely
+9,223,372,036,854,775,807.</p>
+<pre class="source">
+static int64 get MAX_VALUE() {
+  if (_MAX_VALUE == null) {
+    _MAX_VALUE = new int64._bits(_MASK, _MASK, _MASK_2 &gt;&gt; 1);
+  }
+  return _MAX_VALUE;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="MIN_VALUE">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>get MIN_VALUE</strong>() <a class="anchor-link" href="#MIN_VALUE"
+              title="Permalink to int64.get MIN_VALUE">#</a></h4>
+<div class="doc">
+<p>The minimum positive value attainable by an <a class="crossref" href="../fixnum/int64.html#int64">int64</a>, namely
+-9,223,372,036,854,775,808.</p>
+<pre class="source">
+static int64 get MIN_VALUE() {
+  if (_MIN_VALUE == null) {
+    _MIN_VALUE = new int64._bits(0, 0, _SIGN_BIT_VALUE);
+  }
+  return _MIN_VALUE;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="ONE">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>get ONE</strong>() <a class="anchor-link" href="#ONE"
+              title="Permalink to int64.get ONE">#</a></h4>
+<div class="doc">
+<p>An <a class="crossref" href="../fixnum/int64.html#int64">int64</a> constant equal to 1.</p>
+<pre class="source">
+static int64 get ONE() {
+  if (_ONE == null) {
+    _ONE = new int64._bits(1, 0, 0);
+  }
+  return _ONE;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="TWO">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>get TWO</strong>() <a class="anchor-link" href="#TWO"
+              title="Permalink to int64.get TWO">#</a></h4>
+<div class="doc">
+<p>An <a class="crossref" href="../fixnum/int64.html#int64">int64</a> constant equal to 2.</p>
+<pre class="source">
+static int64 get TWO() {
+  if (_TWO == null) {
+    _TWO = new int64._bits(2, 0, 0);
+  }
+  return _TWO;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="ZERO">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>get ZERO</strong>() <a class="anchor-link" href="#ZERO"
+              title="Permalink to int64.get ZERO">#</a></h4>
+<div class="doc">
+<p>An <a class="crossref" href="../fixnum/int64.html#int64">int64</a> constant equal to 0.</p>
+<pre class="source">
+static int64 get ZERO() {
+  if (_ZERO == null) {
+    _ZERO = new int64();
+  }
+  return _ZERO;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseHex">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>parseHex</strong>(String s) <a class="anchor-link" href="#parseHex"
+              title="Permalink to int64.parseHex">#</a></h4>
+<div class="doc">
+<p>Parses a hexadecimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
+<pre class="source">
+static int64 parseHex(String s) =&gt; parseRadix(s, 16);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseInt">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>parseInt</strong>(String s) <a class="anchor-link" href="#parseInt"
+              title="Permalink to int64.parseInt">#</a></h4>
+<div class="doc">
+<p>Parses a decimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
+<pre class="source">
+static int64 parseInt(String s) =&gt; parseRadix(s, 10);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseRadix">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>parseRadix</strong>(String s, int radix) <a class="anchor-link" href="#parseRadix"
+              title="Permalink to int64.parseRadix">#</a></h4>
+<div class="doc">
+<p>Parses a <code>String</code> in a given 
+<span class="param">radix</span> between 2 and 16 and returns an
+<a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
+<pre class="source">
+static int64 parseRadix(String s, int radix) {
+  if ((radix &lt;= 1) || (radix &gt; 16)) {
+    throw "Bad radix: $radix";
+  }
+  int64 x = ZERO;
+  int i = 0;
+  bool negative = false;
+  if (s[0] == '-') {
+    negative = true;
+    i++;
+  }
+  for (; i &lt; s.length; i++) {
+    int c = s.charCodeAt(i);
+    int digit = int32._decodeHex(c);
+    if (digit &lt; 0 || digit &gt;= radix) {
+      throw new Exception("Non-radix char code: $c");
+    }
+    x = (x * radix) + digit;
+  }
+  return negative ? -x : x;
+}
+</pre>
+</div>
+</div>
+<h3>Methods</h3>
+<div class="method"><h4 id="abs">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>abs</strong>() <a class="anchor-link" href="#abs"
+              title="Permalink to int64.abs">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 abs() {
+  return this &lt; 0 ? -this : this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="compareTo">
+<span class="show-code">Code</span>
+int <strong>compareTo</strong>(Comparable other) <a class="anchor-link" href="#compareTo"
+              title="Permalink to int64.compareTo">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int compareTo(Comparable other) {
+  int64 o = _promote(other);
+  int signa = _h &gt;&gt; (_BITS2 - 1);
+  int signb = o._h &gt;&gt; (_BITS2 - 1);
+  if (signa != signb) {
+    return signa == 0 ? 1 : -1;
+  }
+  if (_h &gt; o._h) {
+    return 1;
+  } else if (_h &lt; o._h) {
+    return -1;
+  }
+  if (_m &gt; o._m) {
+    return 1;
+  } else if (_m &lt; o._m) {
+    return -1;
+  }
+  if (_l &gt; o._l) {
+    return 1;
+  } else if (_l &lt; o._l) {
+    return -1;
+  }
+  return 0;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="hashCode">
+<span class="show-code">Code</span>
+int <strong>hashCode</strong>() <a class="anchor-link" href="#hashCode"
+              title="Permalink to int64.hashCode">#</a></h4>
+<div class="doc">
+<p>Returns a hash code based on all the bits of this <a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
+<pre class="source">
+int hashCode() {
+  int bottom = ((_m &amp; 0x3ff) &lt;&lt; _BITS) | _l;
+  int top = (_h &lt;&lt; 12) | ((_m &gt;&gt; 10) &amp; 0xfff);
+  return bottom ^ top;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isEven">
+<span class="show-code">Code</span>
+bool <strong>isEven</strong>() <a class="anchor-link" href="#isEven"
+              title="Permalink to int64.isEven">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isEven() =&gt; (_l &amp; 0x1) == 0;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isMaxValue">
+<span class="show-code">Code</span>
+bool <strong>isMaxValue</strong>() <a class="anchor-link" href="#isMaxValue"
+              title="Permalink to int64.isMaxValue">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isMaxValue() =&gt; (_h == _MASK_2 &gt;&gt; 1) &amp;&amp; _m == _MASK &amp;&amp; _l == _MASK;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isMinValue">
+<span class="show-code">Code</span>
+bool <strong>isMinValue</strong>() <a class="anchor-link" href="#isMinValue"
+              title="Permalink to int64.isMinValue">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isMinValue() =&gt; _h == _SIGN_BIT_VALUE &amp;&amp; _m == 0 &amp;&amp; _l == 0;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isNegative">
+<span class="show-code">Code</span>
+bool <strong>isNegative</strong>() <a class="anchor-link" href="#isNegative"
+              title="Permalink to int64.isNegative">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isNegative() =&gt; (_h &gt;&gt; (_BITS2 - 1)) != 0;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isOdd">
+<span class="show-code">Code</span>
+bool <strong>isOdd</strong>() <a class="anchor-link" href="#isOdd"
+              title="Permalink to int64.isOdd">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isOdd() =&gt; (_l &amp; 0x1) == 1;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isZero">
+<span class="show-code">Code</span>
+bool <strong>isZero</strong>() <a class="anchor-link" href="#isZero"
+              title="Permalink to int64.isZero">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isZero() =&gt; _h == 0 &amp;&amp; _m == 0 &amp;&amp; _l == 0;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="numberOfLeadingZeros">
+<span class="show-code">Code</span>
+int <strong>numberOfLeadingZeros</strong>() <a class="anchor-link" href="#numberOfLeadingZeros"
+              title="Permalink to int64.numberOfLeadingZeros">#</a></h4>
+<div class="doc">
+<p>Returns the number of leading zeros in this <a class="crossref" href="../fixnum/int64.html#int64">int64</a> as an <code>int</code>
+between 0 and 64.</p>
+<pre class="source">
+int numberOfLeadingZeros() {
+  int b2 = int32._numberOfLeadingZeros(_h);
+  if (b2 == 32) {
+    int b1 = int32._numberOfLeadingZeros(_m);
+    if (b1 == 32) {
+      return int32._numberOfLeadingZeros(_l) + 32;
+    } else {
+      return b1 + _BITS2 - (32 - _BITS);
+    }
+  } else {
+    return b2 - (32 - _BITS2);
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="numberOfTrailingZeros">
+<span class="show-code">Code</span>
+int <strong>numberOfTrailingZeros</strong>() <a class="anchor-link" href="#numberOfTrailingZeros"
+              title="Permalink to int64.numberOfTrailingZeros">#</a></h4>
+<div class="doc">
+<p>Returns the number of trailing zeros in this <a class="crossref" href="../fixnum/int64.html#int64">int64</a> as an <code>int</code>
+between 0 and 64.</p>
+<pre class="source">
+int numberOfTrailingZeros() {
+  int zeros = int32._numberOfTrailingZeros(_l);
+  if (zeros &lt; 32) {
+    return zeros;
+  }
+
+  zeros = int32._numberOfTrailingZeros(_m);
+  if (zeros &lt; 32) {
+    return _BITS + zeros;
+  }
+
+  zeros = int32._numberOfTrailingZeros(_h);
+  if (zeros &lt; 32) {
+    return _BITS01 + zeros;
+  }
+  // All zeros
+  return 64;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator negate">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator negate</strong>() <a class="anchor-link" href="#operator negate"
+              title="Permalink to int64.operator negate">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator -() {
+  // Like 0 - this.
+  int sum0 = -_l;
+  int sum1 = -_m + _shiftRight(sum0, _BITS);
+  int sum2 = -_h + _shiftRight(sum1, _BITS);
+
+  return new int64._bits(sum0 &amp; _MASK, sum1 &amp; _MASK, sum2 &amp; _MASK_2);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator +">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator +</strong>(other) <a class="anchor-link" href="#operator +"
+              title="Permalink to int64.operator +">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator +(other) {
+  int64 o = _promote(other);
+  int sum0 = _l + o._l;
+  int sum1 = _m + o._m + _shiftRight(sum0, _BITS);
+  int sum2 = _h + o._h + _shiftRight(sum1, _BITS);
+
+  int64 result = new int64._bits(sum0 &amp; _MASK, sum1 &amp; _MASK, sum2 &amp; _MASK_2);
+  return result;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator *">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator *</strong>(other) <a class="anchor-link" href="#operator *"
+              title="Permalink to int64.operator *">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator *(other) {
+  int64 o = _promote(other);
+  // Grab 13-bit chunks.
+  int a0 = _l &amp; 0x1fff;
+  int a1 = (_l &gt;&gt; 13) | ((_m &amp; 0xf) &lt;&lt; 9);
+  int a2 = (_m &gt;&gt; 4) &amp; 0x1fff;
+  int a3 = (_m &gt;&gt; 17) | ((_h &amp; 0xff) &lt;&lt; 5);
+  int a4 = (_h &amp; 0xfff00) &gt;&gt; 8;
+
+  int b0 = o._l &amp; 0x1fff;
+  int b1 = (o._l &gt;&gt; 13) | ((o._m &amp; 0xf) &lt;&lt; 9);
+  int b2 = (o._m &gt;&gt; 4) &amp; 0x1fff;
+  int b3 = (o._m &gt;&gt; 17) | ((o._h &amp; 0xff) &lt;&lt; 5);
+  int b4 = (o._h &amp; 0xfff00) &gt;&gt; 8;
+
+  // Compute partial products.
+  // Optimization: if b is small, avoid multiplying by parts that are 0.
+  int p0 = a0 * b0; // &lt;&lt; 0
+  int p1 = a1 * b0; // &lt;&lt; 13
+  int p2 = a2 * b0; // &lt;&lt; 26
+  int p3 = a3 * b0; // &lt;&lt; 39
+  int p4 = a4 * b0; // &lt;&lt; 52
+
+  if (b1 != 0) {
+    p1 += a0 * b1;
+    p2 += a1 * b1;
+    p3 += a2 * b1;
+    p4 += a3 * b1;
+  }
+  if (b2 != 0) {
+    p2 += a0 * b2;
+    p3 += a1 * b2;
+    p4 += a2 * b2;
+  }
+  if (b3 != 0) {
+    p3 += a0 * b3;
+    p4 += a1 * b3;
+  }
+  if (b4 != 0) {
+    p4 += a0 * b4;
+  }
+
+  // Accumulate into 22-bit chunks:
+  // .........................................c10|...................c00|
+  // |....................|..................xxxx|xxxxxxxxxxxxxxxxxxxxxx| p0
+  // |....................|......................|......................|
+  // |....................|...................c11|......c01.............|
+  // |....................|....xxxxxxxxxxxxxxxxxx|xxxxxxxxx.............| p1
+  // |....................|......................|......................|
+  // |.................c22|...............c12....|......................|
+  // |..........xxxxxxxxxx|xxxxxxxxxxxxxxxxxx....|......................| p2
+  // |....................|......................|......................|
+  // |.................c23|..c13.................|......................|
+  // |xxxxxxxxxxxxxxxxxxxx|xxxxx.................|......................| p3
+  // |....................|......................|......................|
+  // |.........c24........|......................|......................|
+  // |xxxxxxxxxxxx........|......................|......................| p4
+
+  int c00 = p0 &amp; 0x3fffff;
+  int c01 = (p1 &amp; 0x1ff) &lt;&lt; 13;
+  int c0 = c00 + c01;
+
+  int c10 = p0 &gt;&gt; 22;
+  int c11 = p1 &gt;&gt; 9;
+  int c12 = (p2 &amp; 0x3ffff) &lt;&lt; 4;
+  int c13 = (p3 &amp; 0x1f) &lt;&lt; 17;
+  int c1 = c10 + c11 + c12 + c13;
+
+  int c22 = p2 &gt;&gt; 18;
+  int c23 = p3 &gt;&gt; 5;
+  int c24 = (p4 &amp; 0xfff) &lt;&lt; 8;
+  int c2 = c22 + c23 + c24;
+
+  // Propagate high bits from c0 -&gt; c1, c1 -&gt; c2.
+  c1 += c0 &gt;&gt; _BITS;
+  c0 &amp;= _MASK;
+  c2 += c1 &gt;&gt; _BITS;
+  c1 &amp;= _MASK;
+  c2 &amp;= _MASK_2;
+
+  return new int64._bits(c0, c1, c2);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator %">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator %</strong>(other) <a class="anchor-link" href="#operator %"
+              title="Permalink to int64.operator %">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator %(other) {
+  if (other.isZero()) {
+    throw new IntegerDivisionByZeroException();
+  }
+  if (this.isZero()) {
+    return ZERO;
+  }
+  int64 o = _promote(other).abs();
+  _divMod(this, o, true);
+  return _remainder &lt; 0 ? (_remainder + o) : _remainder;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator ~/">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator ~/</strong>(other) <a class="anchor-link" href="#operator ~/"
+              title="Permalink to int64.operator ~/">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator ~/(other) =&gt; _divMod(this, _promote(other), false);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator &">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator &</strong>(other) <a class="anchor-link" href="#operator &"
+              title="Permalink to int64.operator &">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator &amp;(other) {
+  int64 o = _promote(other);
+  int a0 = _l &amp; o._l;
+  int a1 = _m &amp; o._m;
+  int a2 = _h &amp; o._h;
+  return new int64._bits(a0, a1, a2);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator |">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator |</strong>(other) <a class="anchor-link" href="#operator |"
+              title="Permalink to int64.operator |">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator |(other) {
+  int64 o = _promote(other);
+  int a0 = _l | o._l;
+  int a1 = _m | o._m;
+  int a2 = _h | o._h;
+  return new int64._bits(a0, a1, a2);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator ^">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator ^</strong>(other) <a class="anchor-link" href="#operator ^"
+              title="Permalink to int64.operator ^">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator ^(other) {
+  int64 o = _promote(other);
+  int a0 = _l ^ o._l;
+  int a1 = _m ^ o._m;
+  int a2 = _h ^ o._h;
+  return new int64._bits(a0, a1, a2);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator ~">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator ~</strong>() <a class="anchor-link" href="#operator ~"
+              title="Permalink to int64.operator ~">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator ~() {
+  var result = new int64._bits((~_l) &amp; _MASK, (~_m) &amp; _MASK, (~_h) &amp; _MASK_2);
+  return result;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator >>">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator >></strong>(int n) <a class="anchor-link" href="#operator >>"
+              title="Permalink to int64.operator >>">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator &gt;&gt;(int n) {
+  if (n &lt; 0) {
+    throw new IllegalArgumentException("$n");
+  }
+  n &amp;= 63;
+
+  int res0, res1, res2;
+
+  // Sign extend h(a).
+  int a2 = _h;
+  bool negative = (a2 &amp; _SIGN_BIT_VALUE) != 0;
+  if (negative) {
+    a2 += 0x3 &lt;&lt; _BITS2; // add extra one bits on the left
+  }
+  
+  if (n &lt; _BITS) {
+    res2 = _shiftRight(a2, n);
+    if (negative) {
+      res2 |= _MASK_2 &amp; ~(_MASK_2 &gt;&gt; n);
+    }
+    res1 = _shiftRight(_m, n) | (a2 &lt;&lt; (_BITS - n));
+    res0 = _shiftRight(_l, n) | (_m &lt;&lt; (_BITS - n));
+  } else if (n &lt; _BITS01) {
+    res2 = negative ? _MASK_2 : 0;
+    res1 = _shiftRight(a2, n - _BITS);
+    if (negative) {
+      res1 |= _MASK &amp; ~(_MASK &gt;&gt; (n - _BITS));
+    }
+    res0 = _shiftRight(_m, n - _BITS) | (a2 &lt;&lt; (_BITS01 - n));
+  } else {
+    res2 = negative ? _MASK_2 : 0;
+    res1 = negative ? _MASK : 0;
+    res0 = _shiftRight(a2, n - _BITS01);
+    if (negative) {
+      res0 |= _MASK &amp; ~(_MASK &gt;&gt; (n - _BITS01));
+    }
+  }
+
+  return new int64._bits(res0 &amp; _MASK, res1 &amp; _MASK, res2 &amp; _MASK_2);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator ==">
+<span class="show-code">Code</span>
+bool <strong>operator ==</strong>(other) <a class="anchor-link" href="#operator =="
+              title="Permalink to int64.operator ==">#</a></h4>
+<div class="doc">
+<p>Returns <code>true</code> if this <a class="crossref" href="../fixnum/int64.html#int64">int64</a> has the same numeric value as the
+given object.  The argument may be an <code>int</code> or an <a class="crossref" href="../fixnum/intx.html">intx</a>.</p>
+<pre class="source">
+bool operator ==(other) {
+  if (other == null) {
+    return false;
+  }
+  int64 o = _promote(other);
+  return _l == o._l &amp;&amp; _m == o._m &amp;&amp; _h == o._h;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator <">
+<span class="show-code">Code</span>
+bool <strong>operator <</strong>(other) <a class="anchor-link" href="#operator <"
+              title="Permalink to int64.operator <">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &lt;(other) {
+  return this.compareTo(other) &lt; 0;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator <<">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator <<</strong>(int n) <a class="anchor-link" href="#operator <<"
+              title="Permalink to int64.operator <<">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator &lt;&lt;(int n) {
+  if (n &lt; 0) {
+    throw new IllegalArgumentException("$n");
+  }
+  n &amp;= 63;
+
+  int res0, res1, res2;
+  if (n &lt; _BITS) {
+    res0 = _l &lt;&lt; n;
+    res1 = (_m &lt;&lt; n) | (_l &gt;&gt; (_BITS - n));
+    res2 = (_h &lt;&lt; n) | (_m &gt;&gt; (_BITS - n));
+  } else if (n &lt; _BITS01) {
+    res0 = 0;
+    res1 = _l &lt;&lt; (n - _BITS);
+    res2 = (_m &lt;&lt; (n - _BITS)) | (_l &gt;&gt; (_BITS01 - n));
+  } else {
+    res0 = 0;
+    res1 = 0;
+    res2 = _l &lt;&lt; (n - _BITS01);
+  }
+
+  return new int64._bits(res0 &amp; _MASK, res1 &amp; _MASK, res2 &amp; _MASK_2);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator -">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>operator -</strong>(other) <a class="anchor-link" href="#operator -"
+              title="Permalink to int64.operator -">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 operator -(other) {
+  int64 o = _promote(other);
+
+  int sum0 = _l - o._l;
+  int sum1 = _m - o._m + _shiftRight(sum0, _BITS);
+  int sum2 = _h - o._h + _shiftRight(sum1, _BITS);
+
+  int64 result = new int64._bits(sum0 &amp; _MASK, sum1 &amp; _MASK, sum2 &amp; _MASK_2);
+  return result;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator >">
+<span class="show-code">Code</span>
+bool <strong>operator ></strong>(other) <a class="anchor-link" href="#operator >"
+              title="Permalink to int64.operator >">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &gt;(other) {
+  return this.compareTo(other) &gt; 0;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator >=">
+<span class="show-code">Code</span>
+bool <strong>operator >=</strong>(other) <a class="anchor-link" href="#operator >="
+              title="Permalink to int64.operator >=">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &gt;=(other) {
+  return this.compareTo(other) &gt;= 0;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator <=">
+<span class="show-code">Code</span>
+bool <strong>operator <=</strong>(other) <a class="anchor-link" href="#operator <="
+              title="Permalink to int64.operator <=">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &lt;=(other) {
+  return this.compareTo(other) &lt;= 0;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="remainder">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>remainder</strong>(other) <a class="anchor-link" href="#remainder"
+              title="Permalink to int64.remainder">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 remainder(other) {
+  if (other.isZero()) {
+    throw new IntegerDivisionByZeroException();
+  }
+  int64 o = _promote(other).abs();
+  _divMod(this, o, true);
+  return _remainder;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="shiftRightUnsigned">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>shiftRightUnsigned</strong>(int n) <a class="anchor-link" href="#shiftRightUnsigned"
+              title="Permalink to int64.shiftRightUnsigned">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 shiftRightUnsigned(int n) {
+  if (n &lt; 0) {
+    throw new IllegalArgumentException("$n");
+  }
+  n &amp;= 63;
+
+  int res0, res1, res2;
+  int a2 = _h &amp; _MASK_2; // Ensure a2 is positive.
+  if (n &lt; _BITS) {
+    res2 = a2 &gt;&gt; n;
+    res1 = (_m &gt;&gt; n) | (a2 &lt;&lt; (_BITS - n));
+    res0 = (_l &gt;&gt; n) | (_m &lt;&lt; (_BITS - n));
+  } else if (n &lt; _BITS01) {
+    res2 = 0;
+    res1 = a2 &gt;&gt; (n - _BITS);
+    res0 = (_m &gt;&gt; (n - _BITS)) | (_h &lt;&lt; (_BITS01 - n));
+  } else {
+    res2 = 0;
+    res1 = 0;
+    res0 = a2 &gt;&gt; (n - _BITS01);
+  }
+
+  return new int64._bits(res0 &amp; _MASK, res1 &amp; _MASK, res2 &amp; _MASK_2);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toBytes">
+<span class="show-code">Code</span>
+List&lt;int&gt; <strong>toBytes</strong>() <a class="anchor-link" href="#toBytes"
+              title="Permalink to int64.toBytes">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+List&lt;int&gt; toBytes() {
+  List&lt;int&gt; result = new List&lt;int&gt;(8);
+  result[0] = _l &amp; 0xff;
+  result[1] = (_l &gt;&gt; 8) &amp; 0xff;
+  result[2] = ((_m &lt;&lt; 6) &amp; 0xfc) | ((_l &gt;&gt; 16) &amp; 0x3f);
+  result[3] = (_m &gt;&gt; 2) &amp; 0xff;
+  result[4] = (_m &gt;&gt; 10) &amp; 0xff;
+  result[5] = ((_h &lt;&lt; 4) &amp; 0xf0) | ((_m &gt;&gt; 18) &amp; 0xf);
+  result[6] = (_h &gt;&gt; 4) &amp; 0xff;
+  result[7] = (_h &gt;&gt; 12) &amp; 0xff;
+  return result;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toDebugString">
+<span class="show-code">Code</span>
+String <strong>toDebugString</strong>() <a class="anchor-link" href="#toDebugString"
+              title="Permalink to int64.toDebugString">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+String toDebugString() {
+  return "int64[_l=$_l, _m=$_m, _h=$_h]";
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toHexString">
+<span class="show-code">Code</span>
+String <strong>toHexString</strong>() <a class="anchor-link" href="#toHexString"
+              title="Permalink to int64.toHexString">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+String toHexString() {
+  int64 x = new int64._copy(this);
+  if (isZero()) {
+    return "0";
+  }
+  String hexStr = "";
+  int64 digit_f = new int64.fromInt(0xf);
+  while (!x.isZero()) {
+    int digit = x._l &amp; 0xf;
+    hexStr = "${_hexDigit(digit)}$hexStr";
+    x = x.shiftRightUnsigned(4);
+  }
+  return hexStr;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toInt">
+<span class="show-code">Code</span>
+int <strong>toInt</strong>() <a class="anchor-link" href="#toInt"
+              title="Permalink to int64.toInt">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int toInt() {
+  int l = _l;
+  int m = _m;
+  int h = _h;
+  bool negative = false;
+  if ((_h &amp; _SIGN_BIT_VALUE) != 0) {
+    l = ~_l &amp; _MASK;
+    m = ~_m &amp; _MASK;
+    h = ~_h &amp; _MASK_2;
+    negative = true;
+  }
+
+  int result;
+  if (_haveBigInts) {
+    result = (h &lt;&lt; _BITS01) | (m &lt;&lt; _BITS) | l;
+  } else {
+    result = (h * 17592186044416) + (m * 4194304) + l;
+  }
+  return negative ? -result - 1 : result;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toInt32">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>toInt32</strong>() <a class="anchor-link" href="#toInt32"
+              title="Permalink to int64.toInt32">#</a></h4>
+<div class="doc">
+<p>Returns an <a class="crossref" href="../fixnum/int32.html">int32</a> containing the low 32 bits of this <a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
+<pre class="source">
+int32 toInt32() {
+  return new int32.fromInt(((_m &amp; 0x3ff) &lt;&lt; _BITS) | _l);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toInt64">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>toInt64</strong>() <a class="anchor-link" href="#toInt64"
+              title="Permalink to int64.toInt64">#</a></h4>
+<div class="doc">
+<p>Returns <code>this</code>.</p>
+<pre class="source">
+int64 toInt64() =&gt; this;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toRadixString">
+<span class="show-code">Code</span>
+String <strong>toRadixString</strong>(int radix) <a class="anchor-link" href="#toRadixString"
+              title="Permalink to int64.toRadixString">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+String toRadixString(int radix) {
+  if ((radix &lt;= 1) || (radix &gt; 16)) {
+    throw "Bad radix: $radix";
+  }
+  int64 a = this;
+  if (a.isZero()) {
+    return "0";
+  }
+  if (a.isMinValue()) {
+    return _minValues[radix];
+  }
+
+  String result = "";
+  bool negative = false;
+  if (a.isNegative()) {
+    negative = true;
+    a = -a;
+  }
+
+  int64 r = new int64._bits(radix, 0, 0);
+  while (!a.isZero()) {
+    a = _divMod(a, r, true);
+    result = "${_hexDigit(_remainder._l)}$result";
+  }
+  return negative ? "-$result" : result;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+<span class="show-code">Code</span>
+String <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to int64.toString">#</a></h4>
+<div class="doc">
+<p>Returns the value of this <a class="crossref" href="../fixnum/int64.html#int64">int64</a> as a decimal <code>String</code>.</p>
+<pre class="source">
+String toString() {
+  int64 a = this;
+  if (a.isZero()) {
+    return "0";
+  }
+  if (a.isMinValue()) {
+    return "-9223372036854775808";
+  }
+
+  String result = "";
+  bool negative = false;
+  if (a.isNegative()) {
+    negative = true;
+    a = -a;
+  }
+
+  int64 ten = new int64._bits(10, 0, 0);
+  while (!a.isZero()) {
+    a = _divMod(a, ten, true);
+    result = "${_remainder._l}$result";
+  }
+  if (negative) {
+    result = "-$result";
+  }
+  return result;
+}
+</pre>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        
+        <div class="footer">
+          <div>This page was generated at 2012-09-24 23:55:19.233</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
