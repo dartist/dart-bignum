@@ -1,0 +1,130 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Classic Class / solvr:bignum Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="solvr:bignum" data-type="Classic">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../solvr_bignum.html">solvr:bignum</a> &rsaquo; <a href="../solvr_bignum/Classic.html">Classic</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Classic</strong>
+          Class
+        </h2>
+        
+<div class="doc">
+<p>Modular reduction using "classic" algorithm on <a class="crossref" href="../solvr_bignum/BigInteger.html">BigInteger</a></p>
+</div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="Classic">
+<span class="show-code">Code</span>
+new <strong>Classic</strong>(<a href="../solvr_bignum/BigInteger.html">BigInteger</a> m) <a class="anchor-link" href="#Classic"
+              title="Permalink to Classic.Classic">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Classic(this.m);
+</pre>
+</div>
+</div>
+<h3>Methods</h3>
+<div class="method"><h4 id="convert">
+<span class="show-code">Code</span>
+<strong>convert</strong>(x) <a class="anchor-link" href="#convert"
+              title="Permalink to Classic.convert">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+convert(x) {
+  if(x.s &lt; 0 || x.compareTo(this.m) &gt;= 0) return x.mod(this.m);
+  else return x;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="mulTo">
+<span class="show-code">Code</span>
+<strong>mulTo</strong>(x, y, r) <a class="anchor-link" href="#mulTo"
+              title="Permalink to Classic.mulTo">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+mulTo(x,y,r) { x.multiplyTo(y,r); this.reduce(r); }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="reduce">
+<span class="show-code">Code</span>
+<strong>reduce</strong>(x) <a class="anchor-link" href="#reduce"
+              title="Permalink to Classic.reduce">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+reduce(x) { x.divRemTo(this.m,null,x); }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="revert">
+<span class="show-code">Code</span>
+<strong>revert</strong>(x) <a class="anchor-link" href="#revert"
+              title="Permalink to Classic.revert">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+revert(x) { return x; }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="sqrTo">
+<span class="show-code">Code</span>
+<strong>sqrTo</strong>(x, r) <a class="anchor-link" href="#sqrTo"
+              title="Permalink to Classic.sqrTo">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+sqrTo(x,r) { x.squareTo(r); this.reduce(r); }
+</pre>
+</div>
+</div>
+<h3>Fields</h3>
+<div class="field"><h4 id="m">
+<span class="show-code">Code</span>
+<a href="../solvr_bignum/BigInteger.html">BigInteger</a>         <strong>m</strong> <a class="anchor-link"
+            href="#m"
+            title="Permalink to Classic.m">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+BigInteger m;
+</pre>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        
+        <div class="footer">
+          <div>This page was generated at 2012-09-24 23:52:32.780</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

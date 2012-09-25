@@ -1,0 +1,720 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>int32 Class / fixnum Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="fixnum" data-type="int32">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../fixnum.html">fixnum</a> &rsaquo; <a href="../fixnum/int32.html">int32</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>int32</strong>
+          Class
+        </h2>
+        
+<div class="doc">
+<p>An immutable 32-bit signed integer, in the range <code>-2^31, 2^31 - 1</code>.
+Arithmetic operations may overflow in order to maintain this range.</p>
+</div>
+<h3>Implements</h3>
+<p>
+<span class="type-box"><span class="icon-interface"></span><a href="../fixnum/intx.html">intx</a></span></p>
+<h3>Constructors</h3>
+<div class="method"><h4 id="int32.fromInt">
+<span class="show-code">Code</span>
+new <strong>int32</strong>.fromInt(int i) <a class="anchor-link" href="#int32.fromInt"
+              title="Permalink to int32.int32">#</a></h4>
+<div class="doc">
+<p>Constructs an <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a> from an <code>int</code>.  Only the low 32 bits of the input
+are used.</p>
+<pre class="source">
+int32.fromInt(int i) : _i = (i &amp; 0x7fffffff) - (i &amp; 0x80000000);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="int32._internal">
+<span class="show-code">Code</span>
+const <strong>int32</strong>._internal(int i) <a class="anchor-link" href="#int32._internal"
+              title="Permalink to int32.int32">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+const int32._internal(int i) : _i = i;
+</pre>
+</div>
+</div>
+<h3>Static Methods</h3>
+<div class="method"><h4 id="parseHex">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>parseHex</strong>(String s) <a class="anchor-link" href="#parseHex"
+              title="Permalink to int32.parseHex">#</a></h4>
+<div class="doc">
+<p>Parses a hexadecimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a>.</p>
+<pre class="source">
+static int32 parseHex(String s) =&gt; parseRadix(s, 16);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseInt">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>parseInt</strong>(String s) <a class="anchor-link" href="#parseInt"
+              title="Permalink to int32.parseInt">#</a></h4>
+<div class="doc">
+<p>Parses a decimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a>.</p>
+<pre class="source">
+static int32 parseInt(String s) =&gt; new int32.fromInt(Mathx.parseInt(s));
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseRadix">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>parseRadix</strong>(String s, int radix) <a class="anchor-link" href="#parseRadix"
+              title="Permalink to int32.parseRadix">#</a></h4>
+<div class="doc">
+<p>Parses a <code>String</code> in a given 
+<span class="param">radix</span> between 2 and 16 and returns an
+<a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a>.</p>
+<pre class="source">
+static int32 parseRadix(String s, int radix) {
+  if ((radix &lt;= 1) || (radix &gt; 16)) {
+    throw "Bad radix: $radix";
+  }
+  int32 x = ZERO;
+  for (int i = 0; i &lt; s.length; i++) {
+    int c = s.charCodeAt(i);
+    int digit = _decodeHex(c);
+    if (digit &lt; 0 || digit &gt;= radix) {
+      throw new Exception("Non-radix char code: $c");
+    }
+    x = (x * radix) + digit;
+  }
+  return x;
+}
+</pre>
+</div>
+</div>
+<h3>Static Fields</h3>
+<div class="field"><h4 id="MAX_VALUE">
+<span class="show-code">Code</span>
+final <a href="../fixnum/int32.html">int32</a>         <strong>MAX_VALUE</strong> <a class="anchor-link"
+            href="#MAX_VALUE"
+            title="Permalink to int32.MAX_VALUE">#</a>
+        </h4>
+        <div class="doc">
+<p>The maximum positive value attainable by an <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a>, namely
+2147483647.</p>
+<pre class="source">
+static final int32 MAX_VALUE = const int32._internal(0x7FFFFFFF);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="MIN_VALUE">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a>         <strong>MIN_VALUE</strong> <a class="anchor-link"
+            href="#MIN_VALUE"
+            title="Permalink to int32.MIN_VALUE">#</a>
+        </h4>
+        <div class="doc">
+<p>The minimum positive value attainable by an <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a>, namely
+-2147483648.</p>
+<pre class="source">
+static int32 MIN_VALUE = const int32._internal(0x80000000);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="ONE">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a>         <strong>ONE</strong> <a class="anchor-link"
+            href="#ONE"
+            title="Permalink to int32.ONE">#</a>
+        </h4>
+        <div class="doc">
+<p>An <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a> constant equal to 1.</p>
+<pre class="source">
+static int32 ONE = const int32._internal(1);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="TWO">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a>         <strong>TWO</strong> <a class="anchor-link"
+            href="#TWO"
+            title="Permalink to int32.TWO">#</a>
+        </h4>
+        <div class="doc">
+<p>An <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a> constant equal to 2.</p>
+<pre class="source">
+static int32 TWO = const int32._internal(2);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="ZERO">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a>         <strong>ZERO</strong> <a class="anchor-link"
+            href="#ZERO"
+            title="Permalink to int32.ZERO">#</a>
+        </h4>
+        <div class="doc">
+<p>An <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a> constant equal to 0.</p>
+<pre class="source">
+static int32 ZERO = const int32._internal(0);
+</pre>
+</div>
+</div>
+<h3>Methods</h3>
+<div class="method"><h4 id="abs">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>abs</strong>() <a class="anchor-link" href="#abs"
+              title="Permalink to int32.abs">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 abs() =&gt; _i &lt; 0 ? new int32.fromInt(-_i) : this;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="compareTo">
+<span class="show-code">Code</span>
+int <strong>compareTo</strong>(Comparable other) <a class="anchor-link" href="#compareTo"
+              title="Permalink to int32.compareTo">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int compareTo(Comparable other) {
+  if (other is int64) {
+    return this.toInt64().compareTo(other);
+  }
+  return _i.compareTo(_convert(other));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="hashCode">
+<span class="show-code">Code</span>
+int <strong>hashCode</strong>() <a class="anchor-link" href="#hashCode"
+              title="Permalink to int32.hashCode">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int hashCode() =&gt; _i;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isEven">
+<span class="show-code">Code</span>
+bool <strong>isEven</strong>() <a class="anchor-link" href="#isEven"
+              title="Permalink to int32.isEven">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isEven() =&gt; (_i &amp; 0x1) == 0;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isMaxValue">
+<span class="show-code">Code</span>
+bool <strong>isMaxValue</strong>() <a class="anchor-link" href="#isMaxValue"
+              title="Permalink to int32.isMaxValue">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isMaxValue() =&gt; _i == 2147483647;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isMinValue">
+<span class="show-code">Code</span>
+bool <strong>isMinValue</strong>() <a class="anchor-link" href="#isMinValue"
+              title="Permalink to int32.isMinValue">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isMinValue() =&gt; _i == -2147483648;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isNegative">
+<span class="show-code">Code</span>
+bool <strong>isNegative</strong>() <a class="anchor-link" href="#isNegative"
+              title="Permalink to int32.isNegative">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isNegative() =&gt; _i &lt; 0;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isOdd">
+<span class="show-code">Code</span>
+bool <strong>isOdd</strong>() <a class="anchor-link" href="#isOdd"
+              title="Permalink to int32.isOdd">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isOdd() =&gt; (_i &amp; 0x1) == 1;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isZero">
+<span class="show-code">Code</span>
+bool <strong>isZero</strong>() <a class="anchor-link" href="#isZero"
+              title="Permalink to int32.isZero">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool isZero() =&gt; _i == 0;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="numberOfLeadingZeros">
+<span class="show-code">Code</span>
+int <strong>numberOfLeadingZeros</strong>() <a class="anchor-link" href="#numberOfLeadingZeros"
+              title="Permalink to int32.numberOfLeadingZeros">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int numberOfLeadingZeros() =&gt; _numberOfLeadingZeros(_i);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="numberOfTrailingZeros">
+<span class="show-code">Code</span>
+int <strong>numberOfTrailingZeros</strong>() <a class="anchor-link" href="#numberOfTrailingZeros"
+              title="Permalink to int32.numberOfTrailingZeros">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int numberOfTrailingZeros() =&gt; _numberOfTrailingZeros(_i);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator <=">
+<span class="show-code">Code</span>
+bool <strong>operator <=</strong>(other) <a class="anchor-link" href="#operator <="
+              title="Permalink to int32.operator <=">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &lt;=(other) {
+  if (other is int64) {
+    return this.toInt64() &lt; other;
+  }
+  return _i &lt;= _convert(other);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator >">
+<span class="show-code">Code</span>
+bool <strong>operator ></strong>(other) <a class="anchor-link" href="#operator >"
+              title="Permalink to int32.operator >">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &gt;(other) {
+  if (other is int64) {
+    return this.toInt64() &lt; other;
+  }
+  return _i &gt; _convert(other);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator ==">
+<span class="show-code">Code</span>
+bool <strong>operator ==</strong>(other) <a class="anchor-link" href="#operator =="
+              title="Permalink to int32.operator ==">#</a></h4>
+<div class="doc">
+<p>Returns <code>true</code> if this <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a> has the same numeric value as the
+given object.  The argument may be an <code>int</code> or an <a class="crossref" href="../fixnum/intx.html">intx</a>.</p>
+<pre class="source">
+bool operator ==(other) {
+  if (other == null) {
+    return false;
+  }
+  if (other is int64) {
+    return this.toInt64() == other;
+  }
+  return _i == _convert(other);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator >>">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>operator >></strong>(int n) <a class="anchor-link" href="#operator >>"
+              title="Permalink to int32.operator >>">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 operator &gt;&gt;(int n) {
+  if (n &lt; 0) {
+    throw new IllegalArgumentException("$n");
+  }
+  n &amp;= 31;
+  int value;
+  if (_i &gt;= 0) {
+    value = _i &gt;&gt; n;
+  } else {
+    value = (_i &gt;&gt; n) | (0xffffffff &lt;&lt; (32 - n));
+  }
+  return new int32.fromInt(value);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator <<">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>operator <<</strong>(int n) <a class="anchor-link" href="#operator <<"
+              title="Permalink to int32.operator <<">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 operator &lt;&lt;(int n) {
+  if (n &lt; 0) {
+    throw new IllegalArgumentException("$n");
+  }
+  n &amp;= 31;
+  return new int32.fromInt(_i &lt;&lt; n);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator ~">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>operator ~</strong>() <a class="anchor-link" href="#operator ~"
+              title="Permalink to int32.operator ~">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 operator ~() =&gt; new int32.fromInt(~_i);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator ^">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>operator ^</strong>(other) <a class="anchor-link" href="#operator ^"
+              title="Permalink to int32.operator ^">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 operator ^(other) {
+  if (other is int64) {
+    return (this.toInt64() ^ other).toInt32();
+  }
+  return new int32.fromInt(_i ^ _convert(other));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator |">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>operator |</strong>(other) <a class="anchor-link" href="#operator |"
+              title="Permalink to int32.operator |">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 operator |(other) {
+  if (other is int64) {
+    return (this.toInt64() | other).toInt32();
+  }
+  return new int32.fromInt(_i | _convert(other));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator <">
+<span class="show-code">Code</span>
+bool <strong>operator <</strong>(other) <a class="anchor-link" href="#operator <"
+              title="Permalink to int32.operator <">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &lt;(other) {
+  if (other is int64) {
+    return this.toInt64() &lt; other;
+  }
+  return _i &lt; _convert(other);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator ~/">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>operator ~/</strong>(other) <a class="anchor-link" href="#operator ~/"
+              title="Permalink to int32.operator ~/">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 operator ~/(other) {
+  if (other is int64) {
+    // Result will be int32
+    return (this.toInt64() ~/ other).toInt32();
+  }
+  return new int32.fromInt(_i ~/ _convert(other));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator %">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>operator %</strong>(other) <a class="anchor-link" href="#operator %"
+              title="Permalink to int32.operator %">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 operator %(other) {
+  if (other is int64) {
+    // Result will be int32
+    return (this.toInt64() % other).toInt32();
+  }
+  return new int32.fromInt(_i % _convert(other));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator *">
+<span class="show-code">Code</span>
+<a href="../fixnum/intx.html">intx</a> <strong>operator *</strong>(other) <a class="anchor-link" href="#operator *"
+              title="Permalink to int32.operator *">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+intx operator *(other) {
+  if (other is int64) {
+    return this.toInt64() * other;
+  }
+  // TODO(rice) - optimize
+  return (this.toInt64() * other).toInt32();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator negate">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>operator negate</strong>() <a class="anchor-link" href="#operator negate"
+              title="Permalink to int32.operator negate">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 operator -() =&gt; new int32.fromInt(-_i);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator &">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>operator &</strong>(other) <a class="anchor-link" href="#operator &"
+              title="Permalink to int32.operator &">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 operator &amp;(other) {
+  if (other is int64) {
+    return (this.toInt64() &amp; other).toInt32();
+  }
+  return new int32.fromInt(_i &amp; _convert(other));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator +">
+<span class="show-code">Code</span>
+<a href="../fixnum/intx.html">intx</a> <strong>operator +</strong>(other) <a class="anchor-link" href="#operator +"
+              title="Permalink to int32.operator +">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+intx operator +(other) {
+  if (other is int64) {
+    return this.toInt64() + other;
+  }
+  return new int32.fromInt(_i + _convert(other));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator >=">
+<span class="show-code">Code</span>
+bool <strong>operator >=</strong>(other) <a class="anchor-link" href="#operator >="
+              title="Permalink to int32.operator >=">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool operator &gt;=(other) {
+  if (other is int64) {
+    return this.toInt64() &lt; other;
+  }
+  return _i &gt;= _convert(other);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="operator -">
+<span class="show-code">Code</span>
+<a href="../fixnum/intx.html">intx</a> <strong>operator -</strong>(other) <a class="anchor-link" href="#operator -"
+              title="Permalink to int32.operator -">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+intx operator -(other) {
+  if (other is int64) {
+    return this.toInt64() - other;
+  }
+  return new int32.fromInt(_i - _convert(other));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="remainder">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>remainder</strong>(other) <a class="anchor-link" href="#remainder"
+              title="Permalink to int32.remainder">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 remainder(other) {
+  if (other is int64) {
+    // Result will be int32
+    int64 t = this.toInt64();
+    return (t - (t ~/ other) * other).toInt32();
+  }
+  return this - (this ~/ other) * other;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="shiftRightUnsigned">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>shiftRightUnsigned</strong>(int n) <a class="anchor-link" href="#shiftRightUnsigned"
+              title="Permalink to int32.shiftRightUnsigned">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 shiftRightUnsigned(int n) {
+  if (n &lt; 0) {
+    throw new IllegalArgumentException("$n");
+  }
+  n &amp;= 31;
+  int value;
+  if (_i &gt;= 0) {
+    value = _i &gt;&gt; n;
+  } else {
+    value = (_i &gt;&gt; n) &amp; ((1 &lt;&lt; (32 - n)) - 1);
+  }
+  return new int32.fromInt(value);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toBytes">
+<span class="show-code">Code</span>
+List&lt;int&gt; <strong>toBytes</strong>() <a class="anchor-link" href="#toBytes"
+              title="Permalink to int32.toBytes">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+List&lt;int&gt; toBytes() {
+  List&lt;int&gt; result = new List&lt;int&gt;(4);
+  result[0] = _i &amp; 0xff;
+  result[1] = (_i &gt;&gt; 8) &amp; 0xff;
+  result[2] = (_i &gt;&gt; 16) &amp; 0xff;
+  result[3] = (_i &gt;&gt; 24) &amp; 0xff;
+  return result;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toHexString">
+<span class="show-code">Code</span>
+String <strong>toHexString</strong>() <a class="anchor-link" href="#toHexString"
+              title="Permalink to int32.toHexString">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+String toHexString() =&gt; _i.toRadixString(16);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toInt">
+<span class="show-code">Code</span>
+int <strong>toInt</strong>() <a class="anchor-link" href="#toInt"
+              title="Permalink to int32.toInt">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int toInt() =&gt; _i;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toInt32">
+<span class="show-code">Code</span>
+<a href="../fixnum/int32.html">int32</a> <strong>toInt32</strong>() <a class="anchor-link" href="#toInt32"
+              title="Permalink to int32.toInt32">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int32 toInt32() =&gt; this;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toInt64">
+<span class="show-code">Code</span>
+<a href="../fixnum/int64.html">int64</a> <strong>toInt64</strong>() <a class="anchor-link" href="#toInt64"
+              title="Permalink to int32.toInt64">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+int64 toInt64() =&gt; new int64.fromInt(_i);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toRadixString">
+<span class="show-code">Code</span>
+String <strong>toRadixString</strong>(int radix) <a class="anchor-link" href="#toRadixString"
+              title="Permalink to int32.toRadixString">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+String toRadixString(int radix) =&gt; _i.toRadixString(radix);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+<span class="show-code">Code</span>
+String <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to int32.toString">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+String toString() =&gt; _i.toString();
+</pre>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        
+        <div class="footer">
+          <div>This page was generated at 2012-09-24 23:52:32.696</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
