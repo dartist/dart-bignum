@@ -1,6 +1,8 @@
 name: bignum
 description: Big Number library for Dart
 version: 0.0.1
+author: Adam Singer <adam@solvr.io>
+homepage: https://github.com/Solvr/dart-bignum
 dependencies:
   unittest:
     sdk: unittest

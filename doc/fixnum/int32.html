@@ -14,7 +14,14 @@
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">Dart Documentation</a>
-         &rsaquo; <a href="../fixnum.html">fixnum</a> &rsaquo; <a href="../fixnum/int32.html">int32</a></div>
+         &rsaquo; <a href="../fixnum.html">fixnum</a> &rsaquo; <a href="../fixnum/int32.html">int32</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
         <div class="nav">
         
 </div>
@@ -31,21 +38,21 @@ Arithmetic operations may overflow in order to maintain this range.</p>
 <p>
 <span class="type-box"><span class="icon-interface"></span><a href="../fixnum/intx.html">intx</a></span></p>
 <h3>Constructors</h3>
-<div class="method"><h4 id="int32">
+<div class="method"><h4 id="int32.fromInt">
 <span class="show-code">Code</span>
-new <strong>int32</strong>.fromInt(int i) <a class="anchor-link" href="#int32"
+new <strong>int32</strong>.fromInt(int i) <a class="anchor-link" href="#int32.fromInt"
               title="Permalink to int32.int32">#</a></h4>
 <div class="doc">
-<p>Constructs an <a class="crossref" href="../fixnum/int32.html#new:int32._internal">int32</a> from an <code>int</code>.  Only the low 32 bits of the input
+<p>Constructs an <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a> from an <code>int</code>.  Only the low 32 bits of the input
 are used.</p>
 <pre class="source">
 int32.fromInt(int i) : _i = (i &amp; 0x7fffffff) - (i &amp; 0x80000000);
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="int32">
+<div class="method"><h4 id="int32._internal">
 <span class="show-code">Code</span>
-const <strong>int32</strong>._internal(int i) <a class="anchor-link" href="#int32"
+const <strong>int32</strong>._internal(int i) <a class="anchor-link" href="#int32._internal"
               title="Permalink to int32.int32">#</a></h4>
 <div class="doc">
 
@@ -60,7 +67,7 @@ const int32._internal(int i) : _i = i;
 <a href="../fixnum/int32.html">int32</a> <strong>parseHex</strong>(String s) <a class="anchor-link" href="#parseHex"
               title="Permalink to int32.parseHex">#</a></h4>
 <div class="doc">
-<p>Parses a hexadecimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int32.html#new:int32._internal">int32</a>.</p>
+<p>Parses a hexadecimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a>.</p>
 <pre class="source">
 static int32 parseHex(String s) =&gt; parseRadix(s, 16);
 </pre>
@@ -71,7 +78,7 @@ static int32 parseHex(String s) =&gt; parseRadix(s, 16);
 <a href="../fixnum/int32.html">int32</a> <strong>parseInt</strong>(String s) <a class="anchor-link" href="#parseInt"
               title="Permalink to int32.parseInt">#</a></h4>
 <div class="doc">
-<p>Parses a decimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int32.html#new:int32._internal">int32</a>.</p>
+<p>Parses a decimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a>.</p>
 <pre class="source">
 static int32 parseInt(String s) =&gt; new int32.fromInt(Mathx.parseInt(s));
 </pre>
@@ -84,7 +91,7 @@ static int32 parseInt(String s) =&gt; new int32.fromInt(Mathx.parseInt(s));
 <div class="doc">
 <p>Parses a <code>String</code> in a given 
 <span class="param">radix</span> between 2 and 16 and returns an
-<a class="crossref" href="../fixnum/int32.html#new:int32._internal">int32</a>.</p>
+<a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a>.</p>
 <pre class="source">
 static int32 parseRadix(String s, int radix) {
   if ((radix &lt;= 1) || (radix &gt; 16)) {
@@ -112,7 +119,7 @@ final <a href="../fixnum/int32.html">int32</a>         <strong>MAX_VALUE</strong
             title="Permalink to int32.MAX_VALUE">#</a>
         </h4>
         <div class="doc">
-<p>The maximum positive value attainable by an <a class="crossref" href="../fixnum/int32.html#new:int32._internal">int32</a>, namely
+<p>The maximum positive value attainable by an <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a>, namely
 2147483647.</p>
 <pre class="source">
 static final int32 MAX_VALUE = const int32._internal(0x7FFFFFFF);
@@ -126,7 +133,7 @@ static final int32 MAX_VALUE = const int32._internal(0x7FFFFFFF);
             title="Permalink to int32.MIN_VALUE">#</a>
         </h4>
         <div class="doc">
-<p>The minimum positive value attainable by an <a class="crossref" href="../fixnum/int32.html#new:int32._internal">int32</a>, namely
+<p>The minimum positive value attainable by an <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a>, namely
 -2147483648.</p>
 <pre class="source">
 static int32 MIN_VALUE = const int32._internal(0x80000000);
@@ -140,7 +147,7 @@ static int32 MIN_VALUE = const int32._internal(0x80000000);
             title="Permalink to int32.ONE">#</a>
         </h4>
         <div class="doc">
-<p>An <a class="crossref" href="../fixnum/int32.html#new:int32._internal">int32</a> constant equal to 1.</p>
+<p>An <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a> constant equal to 1.</p>
 <pre class="source">
 static int32 ONE = const int32._internal(1);
 </pre>
@@ -153,7 +160,7 @@ static int32 ONE = const int32._internal(1);
             title="Permalink to int32.TWO">#</a>
         </h4>
         <div class="doc">
-<p>An <a class="crossref" href="../fixnum/int32.html#new:int32._internal">int32</a> constant equal to 2.</p>
+<p>An <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a> constant equal to 2.</p>
 <pre class="source">
 static int32 TWO = const int32._internal(2);
 </pre>
@@ -166,7 +173,7 @@ static int32 TWO = const int32._internal(2);
             title="Permalink to int32.ZERO">#</a>
         </h4>
         <div class="doc">
-<p>An <a class="crossref" href="../fixnum/int32.html#new:int32._internal">int32</a> constant equal to 0.</p>
+<p>An <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a> constant equal to 0.</p>
 <pre class="source">
 static int32 ZERO = const int32._internal(0);
 </pre>
@@ -299,9 +306,9 @@ int numberOfTrailingZeros() =&gt; _numberOfTrailingZeros(_i);
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator <=">
 <span class="show-code">Code</span>
-bool <strong>operator <=</strong>(other) <a class="anchor-link" href="#operator"
+bool <strong>operator <=</strong>(other) <a class="anchor-link" href="#operator <="
               title="Permalink to int32.operator <=">#</a></h4>
 <div class="doc">
 
@@ -315,9 +322,9 @@ bool operator &lt;=(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator >">
 <span class="show-code">Code</span>
-bool <strong>operator ></strong>(other) <a class="anchor-link" href="#operator"
+bool <strong>operator ></strong>(other) <a class="anchor-link" href="#operator >"
               title="Permalink to int32.operator >">#</a></h4>
 <div class="doc">
 
@@ -331,12 +338,12 @@ bool operator &gt;(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator ==">
 <span class="show-code">Code</span>
-bool <strong>operator ==</strong>(other) <a class="anchor-link" href="#operator"
+bool <strong>operator ==</strong>(other) <a class="anchor-link" href="#operator =="
               title="Permalink to int32.operator ==">#</a></h4>
 <div class="doc">
-<p>Returns <code>true</code> if this <a class="crossref" href="../fixnum/int32.html#new:int32._internal">int32</a> has the same numeric value as the
+<p>Returns <code>true</code> if this <a class="crossref" href="../fixnum/int32.html#int32._internal">int32</a> has the same numeric value as the
 given object.  The argument may be an <code>int</code> or an <a class="crossref" href="../fixnum/intx.html">intx</a>.</p>
 <pre class="source">
 bool operator ==(other) {
@@ -351,9 +358,9 @@ bool operator ==(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator >>">
 <span class="show-code">Code</span>
-<a href="../fixnum/int32.html">int32</a> <strong>operator >></strong>(int n) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int32.html">int32</a> <strong>operator >></strong>(int n) <a class="anchor-link" href="#operator >>"
               title="Permalink to int32.operator >>">#</a></h4>
 <div class="doc">
 
@@ -374,9 +381,9 @@ int32 operator &gt;&gt;(int n) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator <<">
 <span class="show-code">Code</span>
-<a href="../fixnum/int32.html">int32</a> <strong>operator <<</strong>(int n) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int32.html">int32</a> <strong>operator <<</strong>(int n) <a class="anchor-link" href="#operator <<"
               title="Permalink to int32.operator <<">#</a></h4>
 <div class="doc">
 
@@ -391,9 +398,9 @@ int32 operator &lt;&lt;(int n) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator ~">
 <span class="show-code">Code</span>
-<a href="../fixnum/int32.html">int32</a> <strong>operator ~</strong>() <a class="anchor-link" href="#operator"
+<a href="../fixnum/int32.html">int32</a> <strong>operator ~</strong>() <a class="anchor-link" href="#operator ~"
               title="Permalink to int32.operator ~">#</a></h4>
 <div class="doc">
 
@@ -402,9 +409,9 @@ int32 operator ~() =&gt; new int32.fromInt(~_i);
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator ^">
 <span class="show-code">Code</span>
-<a href="../fixnum/int32.html">int32</a> <strong>operator ^</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int32.html">int32</a> <strong>operator ^</strong>(other) <a class="anchor-link" href="#operator ^"
               title="Permalink to int32.operator ^">#</a></h4>
 <div class="doc">
 
@@ -418,9 +425,9 @@ int32 operator ^(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator |">
 <span class="show-code">Code</span>
-<a href="../fixnum/int32.html">int32</a> <strong>operator |</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int32.html">int32</a> <strong>operator |</strong>(other) <a class="anchor-link" href="#operator |"
               title="Permalink to int32.operator |">#</a></h4>
 <div class="doc">
 
@@ -434,9 +441,9 @@ int32 operator |(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator <">
 <span class="show-code">Code</span>
-bool <strong>operator <</strong>(other) <a class="anchor-link" href="#operator"
+bool <strong>operator <</strong>(other) <a class="anchor-link" href="#operator <"
               title="Permalink to int32.operator <">#</a></h4>
 <div class="doc">
 
@@ -450,9 +457,9 @@ bool operator &lt;(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator ~/">
 <span class="show-code">Code</span>
-<a href="../fixnum/int32.html">int32</a> <strong>operator ~/</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int32.html">int32</a> <strong>operator ~/</strong>(other) <a class="anchor-link" href="#operator ~/"
               title="Permalink to int32.operator ~/">#</a></h4>
 <div class="doc">
 
@@ -467,9 +474,9 @@ int32 operator ~/(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator %">
 <span class="show-code">Code</span>
-<a href="../fixnum/int32.html">int32</a> <strong>operator %</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int32.html">int32</a> <strong>operator %</strong>(other) <a class="anchor-link" href="#operator %"
               title="Permalink to int32.operator %">#</a></h4>
 <div class="doc">
 
@@ -484,9 +491,9 @@ int32 operator %(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator *">
 <span class="show-code">Code</span>
-<a href="../fixnum/intx.html">intx</a> <strong>operator *</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/intx.html">intx</a> <strong>operator *</strong>(other) <a class="anchor-link" href="#operator *"
               title="Permalink to int32.operator *">#</a></h4>
 <div class="doc">
 
@@ -501,20 +508,20 @@ intx operator *(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator negate">
 <span class="show-code">Code</span>
-<a href="../fixnum/int32.html">int32</a> <strong>operator negate</strong>() <a class="anchor-link" href="#operator"
+<a href="../fixnum/int32.html">int32</a> <strong>operator negate</strong>() <a class="anchor-link" href="#operator negate"
               title="Permalink to int32.operator negate">#</a></h4>
 <div class="doc">
 
 <pre class="source">
-int32 operator negate() =&gt; new int32.fromInt(-_i);
+int32 operator -() =&gt; new int32.fromInt(-_i);
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator &">
 <span class="show-code">Code</span>
-<a href="../fixnum/int32.html">int32</a> <strong>operator &</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int32.html">int32</a> <strong>operator &</strong>(other) <a class="anchor-link" href="#operator &"
               title="Permalink to int32.operator &">#</a></h4>
 <div class="doc">
 
@@ -528,9 +535,9 @@ int32 operator &amp;(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator +">
 <span class="show-code">Code</span>
-<a href="../fixnum/intx.html">intx</a> <strong>operator +</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/intx.html">intx</a> <strong>operator +</strong>(other) <a class="anchor-link" href="#operator +"
               title="Permalink to int32.operator +">#</a></h4>
 <div class="doc">
 
@@ -544,9 +551,9 @@ intx operator +(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator >=">
 <span class="show-code">Code</span>
-bool <strong>operator >=</strong>(other) <a class="anchor-link" href="#operator"
+bool <strong>operator >=</strong>(other) <a class="anchor-link" href="#operator >="
               title="Permalink to int32.operator >=">#</a></h4>
 <div class="doc">
 
@@ -560,9 +567,9 @@ bool operator &gt;=(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator -">
 <span class="show-code">Code</span>
-<a href="../fixnum/intx.html">intx</a> <strong>operator -</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/intx.html">intx</a> <strong>operator -</strong>(other) <a class="anchor-link" href="#operator -"
               title="Permalink to int32.operator -">#</a></h4>
 <div class="doc">
 
@@ -706,7 +713,7 @@ String toString() =&gt; _i.toString();
         </div>
         
         <div class="footer">
-          <div>This page was generated at 2012-08-29 12:31:51.043</div>
+          <div>This page was generated at 2012-09-24 23:55:19.161</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>
