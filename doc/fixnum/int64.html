@@ -14,7 +14,14 @@
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">Dart Documentation</a>
-         &rsaquo; <a href="../fixnum.html">fixnum</a> &rsaquo; <a href="../fixnum/int64.html">int64</a></div>
+         &rsaquo; <a href="../fixnum.html">fixnum</a> &rsaquo; <a href="../fixnum/int64.html">int64</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
         <div class="nav">
         
 </div>
@@ -31,12 +38,12 @@ Arithmetic operations may overflow in order to maintain this range.</p>
 <p>
 <span class="type-box"><span class="icon-interface"></span><a href="../fixnum/intx.html">intx</a></span></p>
 <h3>Constructors</h3>
-<div class="method"><h4 id="int64">
+<div class="method"><h4 id="int64._copy">
 <span class="show-code">Code</span>
-new <strong>int64</strong>._copy(<a href="../fixnum/int64.html">int64</a> other) <a class="anchor-link" href="#int64"
+new <strong>int64</strong>._copy(<a href="../fixnum/int64.html">int64</a> other) <a class="anchor-link" href="#int64._copy"
               title="Permalink to int64.int64">#</a></h4>
 <div class="doc">
-<p>Constructs an <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> with the same value as an existing <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a>.</p>
+<p>Constructs an <a class="crossref" href="../fixnum/int64.html#int64">int64</a> with the same value as an existing <a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
 <pre class="source">
 int64._copy(int64 other) {
   _l = other._l;
@@ -46,24 +53,24 @@ int64._copy(int64 other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="int64">
+<div class="method"><h4 id="int64._bits">
 <span class="show-code">Code</span>
-new <strong>int64</strong>._bits(int _l, int _m, int _h) <a class="anchor-link" href="#int64"
+new <strong>int64</strong>._bits(int _l, int _m, int _h) <a class="anchor-link" href="#int64._bits"
               title="Permalink to int64.int64">#</a></h4>
 <div class="doc">
-<p>Constructs an <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> with a given bitwise representation.  No validation
+<p>Constructs an <a class="crossref" href="../fixnum/int64.html#int64">int64</a> with a given bitwise representation.  No validation
 is performed.</p>
 <pre class="source">
 int64._bits(int this._l, int this._m, int this._h);
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="int64">
+<div class="method"><h4 id="int64.fromInts">
 <span class="show-code">Code</span>
-new <strong>int64</strong>.fromInts(int top, int bottom) <a class="anchor-link" href="#int64"
+new <strong>int64</strong>.fromInts(int top, int bottom) <a class="anchor-link" href="#int64.fromInts"
               title="Permalink to int64.int64">#</a></h4>
 <div class="doc">
-<p>Constructs an <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> from a pair of 32-bit integers having the value
+<p>Constructs an <a class="crossref" href="../fixnum/int64.html#int64">int64</a> from a pair of 32-bit integers having the value
 <code>((top &amp; 0xffffffff) &lt;&lt; 32) | (bottom &amp; 0xffffffff)</code>.</p>
 <pre class="source">
 int64.fromInts(int top, int bottom) {
@@ -76,9 +83,9 @@ int64.fromInts(int top, int bottom) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="int64">
+<div class="method"><h4 id="int64.fromBytesBigEndian">
 <span class="show-code">Code</span>
-factory <strong>int64</strong>.fromBytesBigEndian(List&lt;int&gt; bytes) <a class="anchor-link" href="#int64"
+factory <strong>int64</strong>.fromBytesBigEndian(List&lt;int&gt; bytes) <a class="anchor-link" href="#int64.fromBytesBigEndian"
               title="Permalink to int64.int64">#</a></h4>
 <div class="doc">
 
@@ -105,9 +112,9 @@ factory int64.fromBytesBigEndian(List&lt;int&gt; bytes) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="int64">
+<div class="method"><h4 id="int64.fromBytes">
 <span class="show-code">Code</span>
-factory <strong>int64</strong>.fromBytes(List&lt;int&gt; bytes) <a class="anchor-link" href="#int64"
+factory <strong>int64</strong>.fromBytes(List&lt;int&gt; bytes) <a class="anchor-link" href="#int64.fromBytes"
               title="Permalink to int64.int64">#</a></h4>
 <div class="doc">
 
@@ -134,12 +141,12 @@ factory int64.fromBytes(List&lt;int&gt; bytes) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="int64">
+<div class="method"><h4 id="int64.fromInt">
 <span class="show-code">Code</span>
-new <strong>int64</strong>.fromInt(int value) <a class="anchor-link" href="#int64"
+new <strong>int64</strong>.fromInt(int value) <a class="anchor-link" href="#int64.fromInt"
               title="Permalink to int64.int64">#</a></h4>
 <div class="doc">
-<p>Constructs an <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> with a given <code>int</code> value.</p>
+<p>Constructs an <a class="crossref" href="../fixnum/int64.html#int64">int64</a> with a given <code>int</code> value.</p>
 <pre class="source">
 int64.fromInt(int value) {
   bool negative = false;
@@ -174,7 +181,7 @@ int64.fromInt(int value) {
 new <strong>int64</strong>() <a class="anchor-link" href="#int64"
               title="Permalink to int64.int64">#</a></h4>
 <div class="doc">
-<p>Constructs an <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> equal to 0.</p>
+<p>Constructs an <a class="crossref" href="../fixnum/int64.html#int64">int64</a> equal to 0.</p>
 <pre class="source">
 int64() : _l = 0, _m = 0, _h = 0;
 </pre>
@@ -183,10 +190,10 @@ int64() : _l = 0, _m = 0, _h = 0;
 <h3>Static Methods</h3>
 <div class="method"><h4 id="MAX_VALUE">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>MAX_VALUE</strong>() <a class="anchor-link" href="#MAX_VALUE"
-              title="Permalink to int64.MAX_VALUE">#</a></h4>
+<a href="../fixnum/int64.html">int64</a> <strong>get MAX_VALUE</strong>() <a class="anchor-link" href="#MAX_VALUE"
+              title="Permalink to int64.get MAX_VALUE">#</a></h4>
 <div class="doc">
-<p>The maximum positive value attainable by an <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a>, namely
+<p>The maximum positive value attainable by an <a class="crossref" href="../fixnum/int64.html#int64">int64</a>, namely
 9,223,372,036,854,775,807.</p>
 <pre class="source">
 static int64 get MAX_VALUE() {
@@ -200,10 +207,10 @@ static int64 get MAX_VALUE() {
 </div>
 <div class="method"><h4 id="MIN_VALUE">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>MIN_VALUE</strong>() <a class="anchor-link" href="#MIN_VALUE"
-              title="Permalink to int64.MIN_VALUE">#</a></h4>
+<a href="../fixnum/int64.html">int64</a> <strong>get MIN_VALUE</strong>() <a class="anchor-link" href="#MIN_VALUE"
+              title="Permalink to int64.get MIN_VALUE">#</a></h4>
 <div class="doc">
-<p>The minimum positive value attainable by an <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a>, namely
+<p>The minimum positive value attainable by an <a class="crossref" href="../fixnum/int64.html#int64">int64</a>, namely
 -9,223,372,036,854,775,808.</p>
 <pre class="source">
 static int64 get MIN_VALUE() {
@@ -217,10 +224,10 @@ static int64 get MIN_VALUE() {
 </div>
 <div class="method"><h4 id="ONE">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>ONE</strong>() <a class="anchor-link" href="#ONE"
-              title="Permalink to int64.ONE">#</a></h4>
+<a href="../fixnum/int64.html">int64</a> <strong>get ONE</strong>() <a class="anchor-link" href="#ONE"
+              title="Permalink to int64.get ONE">#</a></h4>
 <div class="doc">
-<p>An <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> constant equal to 1.</p>
+<p>An <a class="crossref" href="../fixnum/int64.html#int64">int64</a> constant equal to 1.</p>
 <pre class="source">
 static int64 get ONE() {
   if (_ONE == null) {
@@ -233,10 +240,10 @@ static int64 get ONE() {
 </div>
 <div class="method"><h4 id="TWO">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>TWO</strong>() <a class="anchor-link" href="#TWO"
-              title="Permalink to int64.TWO">#</a></h4>
+<a href="../fixnum/int64.html">int64</a> <strong>get TWO</strong>() <a class="anchor-link" href="#TWO"
+              title="Permalink to int64.get TWO">#</a></h4>
 <div class="doc">
-<p>An <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> constant equal to 2.</p>
+<p>An <a class="crossref" href="../fixnum/int64.html#int64">int64</a> constant equal to 2.</p>
 <pre class="source">
 static int64 get TWO() {
   if (_TWO == null) {
@@ -249,10 +256,10 @@ static int64 get TWO() {
 </div>
 <div class="method"><h4 id="ZERO">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>ZERO</strong>() <a class="anchor-link" href="#ZERO"
-              title="Permalink to int64.ZERO">#</a></h4>
+<a href="../fixnum/int64.html">int64</a> <strong>get ZERO</strong>() <a class="anchor-link" href="#ZERO"
+              title="Permalink to int64.get ZERO">#</a></h4>
 <div class="doc">
-<p>An <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> constant equal to 0.</p>
+<p>An <a class="crossref" href="../fixnum/int64.html#int64">int64</a> constant equal to 0.</p>
 <pre class="source">
 static int64 get ZERO() {
   if (_ZERO == null) {
@@ -268,7 +275,7 @@ static int64 get ZERO() {
 <a href="../fixnum/int64.html">int64</a> <strong>parseHex</strong>(String s) <a class="anchor-link" href="#parseHex"
               title="Permalink to int64.parseHex">#</a></h4>
 <div class="doc">
-<p>Parses a hexadecimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a>.</p>
+<p>Parses a hexadecimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
 <pre class="source">
 static int64 parseHex(String s) =&gt; parseRadix(s, 16);
 </pre>
@@ -279,7 +286,7 @@ static int64 parseHex(String s) =&gt; parseRadix(s, 16);
 <a href="../fixnum/int64.html">int64</a> <strong>parseInt</strong>(String s) <a class="anchor-link" href="#parseInt"
               title="Permalink to int64.parseInt">#</a></h4>
 <div class="doc">
-<p>Parses a decimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a>.</p>
+<p>Parses a decimal <code>String</code> and returns an <a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
 <pre class="source">
 static int64 parseInt(String s) =&gt; parseRadix(s, 10);
 </pre>
@@ -292,7 +299,7 @@ static int64 parseInt(String s) =&gt; parseRadix(s, 10);
 <div class="doc">
 <p>Parses a <code>String</code> in a given 
 <span class="param">radix</span> between 2 and 16 and returns an
-<a class="crossref" href="../fixnum/int64.html#new:int64">int64</a>.</p>
+<a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
 <pre class="source">
 static int64 parseRadix(String s, int radix) {
   if ((radix &lt;= 1) || (radix &gt; 16)) {
@@ -371,7 +378,7 @@ int compareTo(Comparable other) {
 int <strong>hashCode</strong>() <a class="anchor-link" href="#hashCode"
               title="Permalink to int64.hashCode">#</a></h4>
 <div class="doc">
-<p>Returns a hash code based on all the bits of this <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a>.</p>
+<p>Returns a hash code based on all the bits of this <a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
 <pre class="source">
 int hashCode() {
   int bottom = ((_m &amp; 0x3ff) &lt;&lt; _BITS) | _l;
@@ -452,7 +459,7 @@ bool isZero() =&gt; _h == 0 &amp;&amp; _m == 0 &amp;&amp; _l == 0;
 int <strong>numberOfLeadingZeros</strong>() <a class="anchor-link" href="#numberOfLeadingZeros"
               title="Permalink to int64.numberOfLeadingZeros">#</a></h4>
 <div class="doc">
-<p>Returns the number of leading zeros in this <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> as an <code>int</code>
+<p>Returns the number of leading zeros in this <a class="crossref" href="../fixnum/int64.html#int64">int64</a> as an <code>int</code>
 between 0 and 64.</p>
 <pre class="source">
 int numberOfLeadingZeros() {
@@ -476,7 +483,7 @@ int numberOfLeadingZeros() {
 int <strong>numberOfTrailingZeros</strong>() <a class="anchor-link" href="#numberOfTrailingZeros"
               title="Permalink to int64.numberOfTrailingZeros">#</a></h4>
 <div class="doc">
-<p>Returns the number of trailing zeros in this <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> as an <code>int</code>
+<p>Returns the number of trailing zeros in this <a class="crossref" href="../fixnum/int64.html#int64">int64</a> as an <code>int</code>
 between 0 and 64.</p>
 <pre class="source">
 int numberOfTrailingZeros() {
@@ -500,14 +507,14 @@ int numberOfTrailingZeros() {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator negate">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator negate</strong>() <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator negate</strong>() <a class="anchor-link" href="#operator negate"
               title="Permalink to int64.operator negate">#</a></h4>
 <div class="doc">
 
 <pre class="source">
-int64 operator negate() {
+int64 operator -() {
   // Like 0 - this.
   int sum0 = -_l;
   int sum1 = -_m + _shiftRight(sum0, _BITS);
@@ -518,9 +525,9 @@ int64 operator negate() {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator +">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator +</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator +</strong>(other) <a class="anchor-link" href="#operator +"
               title="Permalink to int64.operator +">#</a></h4>
 <div class="doc">
 
@@ -537,9 +544,9 @@ int64 operator +(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator *">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator *</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator *</strong>(other) <a class="anchor-link" href="#operator *"
               title="Permalink to int64.operator *">#</a></h4>
 <div class="doc">
 
@@ -629,9 +636,9 @@ int64 operator *(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator %">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator %</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator %</strong>(other) <a class="anchor-link" href="#operator %"
               title="Permalink to int64.operator %">#</a></h4>
 <div class="doc">
 
@@ -650,9 +657,9 @@ int64 operator %(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator ~/">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator ~/</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator ~/</strong>(other) <a class="anchor-link" href="#operator ~/"
               title="Permalink to int64.operator ~/">#</a></h4>
 <div class="doc">
 
@@ -661,9 +668,9 @@ int64 operator ~/(other) =&gt; _divMod(this, _promote(other), false);
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator &">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator &</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator &</strong>(other) <a class="anchor-link" href="#operator &"
               title="Permalink to int64.operator &">#</a></h4>
 <div class="doc">
 
@@ -678,9 +685,9 @@ int64 operator &amp;(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator |">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator |</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator |</strong>(other) <a class="anchor-link" href="#operator |"
               title="Permalink to int64.operator |">#</a></h4>
 <div class="doc">
 
@@ -695,9 +702,9 @@ int64 operator |(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator ^">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator ^</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator ^</strong>(other) <a class="anchor-link" href="#operator ^"
               title="Permalink to int64.operator ^">#</a></h4>
 <div class="doc">
 
@@ -712,9 +719,9 @@ int64 operator ^(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator ~">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator ~</strong>() <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator ~</strong>() <a class="anchor-link" href="#operator ~"
               title="Permalink to int64.operator ~">#</a></h4>
 <div class="doc">
 
@@ -726,9 +733,9 @@ int64 operator ~() {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator >>">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator >></strong>(int n) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator >></strong>(int n) <a class="anchor-link" href="#operator >>"
               title="Permalink to int64.operator >>">#</a></h4>
 <div class="doc">
 
@@ -776,12 +783,12 @@ int64 operator &gt;&gt;(int n) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator ==">
 <span class="show-code">Code</span>
-bool <strong>operator ==</strong>(other) <a class="anchor-link" href="#operator"
+bool <strong>operator ==</strong>(other) <a class="anchor-link" href="#operator =="
               title="Permalink to int64.operator ==">#</a></h4>
 <div class="doc">
-<p>Returns <code>true</code> if this <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> has the same numeric value as the
+<p>Returns <code>true</code> if this <a class="crossref" href="../fixnum/int64.html#int64">int64</a> has the same numeric value as the
 given object.  The argument may be an <code>int</code> or an <a class="crossref" href="../fixnum/intx.html">intx</a>.</p>
 <pre class="source">
 bool operator ==(other) {
@@ -794,9 +801,9 @@ bool operator ==(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator <">
 <span class="show-code">Code</span>
-bool <strong>operator <</strong>(other) <a class="anchor-link" href="#operator"
+bool <strong>operator <</strong>(other) <a class="anchor-link" href="#operator <"
               title="Permalink to int64.operator <">#</a></h4>
 <div class="doc">
 
@@ -807,9 +814,9 @@ bool operator &lt;(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator <<">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator <<</strong>(int n) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator <<</strong>(int n) <a class="anchor-link" href="#operator <<"
               title="Permalink to int64.operator <<">#</a></h4>
 <div class="doc">
 
@@ -840,9 +847,9 @@ int64 operator &lt;&lt;(int n) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator -">
 <span class="show-code">Code</span>
-<a href="../fixnum/int64.html">int64</a> <strong>operator -</strong>(other) <a class="anchor-link" href="#operator"
+<a href="../fixnum/int64.html">int64</a> <strong>operator -</strong>(other) <a class="anchor-link" href="#operator -"
               title="Permalink to int64.operator -">#</a></h4>
 <div class="doc">
 
@@ -860,9 +867,9 @@ int64 operator -(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator >">
 <span class="show-code">Code</span>
-bool <strong>operator ></strong>(other) <a class="anchor-link" href="#operator"
+bool <strong>operator ></strong>(other) <a class="anchor-link" href="#operator >"
               title="Permalink to int64.operator >">#</a></h4>
 <div class="doc">
 
@@ -873,9 +880,9 @@ bool operator &gt;(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator >=">
 <span class="show-code">Code</span>
-bool <strong>operator >=</strong>(other) <a class="anchor-link" href="#operator"
+bool <strong>operator >=</strong>(other) <a class="anchor-link" href="#operator >="
               title="Permalink to int64.operator >=">#</a></h4>
 <div class="doc">
 
@@ -886,9 +893,9 @@ bool operator &gt;=(other) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="operator">
+<div class="method"><h4 id="operator <=">
 <span class="show-code">Code</span>
-bool <strong>operator <=</strong>(other) <a class="anchor-link" href="#operator"
+bool <strong>operator <=</strong>(other) <a class="anchor-link" href="#operator <="
               title="Permalink to int64.operator <=">#</a></h4>
 <div class="doc">
 
@@ -1045,7 +1052,7 @@ int toInt() {
 <a href="../fixnum/int32.html">int32</a> <strong>toInt32</strong>() <a class="anchor-link" href="#toInt32"
               title="Permalink to int64.toInt32">#</a></h4>
 <div class="doc">
-<p>Returns an <a class="crossref" href="../fixnum/int32.html">int32</a> containing the low 32 bits of this <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a>.</p>
+<p>Returns an <a class="crossref" href="../fixnum/int32.html">int32</a> containing the low 32 bits of this <a class="crossref" href="../fixnum/int64.html#int64">int64</a>.</p>
 <pre class="source">
 int32 toInt32() {
   return new int32.fromInt(((_m &amp; 0x3ff) &lt;&lt; _BITS) | _l);
@@ -1105,7 +1112,7 @@ String toRadixString(int radix) {
 String <strong>toString</strong>() <a class="anchor-link" href="#toString"
               title="Permalink to int64.toString">#</a></h4>
 <div class="doc">
-<p>Returns the value of this <a class="crossref" href="../fixnum/int64.html#new:int64">int64</a> as a decimal <code>String</code>.</p>
+<p>Returns the value of this <a class="crossref" href="../fixnum/int64.html#int64">int64</a> as a decimal <code>String</code>.</p>
 <pre class="source">
 String toString() {
   int64 a = this;
@@ -1141,7 +1148,7 @@ String toString() {
         </div>
         
         <div class="footer">
-          <div>This page was generated at 2012-08-29 12:31:50.984</div>
+          <div>This page was generated at 2012-09-24 23:52:32.772</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>
