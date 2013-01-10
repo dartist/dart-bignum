@@ -1547,7 +1547,7 @@ class BigInteger {
   BigInteger operator /(BigInteger other) => divide(other);
   
   // Truncating division.
-  BigInteger operator ~/(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator ~/(BigInteger other) => divide(other);
   
   // The unary '-' operator.
   BigInteger operator -() => this.negate_op();
