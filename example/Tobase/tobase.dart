@@ -1,6 +1,6 @@
-#import('dart:html');
-#import('dart:math', prefix:"Mathx");
-#import('package:bignum/bignum.dart');
+import 'dart:html';
+import 'dart:math' as Mathx;
+import 'package:bignum/bignum.dart';
 
 InputElement number1Input;
 InputElement number2Input;

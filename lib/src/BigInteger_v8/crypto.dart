@@ -1,3 +1,4 @@
+part of bignum;
 
 class Arcfour {
   var i;

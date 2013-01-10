@@ -1,8 +1,8 @@
-#import("dart:html");
-#import('dart:math', prefix:"Mathx");
-#import('../../lib.dart');
-#import('../../packages/unittest/unittest.dart');
-#source('../data/powpowpow.dart');
+import "dart:html";
+import 'dart:math' as Mathx;
+import 'package:bignum/bignum.dart';
+import 'package:unittest/unittest.dart';
+part '../data/powpowpow.dart';
 
 appendText([s=""]) {
   query("#container").elements.add(new Element.html("<div>$s<br></div>"));

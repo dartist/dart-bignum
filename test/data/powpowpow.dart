@@ -1,3 +1,5 @@
+part of test_big_integer_v8;
+
 /*
  * (100^100)^100 as String in base 2, 10, 16
  */  

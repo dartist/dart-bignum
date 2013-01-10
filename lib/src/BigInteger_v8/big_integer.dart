@@ -1,3 +1,5 @@
+part of bignum;
+
 /*
  * Copyright (c) 2003-2005  Tom Wu
  * Copyright (c) 2012 Adam Singer (adam@solvr.io) 

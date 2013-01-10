@@ -1,9 +1,10 @@
-#import('package:unittest/unittest.dart');
-#import('dart:math', prefix:"Mathx");
-#import('package:bignum/bignum.dart');
-//#import('../packages/unittest/unittest.dart');
+library test_big_integer_v8;
 
-#source('data/powpowpow.dart');
+import 'package:unittest/unittest.dart';
+import 'dart:math' as Mathx;
+import 'package:bignum/bignum.dart';
+
+part 'data/powpowpow.dart';
 
 bool TEST_EXTRA_LARGE = false;
 bool TEST_PRIMES_HARD = false;

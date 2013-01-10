@@ -2,10 +2,12 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+part of fixnum;
+
 /**
  * A fixed-precision integer.
  */
-interface intx extends Comparable, Hashable {
+abstract class intx implements Comparable, Hashable {
 
   // Arithmetic operations.
   intx operator +(other);
@@ -46,7 +48,7 @@ interface intx extends Comparable, Hashable {
   bool isOdd();
   bool isZero();
 
-  int hashCode();
+  int hashCode;
 
   intx abs();
 

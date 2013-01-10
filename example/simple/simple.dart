@@ -1,4 +1,5 @@
-#import('package:bignum/bignum.dart');
+import 'package:bignum/bignum.dart';
+
 void main() {
   BigInteger x = new BigInteger("12341234123412341234");
   BigInteger y = new BigInteger("100");
