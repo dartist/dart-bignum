@@ -1,3 +1,5 @@
+library big_integer;
+
 import 'dart:math' as Math;
 
 const int AllBits = 4294967295;
