@@ -1,3 +1,7 @@
+library big_integer;
+
+import 'dart:math' as Math;
+
 const int AllBits = 4294967295;
 const int HiBitSet = 2147483648;
 const int DataSizeOf = 4;
@@ -5,10 +9,10 @@ const int DataSizeBits = 32;
 
 class DigitsArray {
   List<int> data;
-  int get count() => data.length;
+  int get count => data.length;
   int dataUsed;
-  bool get isZero() => dataUsed == 0 || (dataUsed == 1 && data[0] == 0); 
-  bool get isNegative() => (data[data.length - 1] & HiBitSet) == HiBitSet;
+  bool get isZero => dataUsed == 0 || (dataUsed == 1 && data[0] == 0); 
+  bool get isNegative => (data[data.length - 1] & HiBitSet) == HiBitSet;
   
   DigitsArray(int size) {
     Allocate(size, 0);
@@ -343,8 +347,8 @@ class BigInteger {
   }
   
   // Properties
-  bool get IsNegative() => this.m_digits.isNegative;
-  bool get IsZero() => this.m_digits.isZero;
+  bool get IsNegative => this.m_digits.isNegative;
+  bool get IsZero => this.m_digits.isZero;
   
   // Arithmetic operations.
   BigInteger operator +(BigInteger other) {  
@@ -369,7 +373,7 @@ class BigInteger {
   // Truncating division.
   BigInteger operator ~/(BigInteger other) { throw "Not Implemented"; }
   // The unary '-' operator.
-  BigInteger operator negate() { throw "Not Implemented"; }
+  BigInteger operator -() { throw "Not Implemented"; }
   BigInteger remainder(BigInteger other) { throw "Not Implemented"; }
 
   // Relational operations.

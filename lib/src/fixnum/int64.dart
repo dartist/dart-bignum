@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+part of fixnum;
+
 /**
  * An immutable 64-bit signed integer, in the range [-2^63, 2^63 - 1].
  * Arithmetic operations may overflow in order to maintain this range.
@@ -63,7 +65,7 @@ class int64 implements intx {
    * The maximum positive value attainable by an [int64], namely
    * 9,223,372,036,854,775,807.
    */
-  static int64 get MAX_VALUE() {
+  static int64 get MAX_VALUE {
     if (_MAX_VALUE == null) {
       _MAX_VALUE = new int64._bits(_MASK, _MASK, _MASK_2 >> 1);
     }
@@ -74,7 +76,7 @@ class int64 implements intx {
    * The minimum positive value attainable by an [int64], namely
    * -9,223,372,036,854,775,808.
    */
-  static int64 get MIN_VALUE() {
+  static int64 get MIN_VALUE {
     if (_MIN_VALUE == null) {
       _MIN_VALUE = new int64._bits(0, 0, _SIGN_BIT_VALUE);
     }
@@ -84,7 +86,7 @@ class int64 implements intx {
   /**
    * An [int64] constant equal to 0.
    */
-  static int64 get ZERO() {
+  static int64 get ZERO {
     if (_ZERO == null) {
       _ZERO = new int64();
     }
@@ -94,7 +96,7 @@ class int64 implements intx {
   /**
    * An [int64] constant equal to 1.
    */
-  static int64 get ONE() {
+  static int64 get ONE {
     if (_ONE == null) {
       _ONE = new int64._bits(1, 0, 0);
     }
@@ -104,7 +106,7 @@ class int64 implements intx {
   /**
    * An [int64] constant equal to 2.
    */
-  static int64 get TWO() {
+  static int64 get TWO {
     if (_TWO == null) {
       _TWO = new int64._bits(2, 0, 0);
     }
@@ -240,7 +242,7 @@ class int64 implements intx {
 
   int64 _promote(other) {
     if (other == null) {
-      throw new NullPointerException();
+      throw new ArgumentError("null");
     } else if (other is intx) {
       other = other.toInt64();
     } else if (other is int) {
@@ -420,7 +422,7 @@ class int64 implements intx {
 
   int64 operator <<(int n) {
     if (n < 0) {
-      throw new IllegalArgumentException("$n");
+      throw new ArgumentError("$n");
     }
     n &= 63;
 
@@ -444,7 +446,7 @@ class int64 implements intx {
 
   int64 operator >>(int n) {
     if (n < 0) {
-      throw new IllegalArgumentException("$n");
+      throw new ArgumentError("$n");
     }
     n &= 63;
 
@@ -485,7 +487,7 @@ class int64 implements intx {
 
   int64 shiftRightUnsigned(int n) {
     if (n < 0) {
-      throw new IllegalArgumentException("$n");
+      throw new ArgumentError("$n");
     }
     n &= 63;
 
@@ -571,7 +573,7 @@ class int64 implements intx {
   /**
    * Returns a hash code based on all the bits of this [int64].
    */
-  int hashCode() {
+  int get hashCode {
     int bottom = ((_m & 0x3ff) << _BITS) | _l;
     int top = (_h << 12) | ((_m >> 10) & 0xfff);
     return bottom ^ top;
@@ -765,7 +767,7 @@ class int64 implements intx {
   // without loss of precision.
   static bool _haveBigIntsCached = null;
 
-  static bool get _haveBigInts() {
+  static bool get _haveBigInts {
     if (_haveBigIntsCached == null) {
       var x = 9007199254740992;
       // Defeat compile-time constant folding.

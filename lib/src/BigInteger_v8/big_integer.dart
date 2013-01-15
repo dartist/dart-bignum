@@ -1,3 +1,5 @@
+part of bignum;
+
 /*
  * Copyright (c) 2003-2005  Tom Wu
  * Copyright (c) 2012 Adam Singer (adam@solvr.io) 
@@ -226,6 +228,24 @@ class NullExp {
 
 
 // typedef AmplitudeModulation 
+/**
+ * This class wraps a Dart List and provides a JS-like behaviour.
+ * i.e. Storing an out-of-bounds element grows the list automatically.
+ */
+class JSArray<T> {
+  operator [](var index) {
+    return data[index];
+  }
+
+  operator []=(var index, var value) {
+    if (index > data.length - 1) {
+      data.length = index + 1;
+    }
+    return data[index] = value;
+  }
+
+  List<T> data = new List<T>();
+}
 
 /**
  * Basic dart [BigInteger] class. Implementation works across
@@ -265,14 +285,10 @@ class BigInteger {
   int canary = 0xdeadbeefcafe;
   bool _j_lm; 
   
-  /** Internal data structure of [BigInteger] implementation.
-   * Holds the bits in a [Map] that is keyed by its integer values
-   * that represent its location in an Array type structure. While
-   * This is not the most optimal implementation, it was done to
-   * support a rapid implementation. This will be replaced at a later
-   * time for a [List] data structure.
+  /**
+   * Internal data structure of [BigInteger] implementation.
    */ 
-  Map array; // TODO: create an array implementation that can handle out of bounds issues. 
+  JSArray array; 
   
   Function am;
   
@@ -322,8 +338,10 @@ class BigInteger {
     // Setup all the global scope js code here
     _setupDigitConversions();
     _lplim = (1<<26)~/_lowprimes[_lowprimes.length-1];
+    //am3 works better on x64, while am3 is faster on 32-bit platforms.
+    //_setupEngine(_am4, 26);
     _setupEngine(_am3, 28);
-    this.array = new Map();
+    this.array = new JSArray<int>();
     
     if (a != null) {
       if (a is int) {
@@ -355,6 +373,22 @@ class BigInteger {
       l = xl*l+((m&0x3fff)<<14)+w_array[j]+c;
       c = (l>>28)+(m>>14)+xh*h;
       w_array[j++] = l&0xfffffff;
+    }
+    return c;
+  }
+
+  _am4(i,x,w,j,c,n) {
+    var this_array = this.array;
+    var w_array    = w.array;
+
+    var xl = x.toInt()&0x1fff, xh = x.toInt()>>13;
+    while(--n >= 0) {
+      var l = this_array[i]&0x1fff;
+      var h = this_array[i++]>>13;
+      var m = xh*l+h*xl;
+      l = xl*l+((m&0x1fff)<<13)+w_array[j]+c;
+      c = (l>>26)+(m>>13)+xh*h;
+      w_array[j++] = l&0x3ffffff;
     }
     return c;
   }
@@ -1181,7 +1215,7 @@ class BigInteger {
   /** true iff nth bit is set */
   testBit(n) {
     var this_array = this.array;
-    var j = (n/BI_DB).floor();
+    int j = n~/BI_DB;
     if(j >= this.t) return(this.s!=0);
     return((this_array[j]&(1<<(n%BI_DB)))!=0);
   }
@@ -1545,7 +1579,7 @@ class BigInteger {
   BigInteger operator /(BigInteger other) => divide(other);
   
   // Truncating division.
-  BigInteger operator ~/(BigInteger other) { throw "Not Implemented"; }
+  BigInteger operator ~/(BigInteger other) => divide(other);
   
   // The unary '-' operator.
   BigInteger operator -() => this.negate_op();

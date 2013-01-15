@@ -5,4 +5,3 @@ author: Adam Singer <adam@solvr.io>
 homepage: https://github.com/Solvr/dart-bignum
 dependencies:
   unittest:
-    sdk: unittest

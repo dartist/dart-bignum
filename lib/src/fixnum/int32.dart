@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+part of fixnum;
+
 /**
  * An immutable 32-bit signed integer, in the range [-2^31, 2^31 - 1].
  * Arithmetic operations may overflow in order to maintain this range.
@@ -140,7 +142,7 @@ class int32 implements intx {
   // will be truncated.
   int _convert(other) {
     if (other == null) {
-      throw new NullPointerException();
+      throw new ArgumentError("null");
     } else if (other is intx) {
       return other.toInt32()._i;
     } else if (other is int) {
@@ -238,7 +240,7 @@ class int32 implements intx {
 
   int32 operator <<(int n) {
     if (n < 0) {
-      throw new IllegalArgumentException("$n");
+      throw new ArgumentError("$n");
     }
     n &= 31;
     return new int32.fromInt(_i << n);
@@ -246,7 +248,7 @@ class int32 implements intx {
 
   int32 operator >>(int n) {
     if (n < 0) {
-      throw new IllegalArgumentException("$n");
+      throw new ArgumentError("$n");
     }
     n &= 31;
     int value;
@@ -260,7 +262,7 @@ class int32 implements intx {
 
   int32 shiftRightUnsigned(int n) {
     if (n < 0) {
-      throw new IllegalArgumentException("$n");
+      throw new ArgumentError("$n");
     }
     n &= 31;
     int value;
@@ -328,7 +330,7 @@ class int32 implements intx {
   bool isOdd() => (_i & 0x1) == 1;
   bool isZero() => _i == 0;
 
-  int hashCode() => _i;
+  int get hashCode => _i;
 
   int32 abs() => _i < 0 ? new int32.fromInt(-_i) : this;
 

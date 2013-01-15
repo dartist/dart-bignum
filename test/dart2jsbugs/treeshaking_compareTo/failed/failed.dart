@@ -1,7 +1,7 @@
-#import("dart:html");
-#import('dart:math', prefix:"Mathx");
-#import('../../../../lib.dart');
-// #import('package:dart-bignum/lib.dart');
+import "dart:html";
+import 'dart:math' as Mathx;
+import 'package:bignum/bignum.dart';
+
 appendText([s=""]) {
   query("#container").elements.add(new Element.html("<div>$s<br></div>"));
 }

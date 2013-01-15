@@ -9,11 +9,11 @@ Create a Dart project and add a **pubspec.yaml** file to it
 
 ```
 dependencies:
-  dart-bignum:
-    git: git://github.com/Solvr/dart-bignum.git
+  bignum:
+    git: git://github.com/financeCoding/dart-bignum.git
 ```
 
-and run **pub install** to install **dart-bignum** (including its dependencies). Now add import
+and run **pub install** to install **bignum** (including its dependencies). Now add import
 
 ```
 #import('package:bignum/bignum.dart');
@@ -21,7 +21,7 @@ and run **pub install** to install **dart-bignum** (including its dependencies).
 
 ### Example
 ```
-#import('package:bignum/bignum.dart');
+import 'package:bignum/bignum.dart';
 void main() {
   BigInteger x = new BigInteger("12341234123412341234");
   BigInteger y = new BigInteger("100");
@@ -48,7 +48,7 @@ dartdoc generated documentation can be found here [solvr:bignum](http://solvr.gi
 Currently few known bugs exist while compiling from dart2js. One is working with bitwise operators, the internal implementation of shift operators with dart2js does not handle the same way as the VM. Most of this code was ported from v8 [benchmark suite](http://goo.gl/jTEfH). [Tom Wu](http://www-cs-students.stanford.edu/~tjw/jsbn/) is to thank for the core javascript implementation and the v8 team for optimizations on different javascript virtual machines. 
 
 ### Bugs & Testing
-Please feel free to add [issues](https://github.com/Solvr/dart-bignum/issues) on github issue tracker, we would like to provide a solid library for the community to use. 
+Please feel free to add [issues](https://github.com/financeCoding/dart-bignum/issues) on github issue tracker, we would like to provide a solid library for the community to use. 
 
 ### References
 
