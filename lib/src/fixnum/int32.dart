@@ -81,7 +81,7 @@ class int32 implements intx {
   /**
    * Parses a decimal [String] and returns an [int32].
    */
-  static int32 parseInt(String s) => new int32.fromInt(Mathx.parseInt(s));
+  static int32 parseInt(String s) => new int32.fromInt(int.parse(s));
 
   /**
    * Parses a hexadecimal [String] and returns an [int32].
@@ -338,7 +338,7 @@ class int32 implements intx {
   int numberOfTrailingZeros() => _numberOfTrailingZeros(_i);
 
   List<int> toBytes() {
-    List<int> result = new List<int>(4);
+    List<int> result = new List<int>.fixedLength(4);
     result[0] = _i & 0xff;
     result[1] = (_i >> 8) & 0xff;
     result[2] = (_i >> 16) & 0xff;
