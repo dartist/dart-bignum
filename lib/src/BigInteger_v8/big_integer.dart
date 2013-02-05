@@ -289,7 +289,7 @@ class BigInteger {
   /**
    * Internal data structure of [BigInteger] implementation.
    */
-  JSArray array;
+  JSArray<int> array;
 
   Function am;
 
@@ -1045,11 +1045,12 @@ class BigInteger {
 //  }
 
   /**
-   * convert to bigendian byte array [Map]
+   * convert to bigendian byte array [List]
    */
-  Map toByteArray() {
+  List<int> toByteArray() {
     var this_array = this.array;
-    var i = this.t, r = new Map();
+    var i = this.t;
+    JSArray<int> r = new JSArray<int>();
     r[0] = this.s;
     var p = BI_DB-(i*BI_DB)%8, d, k = 0;
     if(i-- > 0) {
@@ -1070,7 +1071,7 @@ class BigInteger {
         if(k > 0 || d != this.s) r[k++] = d;
       }
     }
-    return r;
+    return r.data;
   }
 
   bool equals(BigInteger a) {

@@ -209,7 +209,7 @@ class RSAKey {
 
   // Undo PKCS#1 (type 2, random) padding and, if valid, return the plaintext
   pkcs1unpad2(d,n) {
-    var b = d.toByteArray();
+    List<int> b = d.toByteArray();
     var i = 0;
     while(i < b.length && b[i] == 0) ++i;
     if(b.length-i != n-1 || b[i] != 2) {
