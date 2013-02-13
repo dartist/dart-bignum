@@ -9,12 +9,13 @@ class Arcfour {
     this.j = 0;
     this.S = new Map();
   }
-  
+
 // Initialize arcfour context from key, an array of ints, each from [0..255]
   init(key) {
     var i, j, t;
-    for(i = 0; i < 256; ++i)
+    for(i = 0; i < 256; ++i) {
       this.S[i] = i;
+    }
     j = 0;
     for(i = 0; i < 256; ++i) {
       j = (j + this.S[i] + key[i % key.length]) & 255;
@@ -25,7 +26,7 @@ class Arcfour {
     this.i = 0;
     this.j = 0;
   }
-  
+
   next() {
     var t;
     this.i = (this.i + 1) & 255;
@@ -48,22 +49,22 @@ class SecureRandom {
   SecureRandom() {
     rng = new Mathx.Random();
     rng_pool_init();
-    
+
   }
-  
+
   // Pool size must be a multiple of 4 and greater than 32.
   // An array of bytes the size of the pool will be passed to init()
   var rng_psize = 256;
   // Random number generator - requires a PRNG backend, e.g. prng4.js
-  
+
   // For best results, put code like
   // <body onClick='rng_seed_time();' onKeyPress='rng_seed_time();'>
   // in your main HTML document.
-  
+
   var rng_state;
   var rng_pool;
   var rng_pptr;
-  
+
   // Mix in a 32-bit integer into the pool
   rng_seed_int(x) {
     rng_pool[rng_pptr++] ^= x & 255;
@@ -72,15 +73,15 @@ class SecureRandom {
     rng_pool[rng_pptr++] ^= (x >> 24) & 255;
     if(rng_pptr >= rng_psize) rng_pptr -= rng_psize;
   }
-  
+
   // Mix in the current time (w/milliseconds) into the pool
   rng_seed_time() {
     // Use pre-computed date to avoid making the benchmark
     // results dependent on the current date.
     rng_seed_int(1122926989487);
   }
-  
-  
+
+
   // TODO: this must get called at some point
   rng_pool_init() {
     // Initialize the pool with junk if needed.
@@ -100,22 +101,23 @@ class SecureRandom {
       //rng_seed_int(window.screenY);
     }
   }
-  
-  
+
+
   rng_get_byte() {
     if(rng_state == null) {
       rng_seed_time();
       rng_state = prng_newstate();
       rng_state.init(rng_pool);
-      for(rng_pptr = 0; rng_pptr < rng_pool.length; ++rng_pptr)
+      for(rng_pptr = 0; rng_pptr < rng_pool.length; ++rng_pptr) {
         rng_pool[rng_pptr] = 0;
+      }
       rng_pptr = 0;
       //rng_pool = null;
     }
     // TODO: allow reseeding after first request
     return rng_state.next();
   }
-  
+
   //rng_get_bytes(ba) {
   nextBytes(ba) {
     var i;
@@ -159,7 +161,7 @@ class RSAKey {
   var dmp1;
   var dmq1;
   var coeff;
-  
+
   // "empty" RSA key constructor
   RSAKey() {
     this.n = null;
@@ -171,7 +173,7 @@ class RSAKey {
     this.dmq1 = null;
     this.coeff = null;
   }
-  
+
   // Set the public key fields N and e from hex strings
   setPublic(N,E) {
     if(N != null && E != null && N.length > 0 && E.length > 0) {
@@ -180,15 +182,16 @@ class RSAKey {
       this.e = Fixnum.int32.parseHex(E).toInt();
       //Mathx.parseInt("A");
     }
-    else
+    else {
       print("Invalid RSA public key");
+    }
   }
-  
+
   // Perform raw public operation on "x": return x^e (mod n)
   doPublic(x) {
     return x.modPowInt(this.e, this.n);
   }
-  
+
   // Return the PKCS#1 RSA encryption of "text" as an even-length hex string
   encrypt(text) {
     var m = pkcs1pad2(text,(this.n.bitLength()+7)>>3);
@@ -196,21 +199,22 @@ class RSAKey {
     var c = this.doPublic(m);
     if(c == null) return null;
     var h = c.toString(16);
-    if((h.length & 1) == 0) { 
-        return h;  
-      } else { 
-        //return "0" + h; 
-        return "0${h}"; 
+    if((h.length & 1) == 0) {
+        return h;
+      } else {
+        //return "0" + h;
+        return "0${h}";
       }
   }
-  
+
   // Undo PKCS#1 (type 2, random) padding and, if valid, return the plaintext
   pkcs1unpad2(d,n) {
-    var b = d.toByteArray();
+    List<int> b = d.toByteArray();
     var i = 0;
     while(i < b.length && b[i] == 0) ++i;
-    if(b.length-i != n-1 || b[i] != 2)
+    if(b.length-i != n-1 || b[i] != 2) {
       return null;
+    }
     ++i;
     while(b[i] != 0)
       if(++i >= b.length) return null;
@@ -222,7 +226,7 @@ class RSAKey {
       //ret += String.fromCharCode(b[i]);
     return ret;
   }
-  
+
   // Set the private key fields N, e, and d from hex strings
   setPrivate(N,E,D) {
     if(N != null && E != null && N.length > 0 && E.length > 0) {
@@ -231,10 +235,11 @@ class RSAKey {
       this.e = Fixnum.int32.parseHex(E).toInt();
       this.d = parseBigInt(D,16);
     }
-    else
+    else {
       print("Invalid RSA private key");
+    }
   }
-  
+
   // Set the private key fields N, e, d and CRT params from hex strings
   setPrivateEx(N,E,D,P,Q,DP,DQ,C) {
     if(N != null && E != null && N.length > 0 && E.length > 0) {
@@ -248,10 +253,11 @@ class RSAKey {
       this.dmq1 = parseBigInt(DQ,16);
       this.coeff = parseBigInt(C,16);
     }
-    else
+    else {
       print("Invalid RSA private key");
+    }
   }
-  
+
   // Generate a new random private key B bits long, using public expt E
   generate(B,E) {
     var rng = new SecureRandom();
@@ -286,21 +292,23 @@ class RSAKey {
       }
     }
   }
-  
+
   // Perform raw private operation on "x": return x^d (mod n)
   doPrivate(x) {
-    if(this.p == null || this.q == null)
+    if(this.p == null || this.q == null) {
       return x.modPow(this.d, this.n);
-  
+    }
+
     // TODO: re-calculate any missing CRT params
     var xp = x.mod(this.p).modPow(this.dmp1, this.p);
     var xq = x.mod(this.q).modPow(this.dmq1, this.q);
-  
-    while(xp.compareTo(xq) < 0)
+
+    while(xp.compareTo(xq) < 0) {
       xp = xp.add(this.p);
+    }
     return xp.subtract(xq).multiply(this.coeff).mod(this.p).multiply(this.q).add(xq);
   }
-  
+
   // Return the PKCS#1 RSA decryption of "ctext".
   // "ctext" is an even-length hex string and the output is a plain string.
   decrypt(ctext) {
@@ -309,7 +317,7 @@ class RSAKey {
     if(m == null) return null;
     return pkcs1unpad2(m, (this.n.bitLength()+7)>>3);
   }
-  
+
 }
 
 

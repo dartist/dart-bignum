@@ -3,7 +3,7 @@ import 'dart:math' as Mathx;
 import 'package:bignum/bignum.dart';
 
 appendText([s=""]) {
-  query("#container").elements.add(new Element.html("<div>$s<br></div>"));
+  query("#container").children.add(new Element.html("<div>$s<br></div>"));
 }
 
 void main() {

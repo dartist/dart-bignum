@@ -7,7 +7,7 @@ part of fixnum;
 /**
  * A fixed-precision integer.
  */
-abstract class intx implements Comparable, Hashable {
+abstract class intx implements Comparable {
 
   // Arithmetic operations.
   intx operator +(other);
