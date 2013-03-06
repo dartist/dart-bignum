@@ -1,4 +1,4 @@
-name: dart-bignum-sample-fail
+name: dart_bignum_sample_fail
 description: Big Number fail
 version: 0.0.1
 dependencies:
