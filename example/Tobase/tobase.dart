@@ -21,7 +21,7 @@ void main() {
   DivElement conatiner = query('#container');
   var text = query('#text');
 
-  buttonElement.on.click.add((_)=>calculateWithBigInteger());
+  buttonElement.onClick.listen((_)=>calculateWithBigInteger());
 
   BigInteger n1 = new BigInteger(5);
   BigInteger n2 = new BigInteger(5);
