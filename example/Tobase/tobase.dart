@@ -28,13 +28,13 @@ void main() {
   var result = n1.add(n2);
   var str = result.toString(10);
   print(str);
-  query('#text').innerHTML = str;
+  query('#text').innerHtml = str;
 }
 
 calculateWithBigInteger() {
-  query('#text').innerHTML = "";
+  query('#text').innerHtml = "";
 //  try {
-    query('#text').innerHTML = "calculating with bignum";
+    query('#text').innerHtml = "calculating with bignum";
     int base = int.parse(baseInput.value).toInt();
     String n1 = number1Input.value;
     String n2 = number2Input.value;
@@ -61,27 +61,27 @@ calculateWithBigInteger() {
 //    print("z.signum() = ${z.signum()}");
     StringBuffer sb = new StringBuffer();
 
-    sb.add("${b1 + b2} = ${b1} + ${b2}<br>");
-    sb.add("${b1 - b2} = ${b1} - ${b2}<br>");
-    sb.add("${b1 * b2} = ${b1} * ${b2}<br>");
+    sb.write("${b1 + b2} = ${b1} + ${b2}<br>");
+    sb.write("${b1 - b2} = ${b1} - ${b2}<br>");
+    sb.write("${b1 * b2} = ${b1} * ${b2}<br>");
     if (b2 != BigInteger.ZERO) {
-      sb.add("${b1 % b2} = ${b1} % ${b2}<br>");
-      sb.add("${b1 / b2} = ${b1} / ${b2}<br>");
+      sb.write("${b1 % b2} = ${b1} % ${b2}<br>");
+      sb.write("${b1 / b2} = ${b1} / ${b2}<br>");
     }
 
-    sb.add("${-b1} = -${b1}<br>");
-    sb.add("${b1 < b2} = ${b1} < ${b2}<br>");
-    sb.add("${b1 <= b2} = ${b1} <= ${b2}<br>");
-    sb.add("${b1 > b2} = ${b1} > ${b2}<br>");
-    sb.add("${b1 >= b2} = ${b1} >= ${b2}<br>");
-    sb.add("${b1 == b2} = ${b1} == ${b2}<br>");
-    sb.add("${b1 & b2} = ${b1} & ${b2}<br>");
-    sb.add("${b1 | b2} = ${b1} | ${b2}<br>");
-    sb.add("${b1 ^ b2} = ${b1} ^ ${b2}<br>");
-    sb.add("${~b1} = ~${b1}<br>");
-    sb.add("${b1 << 5} = ${b1} << 5<br>");
-    sb.add("${b1 >> 5} = ${b1} >> 5<br>");
-    query('#text').innerHTML = sb.toString();
+    sb.write("${-b1} = -${b1}<br>");
+    sb.write("${b1 < b2} = ${b1} < ${b2}<br>");
+    sb.write("${b1 <= b2} = ${b1} <= ${b2}<br>");
+    sb.write("${b1 > b2} = ${b1} > ${b2}<br>");
+    sb.write("${b1 >= b2} = ${b1} >= ${b2}<br>");
+    sb.write("${b1 == b2} = ${b1} == ${b2}<br>");
+    sb.write("${b1 & b2} = ${b1} & ${b2}<br>");
+    sb.write("${b1 | b2} = ${b1} | ${b2}<br>");
+    sb.write("${b1 ^ b2} = ${b1} ^ ${b2}<br>");
+    sb.write("${~b1} = ~${b1}<br>");
+    sb.write("${b1 << 5} = ${b1} << 5<br>");
+    sb.write("${b1 >> 5} = ${b1} >> 5<br>");
+    query('#text').innerHtml = sb.toString();
 
 //  } catch (ex) {
 //    query('#text').innerHTML = "Not able to calculate ${ex}";

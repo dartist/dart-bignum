@@ -228,7 +228,7 @@ class BigInteger {
     m_digits = new DigitsArray.withUsed(1, 1);
   }
   BigInteger.fromInt(int number) {
-    m_digits = new DigitsArray.withUsed((8 / DataSizeOf).toInt() + 1, 0);
+    m_digits = new DigitsArray.withUsed(8 ~/ DataSizeOf + 1, 0);
     while (number != 0 && m_digits.dataUsed < m_digits.count)
     {
       m_digits[m_digits.dataUsed] = number & AllBits;
@@ -273,7 +273,7 @@ class BigInteger {
       throw "Argument out of range length";
     }
 
-    int estSize = (length / 4).toInt();
+    int estSize = length ~/ 4;
     int leftOver = length & 3;
     if (leftOver != 0)
     {
@@ -316,14 +316,14 @@ class BigInteger {
 
     for (int idx = digits.length - 1; idx >= nDigits ; idx--)
     {
-      int d = (digits[idx]).charCodeAt(0);
-      if (d >= '0'.charCodeAt(0) && d <= '9'.charCodeAt(0))
+      int d = (digits[idx]).codeUnitAt(0);
+      if (d >= '0'.codeUnitAt(0) && d <= '9'.codeUnitAt(0))
       {
-        d -= '0'.charCodeAt(0);
+        d -= '0'.codeUnitAt(0);
       }
-      else if (d >= 'A'.charCodeAt(0) && d <= 'Z'.charCodeAt(0))
+      else if (d >= 'A'.codeUnitAt(0) && d <= 'Z'.codeUnitAt(0))
       {
-        d = (d - 'A'.charCodeAt(0)) + 10;
+        d = (d - 'A'.codeUnitAt(0)) + 10;
       }
       else
       {

@@ -420,11 +420,11 @@ class BigInteger {
     BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
     BI_RC = new Map();
     int rr, vv;
-    rr = "0".charCodeAt(0);
+    rr = "0".codeUnitAt(0);
     for(vv = 0; vv <= 9; ++vv) BI_RC[rr++] = vv;
-    rr = "a".charCodeAt(0);
+    rr = "a".codeUnitAt(0);
     for(vv = 10; vv < 36; ++vv) BI_RC[rr++] = vv;
-    rr = "A".charCodeAt(0);
+    rr = "A".codeUnitAt(0);
     for(vv = 10; vv < 36; ++vv) BI_RC[rr++] = vv;
   }
 
@@ -433,7 +433,7 @@ class BigInteger {
   }
 
   _intAt(s,i) {
-    var c = BI_RC[s.charCodeAt(i)];
+    var c = BI_RC[s.codeUnitAt(i)];
     return (c==null)?-1:c;
   }
 
