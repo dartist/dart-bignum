@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>solvr:bignum Library / Dart Documentation</title>
+        <title>bignum Library / Dart Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="styles.css">
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="favicon.ico">
         
         </head>
-        <body data-library="solvr:bignum">
+        <body data-library="bignum">
         <div class="page">
         <div class="header">
           <a href="index.html"><div class="logo"></div></a>
           <a href="index.html">Dart Documentation</a>
-         &rsaquo; <a href="solvr_bignum.html">solvr:bignum</a>        <div id="search-box">
+         &rsaquo; <a href="bignum.html">bignum</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -26,120 +26,125 @@
         
 </div>
 <div class="content">
-<h2><strong>solvr:bignum</strong> library</h2>
-<div class="doc"></div>
-<h3>Methods</h3>
-<div class="method"><h4 id="parseBigInt">
-<span class="show-code">Code</span>
-<strong>parseBigInt</strong>(str, r) <a class="anchor-link" href="#parseBigInt"
-              title="Permalink to parseBigInt">#</a></h4>
+<h2><strong>bignum</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="pkcs1pad2">
+<button class="show-code">Code</button>
+<strong>pkcs1pad2</strong>(s, n) <a class="anchor-link" href="#pkcs1pad2"
+              title="Permalink to pkcs1pad2">#</a></h4>
 <div class="doc">
-
 <pre class="source">
-parseBigInt(str,r) {
-  return new BigInteger(str,r);
+pkcs1pad2(s,n) {
+ if(n &lt; s.length + 11) {
+   print("Message too long for RSA");
+   return null;
+ }
+ var ba = new Map();
+ var i = s.length - 1;
+ while(i &gt;= 0 &amp;&amp; n &gt; 0) ba[--n] = s.codeUnitAt(i--);
+ ba[--n] = 0;
+ var rng = new SecureRandom();
+ var x = new Map();
+ while(n &gt; 2) { // random non-zero pad
+   x[0] = 0;
+   while(x[0] == 0) rng.nextBytes(x);
+   ba[--n] = x[0];
+ }
+ ba[--n] = 2;
+ ba[--n] = 0;
+ return new BigInteger(ba);
 }
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="pkcs1pad2">
-<span class="show-code">Code</span>
-<strong>pkcs1pad2</strong>(s, n) <a class="anchor-link" href="#pkcs1pad2"
-              title="Permalink to pkcs1pad2">#</a></h4>
+<div class="method"><h4 id="parseBigInt">
+<button class="show-code">Code</button>
+<strong>parseBigInt</strong>(str, r) <a class="anchor-link" href="#parseBigInt"
+              title="Permalink to parseBigInt">#</a></h4>
 <div class="doc">
-
 <pre class="source">
-pkcs1pad2(s,n) {
-  if(n &lt; s.length + 11) {
-    print("Message too long for RSA");
-    return null;
-  }
-  var ba = new Map();
-  var i = s.length - 1;
-  while(i &gt;= 0 &amp;&amp; n &gt; 0) ba[--n] = s.charCodeAt(i--);
-  ba[--n] = 0;
-  var rng = new SecureRandom();
-  var x = new Map();
-  while(n &gt; 2) { // random non-zero pad
-    x[0] = 0;
-    while(x[0] == 0) rng.nextBytes(x);
-    ba[--n] = x[0];
-  }
-  ba[--n] = 2;
-  ba[--n] = 0;
-  return new BigInteger(ba);
+parseBigInt(str,r) {
+ return new BigInteger(str,r);
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="prng_newstate">
-<span class="show-code">Code</span>
+<button class="show-code">Code</button>
 <strong>prng_newstate</strong>() <a class="anchor-link" href="#prng_newstate"
               title="Permalink to prng_newstate">#</a></h4>
 <div class="doc">
-
 <pre class="source">
 prng_newstate() {
-  return new Arcfour();
+ return new Arcfour();
 }
 </pre>
 </div>
 </div>
+</div>
+<div>
 <h3>Classes</h3>
           <div class="type">
           <h4>
-            <a href="solvr_bignum/Arcfour.html"><strong>Arcfour</strong></a>
+            <a href="bignum/Arcfour.html"><strong>Arcfour</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="solvr_bignum/Barrett.html"><strong>Barrett</strong></a>
+            <a href="bignum/Barrett.html"><strong>Barrett</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="solvr_bignum/BigInteger.html"><strong>BigInteger</strong></a>
+            <a href="bignum/BigInteger.html"><strong>BigInteger</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="solvr_bignum/Classic.html"><strong>Classic</strong></a>
+            <a href="bignum/Classic.html"><strong>Classic</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="solvr_bignum/Montgomery.html"><strong>Montgomery</strong></a>
+            <a href="bignum/JSArray.html"><strong>JSArray&lt;T&gt;</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="solvr_bignum/NullExp.html"><strong>NullExp</strong></a>
+            <a href="bignum/Montgomery.html"><strong>Montgomery</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="solvr_bignum/RSAKey.html"><strong>RSAKey</strong></a>
+            <a href="bignum/NullExp.html"><strong>NullExp</strong></a>
           </h4>
           </div>
           
           <div class="type">
           <h4>
-            <a href="solvr_bignum/SecureRandom.html"><strong>SecureRandom</strong></a>
+            <a href="bignum/RSAKey.html"><strong>RSAKey</strong></a>
           </h4>
           </div>
           
+          <div class="type">
+          <h4>
+            <a href="bignum/SecureRandom.html"><strong>SecureRandom</strong></a>
+          </h4>
+          </div>
+          
+</div>
         </div>
         <div class="clear"></div>
         </div>
-        
         <div class="footer">
-          <div>This page was generated at 2012-09-24 23:55:19.235</div>
+          <div>This page was generated at 2013-03-06 14:07:29.142</div>
         </div>
         <script async src="client-live-nav.js"></script>
         </body></html>

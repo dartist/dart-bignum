@@ -1,0 +1,1 @@
+{"name":"dart:","dependencies":[],"description":"Dart System Libraries","libraries":[{"name":"file:///auto/homes/drt24/git/upstreams/dart-bignum/lib/bignum.dart","refId":"bignum"},{"name":"file:///auto/homes/drt24/git/upstreams/dart-bignum/lib/src/fixnum/fixnum.dart","refId":"fixnum"}],"revision":"0"}
