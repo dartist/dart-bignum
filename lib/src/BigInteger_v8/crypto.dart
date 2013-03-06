@@ -138,7 +138,7 @@ pkcs1pad2(s,n) {
   }
   var ba = new Map();
   var i = s.length - 1;
-  while(i >= 0 && n > 0) ba[--n] = s.charCodeAt(i--);
+  while(i >= 0 && n > 0) ba[--n] = s.codeUnitAt(i--);
   ba[--n] = 0;
   var rng = new SecureRandom();
   var x = new Map();

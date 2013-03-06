@@ -1,0 +1,543 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>RSAKey class / bignum Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="bignum" data-type="RSAKey">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../bignum.html">bignum</a> &rsaquo; <a href="../bignum/RSAKey.html">RSAKey</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>RSAKey</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class RSAKey {
+ var n;
+ var e;
+ var d;
+ var p;
+ var q;
+ var dmp1;
+ var dmq1;
+ var coeff;
+
+ // "empty" RSA key constructor
+ RSAKey() {
+   this.n = null;
+   this.e = 0;
+   this.d = null;
+   this.p = null;
+   this.q = null;
+   this.dmp1 = null;
+   this.dmq1 = null;
+   this.coeff = null;
+ }
+
+ // Set the public key fields N and e from hex strings
+ setPublic(N,E) {
+   if(N != null &amp;&amp; E != null &amp;&amp; N.length &gt; 0 &amp;&amp; E.length &gt; 0) {
+     this.n = parseBigInt(N,16);
+     //this.e = parseInt(E,16);
+     this.e = Fixnum.int32.parseHex(E).toInt();
+     //Mathx.parseInt("A");
+   }
+   else {
+     print("Invalid RSA public key");
+   }
+ }
+
+ // Perform raw public operation on "x": return x^e (mod n)
+ doPublic(x) {
+   return x.modPowInt(this.e, this.n);
+ }
+
+ // Return the PKCS#1 RSA encryption of "text" as an even-length hex string
+ encrypt(text) {
+   var m = pkcs1pad2(text,(this.n.bitLength()+7)&gt;&gt;3);
+   if(m == null) return null;
+   var c = this.doPublic(m);
+   if(c == null) return null;
+   var h = c.toString(16);
+   if((h.length &amp; 1) == 0) {
+       return h;
+     } else {
+       //return "0" + h;
+       return "0${h}";
+     }
+ }
+
+ // Undo PKCS#1 (type 2, random) padding and, if valid, return the plaintext
+ pkcs1unpad2(d,n) {
+   List&lt;int&gt; b = d.toByteArray();
+   var i = 0;
+   while(i &lt; b.length &amp;&amp; b[i] == 0) ++i;
+   if(b.length-i != n-1 || b[i] != 2) {
+     return null;
+   }
+   ++i;
+   while(b[i] != 0)
+     if(++i &gt;= b.length) return null;
+   var ret = "";
+   while(++i &lt; b.length) {
+     var c = new String.fromCharCodes([b[i]]);
+     ret = "$ret${c}";
+   }
+     //ret += String.fromCharCode(b[i]);
+   return ret;
+ }
+
+ // Set the private key fields N, e, and d from hex strings
+ setPrivate(N,E,D) {
+   if(N != null &amp;&amp; E != null &amp;&amp; N.length &gt; 0 &amp;&amp; E.length &gt; 0) {
+     this.n = parseBigInt(N,16);
+     //this.e = parseInt(E,16);
+     this.e = Fixnum.int32.parseHex(E).toInt();
+     this.d = parseBigInt(D,16);
+   }
+   else {
+     print("Invalid RSA private key");
+   }
+ }
+
+ // Set the private key fields N, e, d and CRT params from hex strings
+ setPrivateEx(N,E,D,P,Q,DP,DQ,C) {
+   if(N != null &amp;&amp; E != null &amp;&amp; N.length &gt; 0 &amp;&amp; E.length &gt; 0) {
+     this.n = parseBigInt(N,16);
+     //this.e = parseInt(E,16);
+     this.e = Fixnum.int32.parseHex(E).toInt();
+     this.d = parseBigInt(D,16);
+     this.p = parseBigInt(P,16);
+     this.q = parseBigInt(Q,16);
+     this.dmp1 = parseBigInt(DP,16);
+     this.dmq1 = parseBigInt(DQ,16);
+     this.coeff = parseBigInt(C,16);
+   }
+   else {
+     print("Invalid RSA private key");
+   }
+ }
+
+ // Generate a new random private key B bits long, using public expt E
+ generate(B,E) {
+   var rng = new SecureRandom();
+   var qs = B&gt;&gt;1;
+   //this.e = parseInt(E,16);
+   this.e = Fixnum.int32.parseHex(E).toInt();
+   var ee = new BigInteger(E,16);
+   for(;;) {
+     for(;;) {
+       this.p = new BigInteger(B-qs,1,rng);
+       if(this.p.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 &amp;&amp; this.p.isProbablePrime(10)) break;
+     }
+     for(;;) {
+       this.q = new BigInteger(qs,1,rng);
+       if(this.q.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 &amp;&amp; this.q.isProbablePrime(10)) break;
+     }
+     if(this.p.compareTo(this.q) &lt;= 0) {
+       var t = this.p;
+       this.p = this.q;
+       this.q = t;
+     }
+     var p1 = this.p.subtract(BigInteger.ONE);
+     var q1 = this.q.subtract(BigInteger.ONE);
+     var phi = p1.multiply(q1);
+     if(phi.gcd(ee).compareTo(BigInteger.ONE) == 0) {
+       this.n = this.p.multiply(this.q);
+       this.d = ee.modInverse(phi);
+       this.dmp1 = this.d.mod(p1);
+       this.dmq1 = this.d.mod(q1);
+       this.coeff = this.q.modInverse(this.p);
+       break;
+     }
+   }
+ }
+
+ // Perform raw private operation on "x": return x^d (mod n)
+ doPrivate(x) {
+   if(this.p == null || this.q == null) {
+     return x.modPow(this.d, this.n);
+   }
+
+   // TODO: re-calculate any missing CRT params
+   var xp = x.mod(this.p).modPow(this.dmp1, this.p);
+   var xq = x.mod(this.q).modPow(this.dmq1, this.q);
+
+   while(xp.compareTo(xq) &lt; 0) {
+     xp = xp.add(this.p);
+   }
+   return xp.subtract(xq).multiply(this.coeff).mod(this.p).multiply(this.q).add(xq);
+ }
+
+ // Return the PKCS#1 RSA decryption of "ctext".
+ // "ctext" is an even-length hex string and the output is a plain string.
+ decrypt(ctext) {
+   var c = parseBigInt(ctext, 16);
+   var m = this.doPrivate(c);
+   if(m == null) return null;
+   return pkcs1unpad2(m, (this.n.bitLength()+7)&gt;&gt;3);
+ }
+
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="RSAKey">
+<button class="show-code">Code</button>
+new <strong>RSAKey</strong>() <a class="anchor-link" href="#RSAKey"
+              title="Permalink to RSAKey.RSAKey">#</a></h4>
+<div class="doc">
+<pre class="source">
+RSAKey() {
+ this.n = null;
+ this.e = 0;
+ this.d = null;
+ this.p = null;
+ this.q = null;
+ this.dmp1 = null;
+ this.dmq1 = null;
+ this.coeff = null;
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="coeff">
+<button class="show-code">Code</button>
+var         <strong>coeff</strong> <a class="anchor-link"
+            href="#coeff"
+            title="Permalink to RSAKey.coeff">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+coeff
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="d">
+<button class="show-code">Code</button>
+var         <strong>d</strong> <a class="anchor-link"
+            href="#d"
+            title="Permalink to RSAKey.d">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+d
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="dmp1">
+<button class="show-code">Code</button>
+var         <strong>dmp1</strong> <a class="anchor-link"
+            href="#dmp1"
+            title="Permalink to RSAKey.dmp1">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+dmp1
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="dmq1">
+<button class="show-code">Code</button>
+var         <strong>dmq1</strong> <a class="anchor-link"
+            href="#dmq1"
+            title="Permalink to RSAKey.dmq1">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+dmq1
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="e">
+<button class="show-code">Code</button>
+var         <strong>e</strong> <a class="anchor-link"
+            href="#e"
+            title="Permalink to RSAKey.e">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+e
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="n">
+<button class="show-code">Code</button>
+var         <strong>n</strong> <a class="anchor-link"
+            href="#n"
+            title="Permalink to RSAKey.n">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+n
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="p">
+<button class="show-code">Code</button>
+var         <strong>p</strong> <a class="anchor-link"
+            href="#p"
+            title="Permalink to RSAKey.p">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+p
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="q">
+<button class="show-code">Code</button>
+var         <strong>q</strong> <a class="anchor-link"
+            href="#q"
+            title="Permalink to RSAKey.q">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+q
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="decrypt">
+<button class="show-code">Code</button>
+<strong>decrypt</strong>(ctext) <a class="anchor-link" href="#decrypt"
+              title="Permalink to RSAKey.decrypt">#</a></h4>
+<div class="doc">
+<pre class="source">
+decrypt(ctext) {
+ var c = parseBigInt(ctext, 16);
+ var m = this.doPrivate(c);
+ if(m == null) return null;
+ return pkcs1unpad2(m, (this.n.bitLength()+7)&gt;&gt;3);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="doPrivate">
+<button class="show-code">Code</button>
+<strong>doPrivate</strong>(x) <a class="anchor-link" href="#doPrivate"
+              title="Permalink to RSAKey.doPrivate">#</a></h4>
+<div class="doc">
+<pre class="source">
+doPrivate(x) {
+ if(this.p == null || this.q == null) {
+   return x.modPow(this.d, this.n);
+ }
+
+ // TODO: re-calculate any missing CRT params
+ var xp = x.mod(this.p).modPow(this.dmp1, this.p);
+ var xq = x.mod(this.q).modPow(this.dmq1, this.q);
+
+ while(xp.compareTo(xq) &lt; 0) {
+   xp = xp.add(this.p);
+ }
+ return xp.subtract(xq).multiply(this.coeff).mod(this.p).multiply(this.q).add(xq);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="doPublic">
+<button class="show-code">Code</button>
+<strong>doPublic</strong>(x) <a class="anchor-link" href="#doPublic"
+              title="Permalink to RSAKey.doPublic">#</a></h4>
+<div class="doc">
+<pre class="source">
+doPublic(x) {
+ return x.modPowInt(this.e, this.n);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="encrypt">
+<button class="show-code">Code</button>
+<strong>encrypt</strong>(text) <a class="anchor-link" href="#encrypt"
+              title="Permalink to RSAKey.encrypt">#</a></h4>
+<div class="doc">
+<pre class="source">
+encrypt(text) {
+ var m = pkcs1pad2(text,(this.n.bitLength()+7)&gt;&gt;3);
+ if(m == null) return null;
+ var c = this.doPublic(m);
+ if(c == null) return null;
+ var h = c.toString(16);
+ if((h.length &amp; 1) == 0) {
+     return h;
+   } else {
+     //return "0" + h;
+     return "0${h}";
+   }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="generate">
+<button class="show-code">Code</button>
+<strong>generate</strong>(B, E) <a class="anchor-link" href="#generate"
+              title="Permalink to RSAKey.generate">#</a></h4>
+<div class="doc">
+<pre class="source">
+generate(B,E) {
+ var rng = new SecureRandom();
+ var qs = B&gt;&gt;1;
+ //this.e = parseInt(E,16);
+ this.e = Fixnum.int32.parseHex(E).toInt();
+ var ee = new BigInteger(E,16);
+ for(;;) {
+   for(;;) {
+     this.p = new BigInteger(B-qs,1,rng);
+     if(this.p.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 &amp;&amp; this.p.isProbablePrime(10)) break;
+   }
+   for(;;) {
+     this.q = new BigInteger(qs,1,rng);
+     if(this.q.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 &amp;&amp; this.q.isProbablePrime(10)) break;
+   }
+   if(this.p.compareTo(this.q) &lt;= 0) {
+     var t = this.p;
+     this.p = this.q;
+     this.q = t;
+   }
+   var p1 = this.p.subtract(BigInteger.ONE);
+   var q1 = this.q.subtract(BigInteger.ONE);
+   var phi = p1.multiply(q1);
+   if(phi.gcd(ee).compareTo(BigInteger.ONE) == 0) {
+     this.n = this.p.multiply(this.q);
+     this.d = ee.modInverse(phi);
+     this.dmp1 = this.d.mod(p1);
+     this.dmq1 = this.d.mod(q1);
+     this.coeff = this.q.modInverse(this.p);
+     break;
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="pkcs1unpad2">
+<button class="show-code">Code</button>
+<strong>pkcs1unpad2</strong>(d, n) <a class="anchor-link" href="#pkcs1unpad2"
+              title="Permalink to RSAKey.pkcs1unpad2">#</a></h4>
+<div class="doc">
+<pre class="source">
+pkcs1unpad2(d,n) {
+ List&lt;int&gt; b = d.toByteArray();
+ var i = 0;
+ while(i &lt; b.length &amp;&amp; b[i] == 0) ++i;
+ if(b.length-i != n-1 || b[i] != 2) {
+   return null;
+ }
+ ++i;
+ while(b[i] != 0)
+   if(++i &gt;= b.length) return null;
+ var ret = "";
+ while(++i &lt; b.length) {
+   var c = new String.fromCharCodes([b[i]]);
+   ret = "$ret${c}";
+ }
+   //ret += String.fromCharCode(b[i]);
+ return ret;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="setPrivate">
+<button class="show-code">Code</button>
+<strong>setPrivate</strong>(N, E, D) <a class="anchor-link" href="#setPrivate"
+              title="Permalink to RSAKey.setPrivate">#</a></h4>
+<div class="doc">
+<pre class="source">
+setPrivate(N,E,D) {
+ if(N != null &amp;&amp; E != null &amp;&amp; N.length &gt; 0 &amp;&amp; E.length &gt; 0) {
+   this.n = parseBigInt(N,16);
+   //this.e = parseInt(E,16);
+   this.e = Fixnum.int32.parseHex(E).toInt();
+   this.d = parseBigInt(D,16);
+ }
+ else {
+   print("Invalid RSA private key");
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="setPrivateEx">
+<button class="show-code">Code</button>
+<strong>setPrivateEx</strong>(N, E, D, P, Q, DP, DQ, C) <a class="anchor-link" href="#setPrivateEx"
+              title="Permalink to RSAKey.setPrivateEx">#</a></h4>
+<div class="doc">
+<pre class="source">
+setPrivateEx(N,E,D,P,Q,DP,DQ,C) {
+ if(N != null &amp;&amp; E != null &amp;&amp; N.length &gt; 0 &amp;&amp; E.length &gt; 0) {
+   this.n = parseBigInt(N,16);
+   //this.e = parseInt(E,16);
+   this.e = Fixnum.int32.parseHex(E).toInt();
+   this.d = parseBigInt(D,16);
+   this.p = parseBigInt(P,16);
+   this.q = parseBigInt(Q,16);
+   this.dmp1 = parseBigInt(DP,16);
+   this.dmq1 = parseBigInt(DQ,16);
+   this.coeff = parseBigInt(C,16);
+ }
+ else {
+   print("Invalid RSA private key");
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="setPublic">
+<button class="show-code">Code</button>
+<strong>setPublic</strong>(N, E) <a class="anchor-link" href="#setPublic"
+              title="Permalink to RSAKey.setPublic">#</a></h4>
+<div class="doc">
+<pre class="source">
+setPublic(N,E) {
+ if(N != null &amp;&amp; E != null &amp;&amp; N.length &gt; 0 &amp;&amp; E.length &gt; 0) {
+   this.n = parseBigInt(N,16);
+   //this.e = parseInt(E,16);
+   this.e = Fixnum.int32.parseHex(E).toInt();
+   //Mathx.parseInt("A");
+ }
+ else {
+   print("Invalid RSA public key");
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-03-06 14:07:29.203</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

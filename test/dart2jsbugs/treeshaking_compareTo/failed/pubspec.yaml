@@ -1,6 +1,6 @@
-name: dart-bignum-sample-fail
-description: Big Number fail
+name: dart_bignum_sample_fail
 version: 0.0.1
+description: Big Number fail
 dependencies:
   bignum:
     git: git://github.com/ucam-cl-dtg/dart-bignum.git
