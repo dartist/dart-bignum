@@ -37,7 +37,7 @@ class DigitsArray {
 
 
   void Allocate(int size, [int used = 0]) {
-    data = new List.fixedLength(size + 1);
+    data = new List(size + 1);
     for (int i = 0; i < size+1; i++) {
       data[i] = 0;
     }
@@ -212,7 +212,7 @@ class DigitsArray {
       }
     }
 
-    data = new List<int>.fixedLength(temporary.length);
+    data = new List<int>(temporary.length);
     data.addAll(temporary);
     return data.length;
   }

@@ -355,7 +355,7 @@ class TestBigIntegerV8 {
         test("stringConv", () {
           Mathx.Random rnd = new Mathx.Random();
           t() {
-            List<int> byte_array = new List<int>.fixedLength(rnd.nextInt(100));
+            List<int> byte_array = new List<int>(rnd.nextInt(100));
             for (int i = 0; i < byte_array.length; i++) {
               byte_array[i] = rnd.nextInt(255);
             }
