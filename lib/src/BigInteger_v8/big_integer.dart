@@ -275,6 +275,8 @@ class BigInteger {
 
   static BigInteger get ZERO => nbv(0);
   static BigInteger get ONE => nbv(1);
+  static BigInteger get TWO => nbv(2);
+  static BigInteger get THREE => nbv(3);
 
   // Basic dart BN library - subset useful for RSA encryption.
 
@@ -357,6 +359,12 @@ class BigInteger {
         this.fromString(a,b);
       }
     }
+  }
+
+  factory BigInteger.fromBytes( int signum, List<int> magnitude ) {
+    if( signum==0 ) throw new ArgumentError("Argument signum must not be zero");
+    var self = new BigInteger(magnitude);
+    return (signum<0) ? -self : self;
   }
 
   /**
