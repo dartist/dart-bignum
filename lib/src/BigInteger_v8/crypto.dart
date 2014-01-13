@@ -179,7 +179,7 @@ class RSAKey {
     if(N != null && E != null && N.length > 0 && E.length > 0) {
       this.n = parseBigInt(N,16);
       //this.e = parseInt(E,16);
-      this.e = Fixnum.int32.parseHex(E).toInt();
+      this.e = Fixnum.Int32.parseHex(E).toInt();
       //Mathx.parseInt("A");
     }
     else {
@@ -232,7 +232,7 @@ class RSAKey {
     if(N != null && E != null && N.length > 0 && E.length > 0) {
       this.n = parseBigInt(N,16);
       //this.e = parseInt(E,16);
-      this.e = Fixnum.int32.parseHex(E).toInt();
+      this.e = Fixnum.Int32.parseHex(E).toInt();
       this.d = parseBigInt(D,16);
     }
     else {
@@ -245,7 +245,7 @@ class RSAKey {
     if(N != null && E != null && N.length > 0 && E.length > 0) {
       this.n = parseBigInt(N,16);
       //this.e = parseInt(E,16);
-      this.e = Fixnum.int32.parseHex(E).toInt();
+      this.e = Fixnum.Int32.parseHex(E).toInt();
       this.d = parseBigInt(D,16);
       this.p = parseBigInt(P,16);
       this.q = parseBigInt(Q,16);
@@ -263,7 +263,7 @@ class RSAKey {
     var rng = new SecureRandom();
     var qs = B>>1;
     //this.e = parseInt(E,16);
-    this.e = Fixnum.int32.parseHex(E).toInt();
+    this.e = Fixnum.Int32.parseHex(E).toInt();
     var ee = new BigInteger(E,16);
     for(;;) {
       for(;;) {
