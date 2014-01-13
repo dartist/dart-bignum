@@ -349,7 +349,7 @@ class BigInteger {
         // this.fromNumber(a,b,c);
         // NOTE: the fromNumber implementation trys to exploit js numbers
         this.fromString(a.toString(), 10);
-      } else if (a is double || a is num) {
+      } else if (a is num) {
         this.fromString(a.toInt().toString(), 10);
       } else if (b == null && a is! String) {
         this.fromString(a,256);
@@ -549,6 +549,9 @@ class BigInteger {
 
   /** return + if [this] > [a], - if [this] < [a], 0 if equal **/
   int compareTo(a) {
+    if( a is num ) {
+      a = new BigInteger(a);
+    }
     var this_array = this.array;
     var a_array = a.array;
 
@@ -565,7 +568,7 @@ class BigInteger {
   int nbits(x) {
     var r = 1, t;
 
-    if (x is double) x = x.toInt();
+    if (x is num) x = x.toInt();
 
     if((t=x>>16) != 0) { x = t; r += 16; }
     if((t=x>>8) != 0) { x = t; r += 8; }
@@ -866,6 +869,9 @@ class BigInteger {
     return ((this.t>0)?(this_array[0]&1):this.s) == 0;
   }
 
+  /** true iff [this] is off */
+  isOdd() => !isEven();
+
   /** this^e, e < 2^32, doing sqr and mul with "r" (HAC 14.79) */
   BigInteger exp(int e, z) { // TODO: z is one of the reduction algorithms, pass interface class
     if(e > 0xffffffff || e < 1) return BigInteger.ONE;
@@ -955,7 +961,7 @@ class BigInteger {
     var d = nbv(a), y = nbi(), z = nbi(), r = "";
     this.divRemTo(d,y,z);
     while(y.signum() > 0) {
-      r = "${(a+z.intValue()).toRadixString(b).substring(1)}${r}";
+      r = "${(a+z.intValue()).toInt().toRadixString(b).substring(1)}${r}";
       y.divRemTo(d,y,z);
     }
 
@@ -1203,6 +1209,8 @@ class BigInteger {
     return -1;
   }
 
+  int get lowestSetBit => getLowestSetBit();
+
   /** return number of 1 bits in x */
   cbit(x) {
     var r = 0;
@@ -1310,7 +1318,7 @@ class BigInteger {
   BigInteger remainder(BigInteger a) {
     BigInteger r = nbi();
     this.divRemTo(a,null,r);
-    return r;
+    return (r.signum()>=0) ? r : (r+a);
   }
 
   /** [this/a, this%a] returns Map<BigInteger>
@@ -1499,6 +1507,7 @@ class BigInteger {
     var ac = m.isEven();
     if((this.isEven() && ac) || m.signum() == 0) return BigInteger.ZERO;
     var u = m.clone(), v = this.clone();
+    if( v.signum()<0 ) v = -v;
     var a = nbv(1), b = nbv(0), c = nbv(0), d = nbv(1);
     while(u.signum() != 0) {
       while(u.isEven()) {
@@ -1531,11 +1540,13 @@ class BigInteger {
       }
     }
     if(v.compareTo(BigInteger.ONE) != 0) return BigInteger.ZERO;
-    if(d.compareTo(m) >= 0) return d.subtract(m);
-    if(d.signum() < 0) d.addTo(m,d); else return d;
-    if(d.signum() < 0) return d.add(m); else return d;
+    if(d.compareTo(m) >= 0) return _adjust(d.subtract(m),m);
+    if(d.signum() < 0) d.addTo(m,d); else return _adjust(d,m);
+    if(d.signum() < 0) return _adjust(d.add(m),m); else return _adjust(d,m);
   }
 
+  // TODO: optimize this
+  _adjust(val,m) => ( signum()<0 ) ? (m-val) : val;
 
   /** test primality with certainty >= 1-.5^t */
   bool isProbablePrime(int t) {
@@ -1603,7 +1614,7 @@ class BigInteger {
   bool operator <=(BigInteger other) => compareTo(other) <= 0 ? true : false;
   bool operator >(BigInteger other) => compareTo(other) > 0 ? true : false;
   bool operator >=(BigInteger other) => compareTo(other) >= 0 ? true : false;
-  bool operator ==(BigInteger other) => compareTo(other) == 0 ? true : false;
+  bool operator ==(other) => compareTo(other) == 0 ? true : false;
 
   // Bit-operations.
   BigInteger operator &(BigInteger other) => and(other);
