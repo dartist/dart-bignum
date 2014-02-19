@@ -363,6 +363,13 @@ class BigInteger {
 
   factory BigInteger.fromBytes( int signum, List<int> magnitude ) {
     if( signum==0 ) throw new ArgumentError("Argument signum must not be zero");
+    // Add a leading 0 if most significant bit set (otherwise, the magnitude
+    // is interpreted as negative and this constructor fails)
+    if( (magnitude[0] & 0x80) != 0 ) {
+      magnitude = new List<int>(1+magnitude.length)
+          ..[0] = 0
+          ..setRange(1, 1+magnitude.length, magnitude);
+    }
     var self = new BigInteger(magnitude);
     return (signum<0) ? -self : self;
   }
