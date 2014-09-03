@@ -366,7 +366,7 @@ class BigInteger {
     // Add a leading 0 if most significant bit set (otherwise, the magnitude
     // is interpreted as negative and this constructor fails)
     if( (magnitude[0] & 0x80) != 0 ) {
-      magnitude = new List<int>(1+magnitude.length)
+      magnitude = new Uint8List(1+magnitude.length)
           ..[0] = 0
           ..setRange(1, 1+magnitude.length, magnitude);
     }
