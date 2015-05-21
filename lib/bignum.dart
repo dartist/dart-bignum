@@ -6,7 +6,7 @@ part 'src/BigInteger_v8/big_integer.dart';
 part 'src/BigInteger_dartvm/big_integer.dart';
 
 abstract class BigInteger {
-  static final bool isJs = false;//(0.0 is int) ;
+  static final bool isJs = (0.0 is int) ;
   static BigInteger get ZERO {
     if (isJs) {
       return BigIntegerV8.nbv(0);
