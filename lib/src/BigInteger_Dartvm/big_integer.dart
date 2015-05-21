@@ -400,19 +400,7 @@ class BigIntegerDartvm implements BigInteger {
 
   /**  this^e % m, 0 <= e < 2^32 */
   BigIntegerDartvm modPowInt(int e, BigIntegerDartvm m) {
-    if (e < 1) return BigIntegerDartvm.ONE;
-
-    int md = m.data;
-    int r = data;
-    int rslt = 1;
-    while (e > 0) {
-      if (e & 1 > 0) {
-        rslt = rslt * r % md;
-      }
-      r = r * r % md;
-      e >>= 1;
-    }
-    return new BigIntegerDartvm(rslt);
+    return new BigIntegerDartvm(data.modPow(e, m.data));
   }
 
   /** clone */
@@ -709,7 +697,7 @@ class BigIntegerDartvm implements BigInteger {
 
   /** this^e % m (HAC 14.85) */
   modPow(BigIntegerDartvm e, BigIntegerDartvm m) {
-    return this.modPowInt(e.data, m);
+    return new BigIntegerDartvm(data.modPow(e.data, m.data));
   }
 
   /** gcd(this,a) (HAC 14.54) */
