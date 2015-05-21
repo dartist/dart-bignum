@@ -18,68 +18,68 @@ run_sequence(t) {
   }
 }
 
-class TestBigIntegerV8V8 {
+class TestBigIntegerDartvmV8 {
 
-  testBigIntegerV8() {
-    group("BigIntegerV8 dart", () {
-      test("construct BigIntegerV8 from byte list", (){
-        expect(new BigIntegerV8([0x1]).toString(16), equals("1"));
-        expect(new BigIntegerV8([0x1, 0]).toString(), equals(Mathx.pow(2, 8).toInt().toString()));
-        expect(new BigIntegerV8([0x1, 0, 0]).toString(), equals(Mathx.pow(2, 16).toInt().toString()));
-        expect(new BigIntegerV8([0x1, 0, 0, 0]).toString(), equals(Mathx.pow(2, 24).toInt().toString()));
+  testBigIntegerDartvm() {
+    group("BigIntegerDartvm dart", () {
+      test("construct BigIntegerDartvm from byte list", (){
+        expect(new BigIntegerDartvm([0x1]).toString(16), equals("1"));
+        expect(new BigIntegerDartvm([0x1, 0]).toString(), equals(Mathx.pow(2, 8).toInt().toString()));
+        expect(new BigIntegerDartvm([0x1, 0, 0]).toString(), equals(Mathx.pow(2, 16).toInt().toString()));
+        expect(new BigIntegerDartvm([0x1, 0, 0, 0]).toString(), equals(Mathx.pow(2, 24).toInt().toString()));
       });
-      test("construct BigIntegerV8 int", (){
-        var x = new BigIntegerV8(5);
+      test("construct BigIntegerDartvm int", (){
+        var x = new BigIntegerDartvm(5);
         expect(x.toString(10), equals("5"));
         expect(x.intValue(), equals(5));
-        x = new BigIntegerV8(0x10);
+        x = new BigIntegerDartvm(0x10);
         expect(x.toString(16), equals("10"));
         expect(x.intValue(), equals(16));
-        x = new BigIntegerV8(0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff);
+        x = new BigIntegerDartvm(0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff);
         expect(x.toString(16), equals("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
       });
 
-      test("construct BigIntegerV8 num", (){
+      test("construct BigIntegerDartvm num", (){
         num n = 5;
-        var x = new BigIntegerV8(n);
+        var x = new BigIntegerDartvm(n);
         expect(x.toString(10), equals("${n}"));
         expect(x.intValue(), equals(5));
         n = 0x10;
-        x = new BigIntegerV8(n);
+        x = new BigIntegerDartvm(n);
         expect(x.toString(16), equals("10"));
         expect(x.intValue(), equals(16));
         n = 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
-        x = new BigIntegerV8(n);
+        x = new BigIntegerDartvm(n);
         expect(x.toString(16), equals("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
       });
 
-      test("construct BigIntegerV8 double", (){
+      test("construct BigIntegerDartvm double", (){
         double n = 5.0;
-        var x = new BigIntegerV8(n);
+        var x = new BigIntegerDartvm(n);
         expect(x.toString(10), equals("5"));
         expect(x.intValue(), equals(5));
       });
 
-      test("construct BigIntegerV8 base 10 String", () {
-        var x = new BigIntegerV8("5", 10);
+      test("construct BigIntegerDartvm base 10 String", () {
+        var x = new BigIntegerDartvm("5", 10);
         expect(x.toString(10), equals("5"));
         expect(x.toRadix(10), equals("5"));
         expect(x.toString(), equals("5"));
       });
 
-      test("construct BigIntegerV8 base 16 to multi base String", () {
+      test("construct BigIntegerDartvm base 16 to multi base String", () {
         if (TEST_EXTRA_LARGE) {
-          var ppp = new BigIntegerV8(powpowpow_base_16, 16);
+          var ppp = new BigIntegerDartvm(powpowpow_base_16, 16);
           expect(ppp.toString(16), equals(powpowpow_base_16));
           expect(ppp.toString(10), equals(powpowpow_base_10));
           expect(ppp.toString(2), equals(powpowpow_base_2));
         }
       });
 
-      test("construct BigIntegerV8 base 16", () {
+      test("construct BigIntegerDartvm base 16", () {
         // 0xabcd1234 modulo 0xbeef = 0xB60C
-        var x = new BigIntegerV8("abcd1234", 16);
-        var y = new BigIntegerV8("beef", 16);
+        var x = new BigIntegerDartvm("abcd1234", 16);
+        var y = new BigIntegerDartvm("beef", 16);
         var z = x.mod(y);
 
         //0xabcd1234 * 0xbeef = 802297f6968c
@@ -97,7 +97,7 @@ class TestBigIntegerV8V8 {
           // TODO: bug with recursive call to toRadix and toString
           //print(yy.toString());
 
-          BigIntegerV8 yy = new BigIntegerV8("3", 16);
+          BigIntegerDartvm yy = new BigIntegerDartvm("3", 16);
           var iii = yy.pow(3);
           expect(yy.toString(16), equals("3"));
           expect(iii.toString(16), equals("1b"));
@@ -105,8 +105,8 @@ class TestBigIntegerV8V8 {
 
           var sw = new Stopwatch();
           sw.start();
-          //print(new BigIntegerV8("100", 16).pow(100).pow(100).toString(16));
-          //print(new BigIntegerV8("100", 16).pow(100).toString(16));
+          //print(new BigIntegerDartvm("100", 16).pow(100).pow(100).toString(16));
+          //print(new BigIntegerDartvm("100", 16).pow(100).toString(16));
           sw.stop();
           //print(sw.elapsedInMs());
         });
@@ -115,13 +115,13 @@ class TestBigIntegerV8V8 {
         test("arithmetic 1", () {
           Mathx.Random rnd = new Mathx.Random();
           t() {
-            BigIntegerV8 x = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
-            BigIntegerV8 y = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
-            BigIntegerV8 z = x.divide(y);
+            BigIntegerDartvm x = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigIntegerDartvm y = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigIntegerDartvm z = x.divide(y);
             z = z.multiply(y);
             z = z.add(x.remainder(y));
             z = z.subtract(x);
-            expect(z.equals(BigIntegerV8.ZERO), equals(true));
+            expect(z.equals(BigIntegerDartvm.ZERO), equals(true));
           };
 
           run_sequence(t);
@@ -130,13 +130,13 @@ class TestBigIntegerV8V8 {
         test("arithmetic 2", () {
           Mathx.Random rnd = new Mathx.Random();
           t() {
-            BigIntegerV8 x = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
-            BigIntegerV8 y = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigIntegerDartvm x = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigIntegerDartvm y = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
             var z = x.divideAndRemainder(y);
             z[0] = z[0].multiply(y);
             z[0] = z[0].add(z[1]);
             z[0] = z[0].subtract(x);
-            expect(z[0].equals(BigIntegerV8.ZERO), equals(true));
+            expect(z[0].equals(BigIntegerDartvm.ZERO), equals(true));
           };
 
           run_sequence(t);
@@ -145,13 +145,13 @@ class TestBigIntegerV8V8 {
         test("arithmetic 3", () {
           Mathx.Random rnd = new Mathx.Random();
           t() {
-            BigIntegerV8 x = new BigIntegerV8(powpowpow_base_16, 16);
-            BigIntegerV8 y = new BigIntegerV8("${powpowpow_base_16}" "${rnd.nextInt(100000000).toRadixString(16)}", 16);
+            BigIntegerDartvm x = new BigIntegerDartvm(powpowpow_base_16, 16);
+            BigIntegerDartvm y = new BigIntegerDartvm("${powpowpow_base_16}" "${rnd.nextInt(100000000).toRadixString(16)}", 16);
             var z = x.divideAndRemainder(y);
             z[0] = z[0].multiply(y);
             z[0] = z[0].add(z[1]);
             z[0] = z[0].subtract(x);
-            expect(z[0].equals(BigIntegerV8.ZERO), equals(true));
+            expect(z[0].equals(BigIntegerDartvm.ZERO), equals(true));
           };
 
           run_sequence(t);
@@ -161,7 +161,7 @@ class TestBigIntegerV8V8 {
           Mathx.Random rnd = new Mathx.Random();
           t() {
             int x = rnd.nextInt(100000000);
-            BigIntegerV8 bx = new BigIntegerV8(x.toString(), 10);
+            BigIntegerDartvm bx = new BigIntegerDartvm(x.toString(), 10);
             int bit = (x < 0 ? 0 : 1);
             int tmp = x, bitCount = 0;
             for (int j = 0; j < 32; j++) {
@@ -179,7 +179,7 @@ class TestBigIntegerV8V8 {
           Mathx.Random rnd = new Mathx.Random();
           t() {
             int x = rnd.nextInt(100000000);
-            BigIntegerV8 bx = new BigIntegerV8(x.toString(), 10);
+            BigIntegerDartvm bx = new BigIntegerDartvm(x.toString(), 10);
             int signBit = (x < 0 ? 0x80000000 : 0);
             int tmp = x, bitLength, j;
             for (j = 0; j < 32 && (tmp & 0x80000000) == signBit; j++) {
@@ -196,18 +196,18 @@ class TestBigIntegerV8V8 {
         test("bit ops", () {
           Mathx.Random rnd = new Mathx.Random();
           t() {
-            BigIntegerV8 x = new BigIntegerV8(rnd.nextInt(100000000).toString(), 10);
-            BigIntegerV8 y;
+            BigIntegerDartvm x = new BigIntegerDartvm(rnd.nextInt(100000000).toString(), 10);
+            BigIntegerDartvm y;
             /* Test setBit and clearBit (and testBit) */
             if (x.signum() < 0) {
-              y = new BigIntegerV8(-1);
+              y = new BigIntegerDartvm(-1);
               for (int j = 0; j < x.bitLength(); j++) {
                 if (! x.testBit(j)) {
                   y = y.clearBit(j);
                 }
               }
             } else {
-              y = BigIntegerV8.ZERO;
+              y = BigIntegerDartvm.ZERO;
               for (int j = 0; j < x.bitLength(); j++) {
                 if (x.testBit(j)) {
                   y = y.setBit(j);
@@ -218,7 +218,7 @@ class TestBigIntegerV8V8 {
             expect(x.equals(y), equals(true));
 
             /* Test flipBit (and testBit) */
-            y = new BigIntegerV8(x.signum() < 0 ? -1 : 0);
+            y = new BigIntegerDartvm(x.signum() < 0 ? -1 : 0);
             for (int j = 0; j < x.bitLength(); j++) {
               var b1 = x.signum() < 0;
               var b2 = x.testBit(j);
@@ -235,12 +235,12 @@ class TestBigIntegerV8V8 {
 
             expect(x.equals(y), equals(true));
 
-            x = new BigIntegerV8(rnd.nextInt(100000000).toString(), 10);
+            x = new BigIntegerDartvm(rnd.nextInt(100000000).toString(), 10);
             int k = x.getLowestSetBit();
             if (x.signum() == 0) {
               expect(k, equals(-1));
             } else {
-              BigIntegerV8 z = x.and(x.negate_op());
+              BigIntegerDartvm z = x.and(x.negate_op());
               int j;
               for (j = 0; j < z.bitLength() && !z.testBit(j); j++);
 
@@ -255,15 +255,15 @@ class TestBigIntegerV8V8 {
           Mathx.Random rnd = new Mathx.Random();
           t() {
             /* Test idenity x^y == x|y &~ x&y */
-            BigIntegerV8 x = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
-            BigIntegerV8 y = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
-            BigIntegerV8 z = x.xor(y);
-            BigIntegerV8 w = x.or(y).andNot(x.and(y));
+            BigIntegerDartvm x = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigIntegerDartvm y = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigIntegerDartvm z = x.xor(y);
+            BigIntegerDartvm w = x.or(y).andNot(x.and(y));
             expect(z.equals(w), equals(true));
 
             /* Test idenity x &~ y == ~(~x | y) */
-            x = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
-            y = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
+            x = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
+            y = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
             z = x.andNot(y);
             w = x.not().or(y).not();
             expect(z.equals(w), equals(true));
@@ -276,18 +276,18 @@ class TestBigIntegerV8V8 {
           Mathx.Random rnd = new Mathx.Random();
           t() {
 
-            BigIntegerV8 x = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigIntegerDartvm x = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
             //x = x.negate();
             int n = (rnd.nextInt(100000000) % 200).abs();
-            var s1 = x.shiftLeft(n).equals(x.multiply(new BigIntegerV8(2).pow(n)));
+            var s1 = x.shiftLeft(n).equals(x.multiply(new BigIntegerDartvm(2).pow(n)));
             expect(s1, equals(true));
 
-            var y = x.divideAndRemainder(new BigIntegerV8(2).pow(n));
-            BigIntegerV8 z = (x.signum() < 0 && y[1].signum() != 0
-                ? y[0].subtract(BigIntegerV8.ONE)
+            var y = x.divideAndRemainder(new BigIntegerDartvm(2).pow(n));
+            BigIntegerDartvm z = (x.signum() < 0 && y[1].signum() != 0
+                ? y[0].subtract(BigIntegerDartvm.ONE)
                 : y[0]);
 
-            BigIntegerV8 b = x.shiftRight(n);
+            BigIntegerDartvm b = x.shiftRight(n);
             expect(b.equals(z), equals(true));
 
             var s2 = x.shiftLeft(n).shiftRight(n).equals(x);
@@ -301,15 +301,15 @@ class TestBigIntegerV8V8 {
           Mathx.Random rnd = new Mathx.Random();
           t() {
             // TODO: make this better
-            BigIntegerV8 x = new BigIntegerV8("4", 16);
+            BigIntegerDartvm x = new BigIntegerDartvm("4", 16);
 
-            BigIntegerV8 z = x.divide(new BigIntegerV8(2));
+            BigIntegerDartvm z = x.divide(new BigIntegerDartvm(2));
             var y = x.divideAndRemainder(x);
-            expect(y[0].equals(BigIntegerV8.ONE), equals(true));
-            expect(y[1].equals(BigIntegerV8.ZERO), equals(true));
+            expect(y[0].equals(BigIntegerDartvm.ONE), equals(true));
+            expect(y[1].equals(BigIntegerDartvm.ZERO), equals(true));
 
             y = x.divideAndRemainder(z);
-            expect(y[0].equals(new BigIntegerV8(2)), equals(true));
+            expect(y[0].equals(new BigIntegerDartvm(2)), equals(true));
           };
 
           run_sequence(t);
@@ -325,12 +325,12 @@ class TestBigIntegerV8V8 {
 
             String s = new String.fromCharCodes(byte_array);
 
-            BigIntegerV8 x = new BigIntegerV8(s);
+            BigIntegerDartvm x = new BigIntegerDartvm(s);
             // TODO: http://code.google.com/p/dart/issues/detail?id=461
             //for (int radix = 2; radix < 37; radix++) {
             for (int radix = 2; radix < 16; radix++) {
               String result = x.toString(radix);
-              BigIntegerV8 test = new BigIntegerV8(result, radix);
+              BigIntegerDartvm test = new BigIntegerDartvm(result, radix);
               expect(test.toString(), x.toString());
             }
           };
@@ -341,13 +341,13 @@ class TestBigIntegerV8V8 {
         test("byteArrayConv", () {
           Mathx.Random rnd = new Mathx.Random();
           t() {
-            BigIntegerV8 x = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
-            //BigIntegerV8 x = new BigIntegerV8(8449183.toRadixString(16), 16);
-            if (x.equals(BigIntegerV8.ZERO)) {
-              x = x.add(BigIntegerV8.ONE);
+            BigIntegerDartvm x = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
+            //BigIntegerDartvm x = new BigIntegerDartvm(8449183.toRadixString(16), 16);
+            if (x.equals(BigIntegerDartvm.ZERO)) {
+              x = x.add(BigIntegerDartvm.ONE);
             }
 
-            BigIntegerV8 y = new BigIntegerV8(x.toByteArray());
+            BigIntegerDartvm y = new BigIntegerDartvm(x.toByteArray());
 //            print(x.toString());
 //            print(y.toString());
             expect(x.toString(), equals(y.toString()));
@@ -360,15 +360,15 @@ class TestBigIntegerV8V8 {
           Mathx.Random rnd = new Mathx.Random();
           t() {
 
-            BigIntegerV8 x = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigIntegerDartvm x = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
             if (x.isEven()) {
-              x = x.add(BigIntegerV8.ONE);
+              x = x.add(BigIntegerDartvm.ONE);
             }
 
-            BigIntegerV8 m = new BigIntegerV8(2);
+            BigIntegerDartvm m = new BigIntegerDartvm(2);
 
-            BigIntegerV8 inv = x.modInverse(m);
-            BigIntegerV8 prod = inv.multiply(x).remainder(m);
+            BigIntegerDartvm inv = x.modInverse(m);
+            BigIntegerDartvm prod = inv.multiply(x).remainder(m);
             if (prod.signum() == -1) {
               prod = prod.add(m);
             }
@@ -387,17 +387,17 @@ class TestBigIntegerV8V8 {
         test("modExp", () {
           Mathx.Random rnd = new Mathx.Random();
           t() {
-            BigIntegerV8 m = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigIntegerDartvm m = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
 
-            if (m.equals(BigIntegerV8.ONE)) {
-              m = m.add(BigIntegerV8.ONE);
+            if (m.equals(BigIntegerDartvm.ONE)) {
+              m = m.add(BigIntegerDartvm.ONE);
             }
 
-            BigIntegerV8 base = new BigIntegerV8(rnd.nextInt(100000000).toRadixString(16), 16);
-            BigIntegerV8 exp = new BigIntegerV8(8);
+            BigIntegerDartvm base = new BigIntegerDartvm(rnd.nextInt(100000000).toRadixString(16), 16);
+            BigIntegerDartvm exp = new BigIntegerDartvm(8);
 
-            BigIntegerV8 z = base.modPow(exp, m);
-            BigIntegerV8 w = base.pow(exp.intValue()).mod(m);
+            BigIntegerDartvm z = base.modPow(exp, m);
+            BigIntegerDartvm w = base.pow(exp.intValue()).mod(m);
             expect(z.equals(w), equals(true));
           };
 
@@ -429,42 +429,42 @@ class TestBigIntegerV8V8 {
                                "1267617700951005189537696547196156120148404630231",
                                "1326015641149969955786344600146607663033642528339" ];
 
-            BigIntegerV8 p1;
+            BigIntegerDartvm p1;
 
             // Test some known Mersenne primes (2^n)-1
             // The array holds the exponents, not the numbers being tested
             if (TEST_EXTRA_LARGE) {
               mersenne_powers.forEach((mp) {
-                p1 = new BigIntegerV8(2);
+                p1 = new BigIntegerDartvm(2);
                 p1 = p1.pow(mp);
-                p1 = p1.subtract(BigIntegerV8.ONE);
+                p1 = p1.subtract(BigIntegerDartvm.ONE);
                 expect(p1.isProbablePrime(100), equals(true));
               });
 
               // Test some primes that have failed on java
               java_failed_primes.forEach((jp) {
-                p1 = new BigIntegerV8(jp);
+                p1 = new BigIntegerDartvm(jp);
                 expect(p1.isProbablePrime(100), equals(true));
               });
 
               // Test some known Carmichael numbers.
               carmichaels.forEach((cm) {
-                p1 = new BigIntegerV8(cm);
+                p1 = new BigIntegerDartvm(cm);
                 expect(p1.isProbablePrime(100), equals(true));
               });
             } else {
 
-              p1 = new BigIntegerV8(2);
+              p1 = new BigIntegerDartvm(2);
               p1 = p1.pow(mersenne_powers[0]);
-              p1 = p1.subtract(BigIntegerV8.ONE);
+              p1 = p1.subtract(BigIntegerDartvm.ONE);
 
               expect(p1.isProbablePrime(100), equals(true), reason: "mersenne powers [${mersenne_powers[0]}] is not reported prime", verbose: true);
 
-              p1 = new BigIntegerV8(java_failed_primes[0]);
+              p1 = new BigIntegerDartvm(java_failed_primes[0]);
 
               expect(p1.isProbablePrime(100), equals(true), reason: "java failed primes [${java_failed_primes[0]}] is not reported prime", verbose: true);
 
-              p1 = new BigIntegerV8(carmichaels[0]);
+              p1 = new BigIntegerDartvm(carmichaels[0]);
 
               expect(p1.isProbablePrime(100), equals(true), reason: "mersenne powers [${mersenne_powers[0]}] is not reported prime", verbose: true);
             }
@@ -476,43 +476,43 @@ class TestBigIntegerV8V8 {
           } else {
             var lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509];
             lowprimes.forEach((lp) {
-              var p1 = new BigIntegerV8(lp);
+              var p1 = new BigIntegerDartvm(lp);
               expect(p1.isProbablePrime(100), equals(true));
             });
           }
         });
 
         test("operator +", () {
-          var x = new BigIntegerV8(10);
-          var y = new BigIntegerV8(20);
+          var x = new BigIntegerDartvm(10);
+          var y = new BigIntegerDartvm(20);
           var z = x + y;
           expect(z.toString(), equals("30"));
         });
 
         test("operator -", () {
-          var x = new BigIntegerV8(10);
-          var y = new BigIntegerV8(20);
+          var x = new BigIntegerDartvm(10);
+          var y = new BigIntegerDartvm(20);
           var z = x - y;
           expect(z.toString(), equals("-10"));
         });
 
         test("operator *", () {
-          var x = new BigIntegerV8(10);
-          var y = new BigIntegerV8(20);
+          var x = new BigIntegerDartvm(10);
+          var y = new BigIntegerDartvm(20);
           var z = x * y;
           expect(z.toString(), equals("200"));
         });
 
         test("operator %", () {
-          var x = new BigIntegerV8(10);
-          var y = new BigIntegerV8(20);
+          var x = new BigIntegerDartvm(10);
+          var y = new BigIntegerDartvm(20);
           var z = x % y;
           expect(z.toString(), equals("10"));
         });
 
         test("operator /", () {
-          var x = new BigIntegerV8(10);
-          var y = new BigIntegerV8(20);
+          var x = new BigIntegerDartvm(10);
+          var y = new BigIntegerDartvm(20);
           var z = x / y;
           expect(z.toString(), equals("0"));
           z = y / x;
@@ -524,130 +524,130 @@ class TestBigIntegerV8V8 {
         });
 
         test("operator unary -", () {
-          var x = new BigIntegerV8(10);
+          var x = new BigIntegerDartvm(10);
           var z = -x;
           expect(z.toString(), equals("-10"));
         });
 
         test("operator <", () {
-          var x = new BigIntegerV8(10);
-          var y = new BigIntegerV8(20);
+          var x = new BigIntegerDartvm(10);
+          var y = new BigIntegerDartvm(20);
           var z = x < y;
           expect(z, equals(true));
           z = y < x;
           expect(z, equals(false));
-          y = new BigIntegerV8(10);
+          y = new BigIntegerDartvm(10);
           z = x < y;
           expect(z, equals(false));
         });
 
         test("operator <=", () {
-          var x = new BigIntegerV8(10);
-          var y = new BigIntegerV8(20);
+          var x = new BigIntegerDartvm(10);
+          var y = new BigIntegerDartvm(20);
           var z = x <= y;
           expect(z, equals(true));
           z = y <= x;
           expect(z, equals(false));
-          x = new BigIntegerV8(20);
+          x = new BigIntegerDartvm(20);
           z = y <= x;
           expect(z, equals(true));
         });
 
         test("operator >", () {
-          var x = new BigIntegerV8(20);
-          var y = new BigIntegerV8(10);
+          var x = new BigIntegerDartvm(20);
+          var y = new BigIntegerDartvm(10);
           var z = x > y;
           expect(z, equals(true));
           z = y > x;
           expect(z, equals(false));
-          y = new BigIntegerV8(20);
+          y = new BigIntegerDartvm(20);
           z = x > y;
           expect(z, equals(false));
         });
 
         test("operator >=", () {
-          var x = new BigIntegerV8(20);
-          var y = new BigIntegerV8(10);
+          var x = new BigIntegerDartvm(20);
+          var y = new BigIntegerDartvm(10);
           var z = x >= y;
           expect(z, equals(true));
           z = y >= x;
           expect(z, equals(false));
-          y = new BigIntegerV8(20);
+          y = new BigIntegerDartvm(20);
           z = x >= y;
           expect(z, equals(true));
         });
 
         test("operator ==", () {
-          var x = new BigIntegerV8(20);
-          var y = new BigIntegerV8(20);
+          var x = new BigIntegerDartvm(20);
+          var y = new BigIntegerDartvm(20);
           var z = x == y;
           expect(z, equals(true));
-          y = new BigIntegerV8(30);
+          y = new BigIntegerDartvm(30);
           z = y == x;
           expect(z, equals(false));
-          y = new BigIntegerV8(10);
+          y = new BigIntegerDartvm(10);
           z = y == x;
           expect(z, equals(false));
         });
 
         test("operator &", () {
-          var x = new BigIntegerV8(10);
-          var y = new BigIntegerV8(20);
+          var x = new BigIntegerDartvm(10);
+          var y = new BigIntegerDartvm(20);
           var z = x & y;
           expect(z.toString(), equals("0"));
-          y = new BigIntegerV8(10);
+          y = new BigIntegerDartvm(10);
           z = x & y;
           expect(z.toString(), equals("10"));
         });
 
         test("operator |", () {
-          var x = new BigIntegerV8(10);
-          var y = new BigIntegerV8(20);
+          var x = new BigIntegerDartvm(10);
+          var y = new BigIntegerDartvm(20);
           var z = x | y;
           expect(z.toString(), equals("30"));
-          y = new BigIntegerV8(10);
+          y = new BigIntegerDartvm(10);
           z = x | y;
           expect(z.toString(), equals("10"));
         });
 
         test("operator ^", () {
-          var x = new BigIntegerV8("1001", 2);
-          var y = new BigIntegerV8("0110", 2);
+          var x = new BigIntegerDartvm("1001", 2);
+          var y = new BigIntegerDartvm("0110", 2);
           var z = x ^ y;
           expect(z.toString(2), equals("1111"));
 
-          x = new BigIntegerV8("0110", 2);
-          y = new BigIntegerV8("0110", 2);
+          x = new BigIntegerDartvm("0110", 2);
+          y = new BigIntegerDartvm("0110", 2);
           z = x ^ y;
           expect(z.toString(2), equals("0"));
         });
 
         test("operator ~", () {
-          var x = new BigIntegerV8("1001", 2);
+          var x = new BigIntegerDartvm("1001", 2);
           var z = ~x;
           expect(z.toString(2), equals("-1010"));
 
-          x = new BigIntegerV8("1111", 2);
+          x = new BigIntegerDartvm("1111", 2);
           z = ~x;
           expect(z.toString(2), equals("-10000"));
 
-          x = new BigIntegerV8("1101", 2);
+          x = new BigIntegerDartvm("1101", 2);
           z = ~x;
           expect(z.toString(2), equals("-1110"));
 
-          x = new BigIntegerV8(25);
+          x = new BigIntegerDartvm(25);
           z = ~x;
           expect(z.toString(), equals("-26"));
         });
 
         test("operator <<", () {
-          var x = new BigIntegerV8("1001", 2);
+          var x = new BigIntegerDartvm("1001", 2);
           var z = x << 2;
           expect(z.toString(2), equals("100100"));
         });
 
         test("operator >>", () {
-          var x = new BigIntegerV8("1001", 2);
+          var x = new BigIntegerDartvm("1001", 2);
           var z = x >> 2;
           expect(z.toString(2), equals("10"));
         });
@@ -655,78 +655,78 @@ class TestBigIntegerV8V8 {
 
     group("sign test", () {
       test("-5 from int constructor", () {
-        BigIntegerV8 x = new BigIntegerV8(-5);
+        BigIntegerDartvm x = new BigIntegerDartvm(-5);
         expect(x.toString(), equals("-5"));
       });
 
       test("-5 from String constructor", () {
-        BigIntegerV8 x = new BigIntegerV8("-5");
+        BigIntegerDartvm x = new BigIntegerDartvm("-5");
         expect(x.toString(), equals("-5"));
       });
 
       test("-5 from String constructor base 16", () {
-        BigIntegerV8 x = new BigIntegerV8("-5", 16);
+        BigIntegerDartvm x = new BigIntegerDartvm("-5", 16);
         expect(x.toString(), equals("-5"));
       });
 
       test("-5 + (-5)", () {
-        BigIntegerV8 x = new BigIntegerV8("-5");
-        BigIntegerV8 y = new BigIntegerV8("-5");
-        BigIntegerV8 z = x + y;
+        BigIntegerDartvm x = new BigIntegerDartvm("-5");
+        BigIntegerDartvm y = new BigIntegerDartvm("-5");
+        BigIntegerDartvm z = x + y;
         expect(z.toString(), equals("-10"));
       });
 
       test("-5 + (-5)", () {
-        BigIntegerV8 x = new BigIntegerV8("-5");
-        BigIntegerV8 y = new BigIntegerV8("-5");
-        BigIntegerV8 z = x + y;
+        BigIntegerDartvm x = new BigIntegerDartvm("-5");
+        BigIntegerDartvm y = new BigIntegerDartvm("-5");
+        BigIntegerDartvm z = x + y;
         expect(z.toString(), equals("-10"));
       });
 
       test("-5 + 5", () {
-        BigIntegerV8 x = new BigIntegerV8("-5");
-        BigIntegerV8 y = new BigIntegerV8("5");
-        BigIntegerV8 z = x + y;
+        BigIntegerDartvm x = new BigIntegerDartvm("-5");
+        BigIntegerDartvm y = new BigIntegerDartvm("5");
+        BigIntegerDartvm z = x + y;
         expect(z.toString(), equals("0"));
       });
 
       test("-5", () {
-        BigIntegerV8 x = new BigIntegerV8("-5");
+        BigIntegerDartvm x = new BigIntegerDartvm("-5");
         expect(x.toString(), equals("-5"));
       });
 
       test("-5 - (-5)", () {
-        BigIntegerV8 x = new BigIntegerV8("-5");
-        BigIntegerV8 y = new BigIntegerV8("-5");
-        BigIntegerV8 z = x - y;
+        BigIntegerDartvm x = new BigIntegerDartvm("-5");
+        BigIntegerDartvm y = new BigIntegerDartvm("-5");
+        BigIntegerDartvm z = x - y;
         expect(z.toString(), equals("0"));
       });
 
 
       test("0 * 1 == 0", () {
-        BigIntegerV8 x = new BigIntegerV8("0");
-        BigIntegerV8 y = new BigIntegerV8("-1");
-        BigIntegerV8 z = x * y;
+        BigIntegerDartvm x = new BigIntegerDartvm("0");
+        BigIntegerDartvm y = new BigIntegerDartvm("-1");
+        BigIntegerDartvm z = x * y;
         expect(z.compareTo(x), equals(0));
         expect(z == x, equals(true));
         expect(z, equals(x));
-        expect(BigIntegerV8.ZERO, equals(x));
+        expect(BigIntegerDartvm.ZERO, equals(x));
       });
 
       test("1 * 1 == 1", () {
-        BigIntegerV8 x = new BigIntegerV8("1");
-        BigIntegerV8 y = new BigIntegerV8("1");
-        BigIntegerV8 z = x * y;
+        BigIntegerDartvm x = new BigIntegerDartvm("1");
+        BigIntegerDartvm y = new BigIntegerDartvm("1");
+        BigIntegerDartvm z = x * y;
         expect(z.compareTo(x), equals(0));
         expect(z == x, equals(true));
         expect(z, equals(x));
-        expect(BigIntegerV8.ONE, equals(x));
+        expect(BigIntegerDartvm.ONE, equals(x));
       });
 
       test("1 * -1 == -1", () {
-        BigIntegerV8 x = new BigIntegerV8("1");
-        BigIntegerV8 y = new BigIntegerV8("-1");
-        BigIntegerV8 z = x * y;
+        BigIntegerDartvm x = new BigIntegerDartvm("1");
+        BigIntegerDartvm y = new BigIntegerDartvm("-1");
+        BigIntegerDartvm z = x * y;
         expect(z.compareTo(x), equals(-1));
         expect(z == x, equals(false));
         expect(z == -x, equals(true));
@@ -737,17 +737,17 @@ class TestBigIntegerV8V8 {
         expect(z <= x, equals(true));
         expect(z < x, equals(true));
         expect(z, equals(-x));
-        expect(-BigIntegerV8.ONE, equals(z));
+        expect(-BigIntegerDartvm.ONE, equals(z));
       });
     });
 
   }
 
   void main() {
-    testBigIntegerV8();
+    testBigIntegerDartvm();
   }
 }
 
 void main() {
-  new TestBigIntegerV8V8().main();
+  new TestBigIntegerDartvmV8().main();
 }
