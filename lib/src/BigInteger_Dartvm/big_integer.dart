@@ -291,7 +291,7 @@ class BigIntegerDartvm implements BigInteger {
 
   /** |this| */
   BigIntegerDartvm abs() {
-    return (data < 0) ? this.negate_op() : this;
+    return (data < 0) ? this.negate_op() : this.clone();
   }
 
   /** return + if [this] > [a], - if [this] < [a], 0 if equal **/
