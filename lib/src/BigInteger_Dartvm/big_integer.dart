@@ -701,35 +701,27 @@ class BigIntegerDartvm implements BigInteger {
   }
 
   /** gcd(this,a) (HAC 14.54) */
-  gcd(a) {
-    BigIntegerDartvm x = this.abs();
-    BigIntegerDartvm y = a.abs();
-    if (x.compareTo(y) < 0) {
-      BigIntegerDartvm t = x;
-      x = y;
-      y = t;
+  gcd(v) {
+    int a = data.abs();
+    int b = v.data.abs();
+    int d = 0;
+    if ((a & 1) == 0 && (b & 1) == 0) {
+      a >>= 1;
+      b >>= 1;
+      d++;
     }
-    var i = x.getLowestSetBit(),
-        g = y.getLowestSetBit();
-    if (g < 0) return x;
-    if (i < g) g = i;
-    if (g > 0) {
-      x.rShiftTo(g, x);
-      y.rShiftTo(g, y);
-    }
-    while (x.signum() > 0) {
-      if ((i = x.getLowestSetBit()) > 0) x.rShiftTo(i, x);
-      if ((i = y.getLowestSetBit()) > 0) y.rShiftTo(i, y);
-      if (x.compareTo(y) >= 0) {
-        x.subTo(y, x);
-        x.rShiftTo(1, x);
+    while (a != b) {
+      if (a.isEven) {
+        a >>= 1;
+      } else if (b.isEven) {
+        b >>= 1;
+      } else if (a > b) {
+        a = (a - b) >> 1;
       } else {
-        y.subTo(x, y);
-        y.rShiftTo(1, y);
+        b = (b - a) >> 1;
       }
     }
-    if (g > 0) y.lShiftTo(g, y);
-    return y;
+    return new BigIntegerDartvm(a << d);
   }
 
   /** this % n, n < 2^26 */
@@ -739,54 +731,7 @@ class BigIntegerDartvm implements BigInteger {
 
   /** 1/this % m (HAC 14.61) */
   BigIntegerDartvm modInverse(BigIntegerDartvm m) {
-    var ac = m.isEven();
-    if ((this.isEven() && ac) || m.signum() == 0) return BigIntegerDartvm.ZERO;
-    var u = m.clone(),
-        v = this.clone();
-    if (v.signum() < 0) v = -v;
-    var a = nbv(1),
-        b = nbv(0),
-        c = nbv(0),
-        d = nbv(1);
-    while (u.signum() != 0) {
-      while (u.isEven()) {
-        u.rShiftTo(1, u);
-        if (ac) {
-          if (!a.isEven() || !b.isEven()) {
-            a.addTo(this, a);
-            b.subTo(m, b);
-          }
-          a.rShiftTo(1, a);
-        } else if (!b.isEven()) b.subTo(m, b);
-        b.rShiftTo(1, b);
-      }
-      while (v.isEven()) {
-        v.rShiftTo(1, v);
-        if (ac) {
-          if (!c.isEven() || !d.isEven()) {
-            c.addTo(this, c);
-            d.subTo(m, d);
-          }
-          c.rShiftTo(1, c);
-        } else if (!d.isEven()) d.subTo(m, d);
-        d.rShiftTo(1, d);
-      }
-      if (u.compareTo(v) >= 0) {
-        u.subTo(v, u);
-        if (ac) a.subTo(c, a);
-        b.subTo(d, b);
-      } else {
-        v.subTo(u, v);
-        if (ac) c.subTo(a, c);
-        d.subTo(b, d);
-      }
-    }
-    if (v.compareTo(BigIntegerDartvm.ONE) != 0) return BigIntegerDartvm.ZERO;
-    if (d.compareTo(m) >= 0) return _adjust(d.subtract(m), m);
-    if (d.signum() < 0) d.addTo(m, d);
-    else return _adjust(d, m);
-    if (d.signum() < 0) return _adjust(d.add(m), m);
-    else return _adjust(d, m);
+    return new BigIntegerDartvm(data.modInverse(m.data));
   }
 
   _adjust(val, m) => (signum() < 0) ? (m - val) : val;
