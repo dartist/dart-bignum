@@ -3,7 +3,7 @@ import 'dart:math' as Mathx;
 import 'dart:typed_data';
 
 part 'src/BigInteger_v8/big_integer.dart';
-part 'src/BigInteger_Dartvm/big_integer.dart';
+part 'src/BigInteger_dartvm/big_integer.dart';
 
 abstract class BigInteger {
   static final bool isJs = (0.0 is int) ;
