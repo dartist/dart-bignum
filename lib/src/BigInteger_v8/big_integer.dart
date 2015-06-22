@@ -281,12 +281,12 @@ class BigIntegerV8 implements BigInteger {
   // Basic dart BN library - subset useful for RSA encryption.
 
   /** [List] of low primes */
-  List<int> _lowprimes;
-  int _lplim;
+  static final List<int> _lowprimes = const [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509];
+  static int _lplim;
 
   /** JavaScript engine analysis */
-  int canary = 0xdeadbeefcafe;
-  bool _j_lm;
+  static int canary = 0xdeadbeefcafe;
+  static bool _j_lm;
 
   /**
    * Internal data structure of [BigIntegerV8] implementation.
@@ -295,8 +295,8 @@ class BigIntegerV8 implements BigInteger {
 
   Function am;
 
-  var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
-  Map BI_RC;
+  static var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
+  static Map BI_RC;
 
   int t;
   var s;
@@ -335,15 +335,11 @@ class BigIntegerV8 implements BigInteger {
    *    x.toString() == "beef";
    */
   BigIntegerV8([a,b,c]) { // TODO: create mutiple constructors, instead of constructing based on the dynamimc type
-    _lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509];
-    BI_RC = new Map();
-    _j_lm = ((canary&0xffffff)==0xefcafe);
-    // Setup all the global scope js code here
-    _setupDigitConversions();
-    _lplim = (1<<26)~/_lowprimes[_lowprimes.length-1];
     //am3 works better on x64, while am3 is faster on 32-bit platforms.
-    //_setupEngine(_am4, 26);
-    _setupEngine(_am3, 28);
+    // _init(26);
+    // am = _am4;
+    _init(28);
+    am = _am3;
     this.array = new JSArray<int>();
 
     if (a != null) {
@@ -415,10 +411,8 @@ class BigIntegerV8 implements BigInteger {
    * IE7 does 9% better with am3/28 than with am4/26.
    * Firefox (SM) gets 10% faster with am3/28 than with am4/26.
    */
-  _setupEngine(Function fn, int bits) {
-    this.am = fn;
+  static _setupEngine(int bits) {
     dbits = bits;
-
     BI_DB = dbits;
     BI_DM = ((1<<dbits)-1);
     BI_DV = (1<<dbits);
@@ -429,8 +423,17 @@ class BigIntegerV8 implements BigInteger {
     BI_F2 = 2*dbits-BI_FP;
   }
 
+  static _init(int bits) {
+    if (BI_RC != null) return;
+    BI_RC = new Map();
+    _j_lm = ((canary&0xffffff)==0xefcafe);
+    // Setup all the global scope js code here
+    _setupDigitConversions();
+    _lplim = (1<<26)~/_lowprimes[_lowprimes.length-1];
+    _setupEngine(bits);
+  }
   /** Digit conversions */
-  _setupDigitConversions() {
+  static _setupDigitConversions() {
     // Digit conversions
     BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
     BI_RC = new Map();
