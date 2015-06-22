@@ -6,44 +6,44 @@ part 'src/BigInteger_v8/big_integer.dart';
 part 'src/BigInteger_dartvm/big_integer.dart';
 
 abstract class BigInteger {
-  static final bool isJs = (0.0 is int) ;
+  static bool useJsBigint = (0.0 is int) ;
   static BigInteger get ZERO {
-    if (isJs) {
+    if (useJsBigint) {
       return BigIntegerV8.nbv(0);
     } else {
       return BigIntegerDartvm.nbv(0);
     }
   }
   static BigInteger get ONE {
-    if (isJs) {
+    if (useJsBigint) {
       return BigIntegerV8.nbv(1);
     } else {
       return BigIntegerDartvm.nbv(1);
     }
   }
   static BigInteger get TWO {
-    if (isJs) {
+    if (useJsBigint) {
       return BigIntegerV8.nbv(2);
     } else {
       return BigIntegerDartvm.nbv(2);
     }
   }
   static BigInteger get THREE {
-    if (isJs) {
+    if (useJsBigint) {
       return BigIntegerV8.nbv(3);
     } else {
       return BigIntegerDartvm.nbv(3);
     }
   }
   factory BigInteger([a,b,c]) {
-    if (isJs) {
+    if (useJsBigint) {
       return new BigIntegerV8(a,b,c);
     } else {
       return new BigIntegerDartvm(a,b,c);
     }
   }
   factory BigInteger.fromBytes( int signum, List<int> magnitude ) {
-    if (isJs) {
+    if (useJsBigint) {
       return new BigIntegerV8.fromBytes(signum, magnitude);
     } else {
       return new BigIntegerDartvm.fromBytes(signum, magnitude);
