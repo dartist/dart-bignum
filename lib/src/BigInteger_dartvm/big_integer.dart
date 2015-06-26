@@ -702,26 +702,7 @@ class BigIntegerDartvm implements BigInteger {
 
   /** gcd(this,a) (HAC 14.54) */
   gcd(v) {
-    int a = data.abs();
-    int b = v.data.abs();
-    int d = 0;
-    if ((a & 1) == 0 && (b & 1) == 0) {
-      a >>= 1;
-      b >>= 1;
-      d++;
-    }
-    while (a != b) {
-      if (a.isEven) {
-        a >>= 1;
-      } else if (b.isEven) {
-        b >>= 1;
-      } else if (a > b) {
-        a = (a - b) >> 1;
-      } else {
-        b = (b - a) >> 1;
-      }
-    }
-    return new BigIntegerDartvm(a << d);
+    return new BigIntegerDartvm(data.gcd(v.data));
   }
 
   /** this % n, n < 2^26 */
