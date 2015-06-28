@@ -36,11 +36,11 @@ part of bignum;
 
 
 /**
- * Modular reduction using "classic" algorithm on [BigInteger]
+ * Modular reduction using "classic" algorithm on [BigIntegerV8]
  */
 class Classic {
 
-  BigInteger m;
+  BigIntegerV8 m;
 
   Classic(this.m);
   convert(x) {
@@ -55,11 +55,11 @@ class Classic {
 }
 
 /**
- * Montgomery reduction on [BigInteger]
+ * Montgomery reduction on [BigIntegerV8]
  */
 class Montgomery {
 
-  BigInteger m;
+  BigIntegerV8 m;
 
   var mp;
   var mpl;
@@ -74,26 +74,26 @@ class Montgomery {
   this.mp = m.invDigit();
   this.mpl = this.mp&0x7fff;
   this.mph = this.mp>>15;
-  this.um = (1<<(BigInteger.BI_DB-15))-1;
+  this.um = (1<<(BigIntegerV8.BI_DB-15))-1;
   this.mt2 = 2*m.t;
   }
 
   /**
    * xR mod m
    */
-  BigInteger convert(BigInteger x) {
-    var r = BigInteger.nbi();
+  BigIntegerV8 convert(BigIntegerV8 x) {
+    var r = BigIntegerV8.nbi();
     x.abs().dlShiftTo(this.m.t,r);
     r.divRemTo(this.m,null,r);
-    if(x.s < 0 && r.compareTo(BigInteger.ZERO) > 0) this.m.subTo(r,r);
+    if(x.s < 0 && r.compareTo(BigIntegerV8.ZERO) > 0) this.m.subTo(r,r);
     return r;
   }
 
   /**
    * x/R mod m
    */
-  BigInteger revert(BigInteger x) {
-    var r = BigInteger.nbi();
+  BigIntegerV8 revert(BigIntegerV8 x) {
+    var r = BigIntegerV8.nbi();
     x.copyTo(r);
     this.reduce(r);
     return r;
@@ -111,13 +111,13 @@ class Montgomery {
     for(var i = 0; i < this.m.t; ++i) {
       // faster way of calculating u0 = x[i]*mp mod DV
       var j = x_array[i]&0x7fff;
-      var u0 = (j*this.mpl+(((j*this.mph+(x_array[i]>>15)*this.mpl)&this.um)<<15))&BigInteger.BI_DM;
+      var u0 = (j*this.mpl+(((j*this.mph+(x_array[i]>>15)*this.mpl)&this.um)<<15))&BigIntegerV8.BI_DM;
       // use am to combine the multiply-shift-add into one call
       j = i+this.m.t;
       x_array[j] += this.m.am(0,u0,x,i,0,this.m.t);
       // propagate carry
-      while(x_array[j] >= BigInteger.BI_DV) {
-        x_array[j] -= BigInteger.BI_DV;
+      while(x_array[j] >= BigIntegerV8.BI_DV) {
+        x_array[j] -= BigIntegerV8.BI_DV;
         x_array[++j]++;
       }
     }
@@ -150,9 +150,9 @@ class Montgomery {
  */
 class Barrett {
 
-  BigInteger m;
-  BigInteger r2;
-  BigInteger q3;
+  BigIntegerV8 m;
+  BigIntegerV8 r2;
+  BigIntegerV8 q3;
   var mu;
 
   /**
@@ -160,20 +160,20 @@ class Barrett {
    */
   Barrett(this.m) {
     // setup Barrett
-    this.r2 = BigInteger.nbi();
-    this.q3 = BigInteger.nbi();
-    BigInteger.ONE.dlShiftTo(2*m.t,this.r2);
+    this.r2 = BigIntegerV8.nbi();
+    this.q3 = BigIntegerV8.nbi();
+    BigIntegerV8.ONE.dlShiftTo(2*m.t,this.r2);
     this.mu = this.r2.divide(m);
 
   }
 
-  BigInteger convert(BigInteger x) {
+  BigIntegerV8 convert(BigIntegerV8 x) {
     if(x.s < 0 || x.t > 2*this.m.t)  {
       return x.mod(this.m);
     } else if(x.compareTo(this.m) < 0) {
       return x;
     } else {
-      var r = BigInteger.nbi();
+      var r = BigIntegerV8.nbi();
       x.copyTo(r);
       this.reduce(r);
       return r;
@@ -187,7 +187,7 @@ class Barrett {
   /**
    * x = x mod m (HAC 14.42)
    */
-  void reduce(BigInteger x) {
+  void reduce(BigIntegerV8 x) {
     x.drShiftTo(this.m.t - 1, this.r2);
     if(x.t > this.m.t+1) {
       x.t = this.m.t+1;
@@ -249,10 +249,10 @@ class JSArray<T> {
 }
 
 /**
- * Basic dart [BigInteger] class. Implementation works across
+ * Basic dart [BigIntegerV8] class. Implementation works across
  * dart and dart2js.
  */
-class BigInteger {
+class BigIntegerV8 implements BigInteger {
   /** Bits per digit */
   static int dbits;
   static int BI_DB;
@@ -264,45 +264,45 @@ class BigInteger {
   static int BI_F1;
   static int BI_F2;
 
-  /** Create a new [BigInteger] */
-  static BigInteger nbi() { return new BigInteger(null, null, null); }
-  /** return [BigInteger] initialized to [i] */
-  static BigInteger nbv(int i) {
+  /** Create a new [BigIntegerV8] */
+  static BigIntegerV8 nbi() { return new BigIntegerV8(null, null, null); }
+  /** return [BigIntegerV8] initialized to [i] */
+  static BigIntegerV8 nbv(int i) {
     var r = nbi();
     r.fromInt(i);
     return r;
   }
 
-  static BigInteger get ZERO => nbv(0);
-  static BigInteger get ONE => nbv(1);
-  static BigInteger get TWO => nbv(2);
-  static BigInteger get THREE => nbv(3);
+  static BigIntegerV8 get ZERO => nbv(0);
+  static BigIntegerV8 get ONE => nbv(1);
+  static BigIntegerV8 get TWO => nbv(2);
+  static BigIntegerV8 get THREE => nbv(3);
 
   // Basic dart BN library - subset useful for RSA encryption.
 
   /** [List] of low primes */
-  List<int> _lowprimes;
-  int _lplim;
+  static final List<int> _lowprimes = const [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509];
+  static int _lplim;
 
   /** JavaScript engine analysis */
-  int canary = 0xdeadbeefcafe;
-  bool _j_lm;
+  static int canary = 0xdeadbeefcafe;
+  static bool _j_lm;
 
   /**
-   * Internal data structure of [BigInteger] implementation.
+   * Internal data structure of [BigIntegerV8] implementation.
    */
   JSArray<int> array;
 
   Function am;
 
-  var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
-  Map BI_RC;
+  static var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
+  static Map BI_RC;
 
   int t;
   var s;
 
   /**
-   * Constructor of [BigInteger]
+   * Constructor of [BigIntegerV8]
    *
    * Constructor can be called in mutiple ways
    *
@@ -334,16 +334,12 @@ class BigInteger {
    *    var x = new BigInteger(s);
    *    x.toString() == "beef";
    */
-  BigInteger([a,b,c]) { // TODO: create mutiple constructors, instead of constructing based on the dynamimc type
-    _lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509];
-    BI_RC = new Map();
-    _j_lm = ((canary&0xffffff)==0xefcafe);
-    // Setup all the global scope js code here
-    _setupDigitConversions();
-    _lplim = (1<<26)~/_lowprimes[_lowprimes.length-1];
+  BigIntegerV8([a,b,c]) { // TODO: create mutiple constructors, instead of constructing based on the dynamimc type
     //am3 works better on x64, while am3 is faster on 32-bit platforms.
-    //_setupEngine(_am4, 26);
-    _setupEngine(_am3, 28);
+    // _init(26);
+    // am = _am4;
+    _init(28);
+    am = _am3;
     this.array = new JSArray<int>();
 
     if (a != null) {
@@ -361,7 +357,7 @@ class BigInteger {
     }
   }
 
-  factory BigInteger.fromBytes( int signum, List<int> magnitude ) {
+  factory BigIntegerV8.fromBytes( int signum, List<int> magnitude ) {
     if( signum==0 ) throw new ArgumentError("Argument signum must not be zero");
     // Add a leading 0 if most significant bit set (otherwise, the magnitude
     // is interpreted as negative and this constructor fails)
@@ -370,7 +366,7 @@ class BigInteger {
           ..[0] = 0
           ..setRange(1, 1+magnitude.length, magnitude);
     }
-    var self = new BigInteger(magnitude);
+    var self = new BigIntegerV8(magnitude);
     return (signum<0) ? -self : self;
   }
 
@@ -415,10 +411,8 @@ class BigInteger {
    * IE7 does 9% better with am3/28 than with am4/26.
    * Firefox (SM) gets 10% faster with am3/28 than with am4/26.
    */
-  _setupEngine(Function fn, int bits) {
-    this.am = fn;
+  static _setupEngine(int bits) {
     dbits = bits;
-
     BI_DB = dbits;
     BI_DM = ((1<<dbits)-1);
     BI_DV = (1<<dbits);
@@ -429,8 +423,17 @@ class BigInteger {
     BI_F2 = 2*dbits-BI_FP;
   }
 
+  static _init(int bits) {
+    if (BI_RC != null) return;
+    BI_RC = new Map();
+    _j_lm = ((canary&0xffffff)==0xefcafe);
+    // Setup all the global scope js code here
+    _setupDigitConversions();
+    _lplim = (1<<26)~/_lowprimes[_lowprimes.length-1];
+    _setupEngine(bits);
+  }
   /** Digit conversions */
-  _setupDigitConversions() {
+  static _setupDigitConversions() {
     // Digit conversions
     BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
     BI_RC = new Map();
@@ -453,7 +456,7 @@ class BigInteger {
   }
 
   /** copy [this] to [r] */
-  void copyTo(BigInteger r) {
+  void copyTo(BigIntegerV8 r) {
     var this_array = this.array;
     var r_array    = r.array;
 
@@ -512,7 +515,7 @@ class BigInteger {
       if(sh > 0) this_array[this.t-1] |= ((1<<(BI_DB-sh))-1)<<sh;
     }
     this.clamp();
-    if(mi) BigInteger.ZERO.subTo(this,this);
+    if(mi) BigIntegerV8.ZERO.subTo(this,this);
   }
 
   /** return string representation in given radix [b] */
@@ -553,19 +556,19 @@ class BigInteger {
   /** -this */
   negate_op() {
     var r = nbi();
-    BigInteger.ZERO.subTo(this,r);
+    BigIntegerV8.ZERO.subTo(this,r);
     return r;
   }
 
   /** |this| */
-  BigInteger abs() {
+  BigIntegerV8 abs() {
     return (this.s<0)?this.negate_op():this;
   }
 
   /** return + if [this] > [a], - if [this] < [a], 0 if equal **/
   int compareTo(a) {
     if( a is num ) {
-      a = new BigInteger(a);
+      a = new BigIntegerV8(a);
     }
     var this_array = this.array;
     var a_array = a.array;
@@ -747,8 +750,8 @@ class BigInteger {
   void multiplyTo(a,r) {
     var this_array = this.array;
     var r_array = r.array;
-    BigInteger x = this.abs();
-    BigInteger y = a.abs();
+    BigIntegerV8 x = this.abs();
+    BigIntegerV8 y = a.abs();
     var y_array = y.array;
     var i = x.t;
     r.t = i+y.t;
@@ -758,7 +761,7 @@ class BigInteger {
     r.clamp();
 
     if(this.s != a.s) {
-      BigInteger.ZERO.subTo(r,r);
+      BigIntegerV8.ZERO.subTo(r,r);
     }
 
   }
@@ -787,7 +790,7 @@ class BigInteger {
    * divide this by m, quotient and remainder to q, r (HAC 14.20)
    * r != q, this != m.  q or r may be null.
    */
-  divRemTo(BigInteger m,q,BigInteger r) {
+  divRemTo(BigIntegerV8 m,q,BigIntegerV8 r) {
     var pm = m.abs();
     if(pm.t <= 0) return;
     var pt = this.abs();
@@ -811,7 +814,7 @@ class BigInteger {
     var d1 = BI_FV/yt, d2 = (1<<BI_F1)/yt, e = 1<<BI_F2;
     var i = r.t,
         j = i-ys;
-    BigInteger t = (q==null) ?nbi() : q;
+    BigIntegerV8 t = (q==null) ?nbi() : q;
 
     y.dlShiftTo(j,t);
 
@@ -820,7 +823,7 @@ class BigInteger {
       r_array[r.t++] = 1;
       r.subTo(t,r);
     }
-    BigInteger.ONE.dlShiftTo(ys,t);
+    BigIntegerV8.ONE.dlShiftTo(ys,t);
     t.subTo(y,y); // "negative" y so we can replace sub with am later
     while(y.t < ys) y_array[y.t++] = 0;
     while(--j >= 0) {
@@ -834,19 +837,19 @@ class BigInteger {
     }
     if(q != null) {
       r.drShiftTo(ys,q);
-      if(ts != ms) BigInteger.ZERO.subTo(q,q);
+      if(ts != ms) BigIntegerV8.ZERO.subTo(q,q);
     }
     r.t = ys;
     r.clamp();
     if(nsh > 0) r.rShiftTo(nsh,r);  // Denormalize remainder
-    if(ts < 0) BigInteger.ZERO.subTo(r,r);
+    if(ts < 0) BigIntegerV8.ZERO.subTo(r,r);
   }
 
   /** this mod a */
   mod(a) {
     var r = nbi();
     this.abs().divRemTo(a,null,r);
-    if(this.s < 0 && r.compareTo(BigInteger.ZERO) > 0) a.subTo(r,r);
+    if(this.s < 0 && r.compareTo(BigIntegerV8.ZERO) > 0) a.subTo(r,r);
     return r;
   }
 
@@ -888,12 +891,12 @@ class BigInteger {
   isOdd() => !isEven();
 
   /** this^e, e < 2^32, doing sqr and mul with "r" (HAC 14.79) */
-  BigInteger exp(int e, z) { // TODO: z is one of the reduction algorithms, pass interface class
-    if(e > 0xffffffff || e < 1) return BigInteger.ONE;
-    BigInteger r = nbi();
-    BigInteger r2 = nbi();
+  BigIntegerV8 exp(int e, z) { // TODO: z is one of the reduction algorithms, pass interface class
+    if(e > 0xffffffff || e < 1) return BigIntegerV8.ONE;
+    BigIntegerV8 r = nbi();
+    BigIntegerV8 r2 = nbi();
 
-    BigInteger  g = z.convert(this);
+    BigIntegerV8  g = z.convert(this);
     int i = nbits(e)-1;
 
     g.copyTo(r);
@@ -907,7 +910,7 @@ class BigInteger {
   }
 
   /**  this^e % m, 0 <= e < 2^32 */
-  BigInteger modPowInt(int e, BigInteger m) {
+  BigIntegerV8 modPowInt(int e, BigIntegerV8 m) {
     var z;
     if(e < 256 || m.isEven()) {
       z = new Classic(m);
@@ -1024,7 +1027,7 @@ class BigInteger {
     }
 
     if(mi)  {
-      BigInteger.ZERO.subTo(this,this);
+      BigIntegerV8.ZERO.subTo(this,this);
     }
   }
 
@@ -1095,21 +1098,21 @@ class BigInteger {
     return r.data;
   }
 
-  bool equals(BigInteger a) {
+  bool equals(BigIntegerV8 a) {
     return this.compareTo(a)==0 ? true : false;
   }
 
-  BigInteger min(BigInteger a) {
+  BigIntegerV8 min(BigIntegerV8 a) {
     return(this.compareTo(a)<0)?this:a;
   }
 
-  BigInteger max(BigInteger a) {
+  BigIntegerV8 max(BigIntegerV8 a) {
     return(this.compareTo(a)>0)?this:a;
   }
 
 
   /** r = this op a (bitwise) */
-  void bitwiseTo(BigInteger a, Function op, BigInteger r) {
+  void bitwiseTo(BigIntegerV8 a, Function op, BigIntegerV8 r) {
     var this_array = this.array;
     var a_array    = a.array;
     var r_array    = r.array;
@@ -1251,7 +1254,7 @@ class BigInteger {
 
   /** this op (1<<n) */
   changeBit(n,op) {
-    var r = BigInteger.ONE.shiftLeft(n);
+    var r = BigIntegerV8.ONE.shiftLeft(n);
     this.bitwiseTo(r,op,r);
     return r;
   }
@@ -1302,36 +1305,36 @@ class BigInteger {
   }
 
   /** this + a */
-  BigInteger add(a) {
+  BigIntegerV8 add(a) {
     var r = nbi();
     this.addTo(a,r);
     return r;
   }
 
   /** this - a */
-  BigInteger subtract(a) {
+  BigIntegerV8 subtract(a) {
     var r = nbi();
     this.subTo(a,r);
     return r;
   }
 
   /** this * a */
-  BigInteger multiply(a) {
+  BigIntegerV8 multiply(a) {
     var r = nbi();
     this.multiplyTo(a,r);
     return r;
   }
 
   /** this / a */
-  BigInteger divide(a) {
+  BigIntegerV8 divide(a) {
     var r = nbi();
     this.divRemTo(a,r,null);
     return r;
   }
 
   /** this % a */
-  BigInteger remainder(BigInteger a) {
-    BigInteger r = nbi();
+  BigIntegerV8 remainder(BigIntegerV8 a) {
+    BigIntegerV8 r = nbi();
     this.divRemTo(a,null,r);
     return (r.signum()>=0) ? r : (r+a);
   }
@@ -1340,7 +1343,7 @@ class BigInteger {
    * [0] = this/a
    * [1] = this%a
    */
-  Map<int, BigInteger> divideAndRemainder(a) {
+  Map<int, BigIntegerV8> divideAndRemainder(a) {
     var q = nbi(), r = nbi();
     this.divRemTo(a,q,r);
     //return new Array(q,r);
@@ -1371,7 +1374,7 @@ class BigInteger {
   }
 
   /** this^e */
-  BigInteger pow(int e) {
+  BigIntegerV8 pow(int e) {
     return this.exp(e,new NullExp());
   }
 
@@ -1413,7 +1416,7 @@ class BigInteger {
 
 
   /** this^e % m (HAC 14.85) */
-  modPow(BigInteger e, BigInteger m) {
+  modPow(BigIntegerV8 e, BigIntegerV8 m) {
     // TODO: need to create interface for the reduction algorithms
     var e_array = e.array;
     var i = e.bitLength(), k, r = nbv(1), z;
@@ -1518,9 +1521,9 @@ class BigInteger {
   }
 
   /** 1/this % m (HAC 14.61) */
-  BigInteger modInverse(BigInteger m) {
+  BigIntegerV8 modInverse(BigIntegerV8 m) {
     var ac = m.isEven();
-    if((this.isEven() && ac) || m.signum() == 0) return BigInteger.ZERO;
+    if((this.isEven() && ac) || m.signum() == 0) return BigIntegerV8.ZERO;
     var u = m.clone(), v = this.clone();
     if( v.signum()<0 ) v = -v;
     var a = nbv(1), b = nbv(0), c = nbv(0), d = nbv(1);
@@ -1554,7 +1557,7 @@ class BigInteger {
         d.subTo(b,d);
       }
     }
-    if(v.compareTo(BigInteger.ONE) != 0) return BigInteger.ZERO;
+    if(v.compareTo(BigIntegerV8.ONE) != 0) return BigIntegerV8.ZERO;
     if(d.compareTo(m) >= 0) return _adjust(d.subtract(m),m);
     if(d.signum() < 0) d.addTo(m,d); else return _adjust(d,m);
     if(d.signum() < 0) return _adjust(d.add(m),m); else return _adjust(d,m);
@@ -1585,7 +1588,7 @@ class BigInteger {
 
   /** true if probably prime (HAC 4.24, Miller-Rabin) */
   bool millerRabin(t) {
-    var n1 = this.subtract(BigInteger.ONE);
+    var n1 = this.subtract(BigIntegerV8.ONE);
     var k = n1.getLowestSetBit();
     if(k <= 0) return false;
     var r = n1.shiftRight(k);
@@ -1595,11 +1598,11 @@ class BigInteger {
     for(var i = 0; i < t; ++i) {
       a.fromInt(_lowprimes[i]);
       var y = a.modPow(r,this);
-      if(y.compareTo(BigInteger.ONE) != 0 && y.compareTo(n1) != 0) {
+      if(y.compareTo(BigIntegerV8.ONE) != 0 && y.compareTo(n1) != 0) {
         var j = 1;
         while(j++ < k && y.compareTo(n1) != 0) {
           y = y.modPowInt(2,this);
-          if(y.compareTo(BigInteger.ONE) == 0) return false;
+          if(y.compareTo(BigIntegerV8.ONE) == 0) return false;
         }
         if(y.compareTo(n1) != 0) return false;
       }
@@ -1609,34 +1612,34 @@ class BigInteger {
 
 
   // Arithmetic operations.
-  BigInteger operator +(BigInteger other) => add(other);
-  BigInteger operator -(BigInteger other) => subtract(other);
-  BigInteger operator *(BigInteger other) => multiply(other);
-  BigInteger operator %(BigInteger other) => remainder(other);
-  BigInteger operator /(BigInteger other) => divide(other);
+  BigIntegerV8 operator +(BigIntegerV8 other) => add(other);
+  BigIntegerV8 operator -(BigIntegerV8 other) => subtract(other);
+  BigIntegerV8 operator *(BigIntegerV8 other) => multiply(other);
+  BigIntegerV8 operator %(BigIntegerV8 other) => remainder(other);
+  BigIntegerV8 operator /(BigIntegerV8 other) => divide(other);
 
   // Truncating division.
-  BigInteger operator ~/(BigInteger other) => divide(other);
+  BigIntegerV8 operator ~/(BigIntegerV8 other) => divide(other);
 
   // The unary '-' operator.
-  BigInteger operator -() => this.negate_op();
+  BigIntegerV8 operator -() => this.negate_op();
 
   // NOTE: This is implemented above.
   //BigInteger remainder(BigInteger other) { throw "Not Implemented"; }
 
   // Relational operations.
-  bool operator <(BigInteger other) => compareTo(other) < 0 ? true : false;
-  bool operator <=(BigInteger other) => compareTo(other) <= 0 ? true : false;
-  bool operator >(BigInteger other) => compareTo(other) > 0 ? true : false;
-  bool operator >=(BigInteger other) => compareTo(other) >= 0 ? true : false;
+  bool operator <(BigIntegerV8 other) => compareTo(other) < 0 ? true : false;
+  bool operator <=(BigIntegerV8 other) => compareTo(other) <= 0 ? true : false;
+  bool operator >(BigIntegerV8 other) => compareTo(other) > 0 ? true : false;
+  bool operator >=(BigIntegerV8 other) => compareTo(other) >= 0 ? true : false;
   bool operator ==(other) => compareTo(other) == 0 ? true : false;
 
   // Bit-operations.
-  BigInteger operator &(BigInteger other) => and(other);
-  BigInteger operator |(BigInteger other) => or(other);
-  BigInteger operator ^(BigInteger other) => xor(other);
-  BigInteger operator ~() => not();
-  BigInteger operator <<(int shiftAmount) => shiftLeft(shiftAmount);
-  BigInteger operator >>(int shiftAmount) => shiftRight(shiftAmount);
+  BigIntegerV8 operator &(BigIntegerV8 other) => and(other);
+  BigIntegerV8 operator |(BigIntegerV8 other) => or(other);
+  BigIntegerV8 operator ^(BigIntegerV8 other) => xor(other);
+  BigIntegerV8 operator ~() => not();
+  BigIntegerV8 operator <<(int shiftAmount) => shiftLeft(shiftAmount);
+  BigIntegerV8 operator >>(int shiftAmount) => shiftRight(shiftAmount);
 
 }
