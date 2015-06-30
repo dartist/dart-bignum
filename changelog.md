@@ -1,5 +1,9 @@
 # Changelog - dart-bignum
 
+## 0.0.7 2015-06-29 (SDK 1.11.0)
+
+- Use native big integer when run in dartvm(>= 1.11.0)
+
 ## 0.0.6 2014-09-02 (SDK 1.6.0-dev.9.7 r39537)
 
 - Used Uint8List instead of List<int> for performance improvement.

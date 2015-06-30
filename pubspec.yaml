@@ -1,6 +1,6 @@
 name: bignum
 author: Adam Singer <financeCoding@gmail.com>
-version: 0.0.8-dev
+version: 0.0.7
 homepage: https://github.com/Dartist/dart-bignum
 description: Big Number library for Dart
 dependencies:
