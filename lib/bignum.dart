@@ -1,9 +1,8 @@
 library bignum;
-import 'dart:math' as Mathx;
-import 'dart:typed_data';
 
-part 'src/BigInteger_v8/big_integer.dart';
-part 'src/BigInteger_dartvm/big_integer.dart';
+
+import 'src/big_integer_v8.dart';
+import 'src/big_integer_dartvm.dart';
 
 abstract class BigInteger {
   static bool useJsBigint = (){

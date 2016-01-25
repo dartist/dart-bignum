@@ -2,7 +2,7 @@ library test_big_integer_v8;
 
 import 'package:unittest/unittest.dart';
 import 'dart:math' as Mathx;
-import 'package:bignum/bignum.dart';
+import 'package:bignum/src/big_integer_dartvm.dart';
 
 part 'data/powpowpow.dart';
 

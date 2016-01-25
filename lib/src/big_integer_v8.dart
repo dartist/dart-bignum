@@ -1,4 +1,4 @@
-part of bignum;
+library bignum.v8;
 
 /*
  * Copyright (c) 2003-2005  Tom Wu
@@ -32,8 +32,13 @@ part of bignum;
  * and disclaimer.
  */
 
-// TODO: reduction algorithms need to be implemented via an interface
+import 'dart:math' as Mathx;
+import 'dart:typed_data';
 
+import "../bignum.dart";
+import "null_exp.dart";
+
+// TODO: reduction algorithms need to be implemented via an interface
 
 /**
  * Modular reduction using "classic" algorithm on [BigIntegerV8]
@@ -217,14 +222,6 @@ class Barrett {
    */
   mulTo(x,y,r) { x.multiplyTo(y,r); this.reduce(r); }
 
-}
-
-class NullExp {
-  NullExp();
-  convert(x) { return x; }
-  revert(x) { return x; }
-  mulTo(x,y,r) { x.multiplyTo(y,r); }
-  sqrTo(x,r) { x.squareTo(r); }
 }
 
 

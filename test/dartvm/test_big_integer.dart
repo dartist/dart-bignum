@@ -1,4 +1,5 @@
-import '../../lib/bignum.dart';
+import '../../lib/src/big_integer_dartvm.dart';
+import '../../lib/src/big_integer_v8.dart';
 
 main(){
   List tests = [0,1, -1, 0x7f,-0x7f,128,-128,129,-129,0xff,-0xff,0x7fff,-0x7fff,0xffff,-0xffff,];
