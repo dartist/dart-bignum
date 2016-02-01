@@ -4,7 +4,7 @@ version: 0.0.7
 homepage: https://github.com/Dartist/dart-bignum
 description: Big Number library for Dart
 dependencies:
-  fixnum: '>=0.9.0 <0.10.0'
+  fixnum: '>=0.10.2 <0.11.0'
 dev_dependencies:
   unittest: '>=0.9.0 <0.10.0'
 environment:
