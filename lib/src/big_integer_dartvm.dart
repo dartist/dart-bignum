@@ -1,4 +1,4 @@
-part of bignum;
+library bignum.dartvm;
 
 /*
  * Copyright (c) 2003-2005  Tom Wu
@@ -31,6 +31,12 @@ part of bignum;
  * All redistributions must retain an intact copy of this copyright notice
  * and disclaimer.
  */
+
+import 'dart:math' as Mathx;
+import 'dart:typed_data';
+
+import "../bignum.dart";
+import "null_exp.dart";
 
 /**
  * Basic dart [BigIntegerDartvm] class. Implementation works across
