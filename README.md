@@ -1,7 +1,5 @@
 dart-bignum
-===========
-
-BigInteger is under construction. 
+=========== 
 
 Getting Started
 ---------------

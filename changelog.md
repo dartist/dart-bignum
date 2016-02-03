@@ -1,5 +1,11 @@
 # Changelog - dart-bignum
 
+## 0.1.0 2015-02-03 (SDK 1.14.0)
+
+- Cleaned up interface
+- Hide platform-specific implementations
+- Removed unused legacy implementation
+
 ## 0.0.7 2015-06-29 (SDK 1.11.0)
 
 - Use native big integer when run in dartvm(>= 1.11.0)
